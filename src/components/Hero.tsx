@@ -1,5 +1,5 @@
 import { Carousel } from "antd";
-import {  ArrowLeft, ArrowRight, MessageCircleMore, Rocket, ShieldCheck, Undo2 } from "lucide-react";
+import {  ChevronLeft, ChevronRight, Heart, MessageCircleMore, Rocket, ShieldCheck, Undo2 } from "lucide-react";
 import Link from "next/link";
 
 const Hero = () => {
@@ -14,9 +14,9 @@ const Hero = () => {
                     <div className="relative lg:col-span-2 lg:row-span-2">
                         <div className="absolute inset-px rounded-lg bg-white"></div>
                         <Carousel arrows
-                            // infinite 
-                            nextArrow={<ArrowRight  color="#000" />} prevArrow={<ArrowLeft color="#000" />}
-                            >
+                            prevArrow={<ChevronLeft color="#000" />}
+                            nextArrow={<ChevronRight color="#000" />}
+                            infinite>
                             <div>
                                 <div className="relative px-8 py-12 flex h-[35rem] overflow-hidden ">
                                     <div className="flex flex-col w-1/2 justify-around lg:pl-8 lg:py-10 sm:pl-10 sm:pt-10 ">
@@ -27,7 +27,7 @@ const Hero = () => {
                                             <span className="ml-5 text-xl inline-block w-2.5 uppercase leading-none">sale off</span>
                                         </div>
                                         <div>
-                                            <Link href="/" className="hover:!text-blue-700 font-bold block text-3xl tracking-tight !text-gray-950 max-lg:text-center">Macbook Pro - 512/16GB</Link>
+                                            <Link href="/" className="hover:text-blue-700 font-bold block text-3xl tracking-tight !text-gray-950 max-lg:text-center">Macbook Pro - 512/16GB</Link>
                                             <p className="  max-w-lg mt-5 text-gray-600 ">
                                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, minima minus? Laborum ullam, in ipsam ducimus saepe ea illum. Deleniti ad corrupti omnis nam inventore quas aliquam quae iure illo.
                                             </p>
