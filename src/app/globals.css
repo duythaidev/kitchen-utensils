@@ -10,6 +10,14 @@
   background: #000;
 }
 
+.ant-carousel .slick-dots li button {
+  background-color: #000;
+}
+
+.ant-carousel .slick-dots li::after {
+  background-color: #0000ff;
+}
+
 .swiper-slide {
   font-size: 18px;
   color: #fff;
@@ -43,4 +51,3 @@
   max-width: 400px;
   line-height: 1.3;
 }
-
