@@ -9,7 +9,7 @@ export default function Home() {
 
   return (
     <div className='relative'>
-      {/* <Header></Header> */}
+      <Header></Header>
 
       {/*
       <main className="dark:bg-gray-800 bg-white relative overflow-hidden h-screen">
