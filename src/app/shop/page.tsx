@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react';
 
-import ProductList from '@/components/Test';
+import ProductList from '@/components/ProductList';
 
 const Page: React.FC = () => {
     return (
@@ -9,11 +9,11 @@ const Page: React.FC = () => {
             {/* <FilterSidebar></FilterSidebar> */}
             <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-                <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4 border-b border-gray-200 py-8">
+                <div className=" flex justify-between items-baseline border-b border-gray-200 py-8">
                     <h1 className="text-4xl font-bold tracking-tight text-gray-900">
                         Explore All Products
                     </h1>
-                    <div className='col-span-3 place-items-end self-center'>
+                    <div className=' place-items-end self-center'>
                         <nav className="flex my-auto " aria-label="Breadcrumb">
                             <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
                                 <li className="inline-flex items-center">

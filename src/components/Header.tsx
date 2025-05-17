@@ -37,7 +37,7 @@ const Header = () => {
   const [showNav, setShowNav] = useState<boolean>(false)
 
   return (
-    <header className="fixed w-full z-20">
+    <header className="fixed w-full z-20 shadow-sm">
       <div className="border-b border-gray-300   bg-white ">
         <nav className=" mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div className="flex items-center">
