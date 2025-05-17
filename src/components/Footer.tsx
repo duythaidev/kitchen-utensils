@@ -1,24 +1,15 @@
 const Footer = () => {
     return (
         <>
-            <footer
-                className="bg-zinc-50 text-center text-surface/75 dark:bg-neutral-700 dark:text-white/75 lg:text-left">
-                <div
-                    className="flex items-center justify-center border-b-2 border-neutral-200 p-6 dark:border-white/10 lg:justify-between">
-                    <div className="me-12 hidden lg:block">
-                        <span>Get connected with us on social networks:</span>
-                    </div>
-
-                </div>
-
+            <footer className=" text-center text-surface/75  lg:text-left">
                 <div className="mx-6 py-10 text-center md:text-left">
                     <div className="px-20 grid-1 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
                         <div>
-                            <h6 className="mb-4 flex justify-center font-semibold uppercase md:justify-start">
+                            <h6 className="text-xl mb-4 flex justify-center font-semibold uppercase md:justify-start">
                                 Help & Support
                             </h6>
                             <p className="mb-4 flex items-center justify-center md:justify-start">
-                                <span className="me-3 [&>svg]:h-5 [&>svg]:w-5">
+                                <span className="text-blue-600 me-3 [&>svg]:h-5 [&>svg]:w-5">
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 24 24"
                                         fill="currentColor">
@@ -31,7 +22,7 @@ const Footer = () => {
                                 New York, NY 10012, US
                             </p>
                             <p className="mb-4 flex items-center justify-center md:justify-start">
-                                <span className="me-3 [&>svg]:h-5 [&>svg]:w-5">
+                                <span className="text-blue-600 me-3 [&>svg]:h-5 [&>svg]:w-5">
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 24 24"
                                         fill="currentColor">
@@ -43,8 +34,8 @@ const Footer = () => {
                                 </span>
                                 info@example.com
                             </p>
-                            <p className="mb-4 flex items-center justify-center md:justify-start">
-                                <span className="me-3 [&>svg]:h-5 [&>svg]:w-5">
+                            <p className="mb-5 flex items-center justify-center md:justify-start">
+                                <span className="text-blue-600 me-3 [&>svg]:h-5 [&>svg]:w-5">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 24 24"
@@ -57,22 +48,9 @@ const Footer = () => {
                                 </span>
                                 + 01 234 567 88
                             </p>
-                            <p className="mb-4 flex items-center justify-center md:justify-start">
-                                <span className="me-3 [&>svg]:h-5 [&>svg]:w-5">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="currentColor">
-                                        <path
-                                            fill-rule="evenodd"
-                                            d="M7.875 1.5C6.839 1.5 6 2.34 6 3.375v2.99c-.426.053-.851.11-1.274.174-1.454.218-2.476 1.483-2.476 2.917v6.294a3 3 0 003 3h.27l-.155 1.705A1.875 1.875 0 007.232 22.5h9.536a1.875 1.875 0 001.867-2.045l-.155-1.705h.27a3 3 0 003-3V9.456c0-1.434-1.022-2.7-2.476-2.917A48.716 48.716 0 0018 6.366V3.375c0-1.036-.84-1.875-1.875-1.875h-8.25zM16.5 6.205v-2.83A.375.375 0 0016.125 3h-8.25a.375.375 0 00-.375.375v2.83a49.353 49.353 0 019 0zm-.217 8.265c.178.018.317.16.333.337l.526 5.784a.375.375 0 01-.374.409H7.232a.375.375 0 01-.374-.409l.526-5.784a.373.373 0 01.333-.337 41.741 41.741 0 018.566 0zm.967-3.97a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H18a.75.75 0 01-.75-.75V10.5zM15 9.75a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V10.5a.75.75 0 00-.75-.75H15z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </span>
-                                + 01 234 567 89
-                            </p>
+
                             <div className="flex">
-                                <a href="#!" className="me-6 [&>svg]:h-4 [&>svg]:w-4">
+                                <a href="#!" className="text-gray-500 me-6 [&>svg]:h-4 [&>svg]:w-4">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="currentColor"
@@ -81,7 +59,7 @@ const Footer = () => {
                                             d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7 20.3-71.5 72.7-71.5c16.3 0 29.4 .4 37 1.2V7.9C291.4 4 256.4 0 236.2 0C129.3 0 80 50.5 80 159.4v42.1H14v97.8H80z" />
                                     </svg>
                                 </a>
-                                <a href="#!" className="me-6 [&>svg]:h-4 [&>svg]:w-4 ">
+                                <a href="#!" className="text-gray-500 me-6 [&>svg]:h-4 [&>svg]:w-4 ">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="currentColor"
@@ -90,7 +68,7 @@ const Footer = () => {
                                             d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z" />
                                     </svg>
                                 </a>
-                                <a href="#!" className="me-6 [&>svg]:h-4 [&>svg]:w-4">
+                                <a href="#!" className="text-gray-500 me-6 [&>svg]:h-4 [&>svg]:w-4">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="currentColor"
@@ -99,7 +77,7 @@ const Footer = () => {
                                             d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z" />
                                     </svg>
                                 </a>
-                                <a href="#!" className="me-6 [&>svg]:h-4 [&>svg]:w-4">
+                                <a href="#!" className="text-gray-500 me-6 [&>svg]:h-4 [&>svg]:w-4">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="currentColor"
@@ -108,7 +86,7 @@ const Footer = () => {
                                             d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
                                     </svg>
                                 </a>
-                                <a href="#!" className="me-6 [&>svg]:h-4 [&>svg]:w-4">
+                                <a href="#!" className="text-gray-500 me-6 [&>svg]:h-4 [&>svg]:w-4">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="currentColor"
@@ -117,7 +95,7 @@ const Footer = () => {
                                             d="M100.3 448H7.4V148.9h92.9zM53.8 108.1C24.1 108.1 0 83.5 0 53.8a53.8 53.8 0 0 1 107.6 0c0 29.7-24.1 54.3-53.8 54.3zM447.9 448h-92.7V302.4c0-34.7-.7-79.2-48.3-79.2-48.3 0-55.7 37.7-55.7 76.7V448h-92.8V148.9h89.1v40.8h1.3c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.3 61.9 111.3 142.3V448z" />
                                     </svg>
                                 </a>
-                                <a href="#!" className="[&>svg]:h-4 [&>svg]:w-4">
+                                <a href="#!" className="text-gray-500 [&>svg]:h-4 [&>svg]:w-4">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="currentColor"
@@ -128,101 +106,76 @@ const Footer = () => {
                                 </a>
                             </div>
                         </div>
-                        <div className="">
-                            <h6
-                                className="mb-4 flex items-center justify-center font-semibold uppercase md:justify-start">
-                                <span className="me-3 [&>svg]:h-4 [&>svg]:w-4">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="currentColor">
-                                        <path
-                                            d="M12.378 1.602a.75.75 0 00-.756 0L3 6.632l9 5.25 9-5.25-8.622-5.03zM21.75 7.93l-9 5.25v9l8.628-5.032a.75.75 0 00.372-.648V7.93zM11.25 22.18v-9l-9-5.25v8.57a.75.75 0 00.372.648l8.628 5.033z" />
-                                    </svg>
-                                </span>
-                                TW Elements
-                            </h6>
-                            <p>
-                                Here you can use rows and columns to organize your footer
-                                content. Lorem ipsum dolor sit amet, consectetur adipisicing
-                                elit.
-                            </p>
-                        </div>
+
                         <div>
-                            <h6
-                                className="mb-4 flex justify-center font-semibold uppercase md:justify-start">
-                                Products
+                            <h6 className="text-xl mb-4 flex justify-center font-semibold uppercase md:justify-start">
+                                Account
                             </h6>
-                            <p className="mb-4">
-                                <a href="#!">Angular</a>
-                            </p>
-                            <p className="mb-4">
-                                <a href="#!">React</a>
-                            </p>
-                            <p className="mb-4">
-                                <a href="#!">Vue</a>
-                            </p>
-                            <p>
-                                <a href="#!">Laravel</a>
-                            </p>
-                        </div>
-                        <div>
-                            <h6
-                                className="mb-4 flex justify-center font-semibold uppercase md:justify-start">
-                                Useful links
-                            </h6>
-                            <p className="mb-4">
+                            <p className="text-gray-500 hover:text-blue-500 mb-4">
                                 <a href="#!">Pricing</a>
                             </p>
-                            <p className="mb-4">
+                            <p className="text-gray-500 hover:text-blue-500 mb-4">
                                 <a href="#!">Settings</a>
                             </p>
-                            <p className="mb-4">
+                            <p className="text-gray-500 hover:text-blue-500 mb-4">
                                 <a href="#!">Orders</a>
                             </p>
-                            <p>
+                            <p className="text-gray-500 hover:text-blue-500 ">
                                 <a href="#!">Help</a>
                             </p>
                         </div>
-
+                        <div>
+                            <h6 className="text-xl mb-4 flex justify-center font-semibold uppercase md:justify-start">
+                                Quick Link
+                            </h6>
+                            <p className="text-gray-500 hover:text-blue-500 mb-4">
+                                <a href="#!">Pricing</a>
+                            </p>
+                            <p className="text-gray-500 hover:text-blue-500 mb-4">
+                                <a href="#!">Settings</a>
+                            </p>
+                            <p className="text-gray-500 hover:text-blue-500 mb-4">
+                                <a href="#!">Orders</a>
+                            </p>
+                            <p className="text-gray-500 hover:text-blue-500 ">
+                                <a href="#!">Help</a>
+                            </p>
+                        </div>
+                        <div className="">
+                            <h6 className="text-xl mb-4 text-end  font-semibold uppercase ">
+                                Download app
+                            </h6>
+                            <p className="text-gray-500 text-end">Save $3 With App & New User only</p>
+                            <div className="flex flex-col md:ml-auto md:mr-0 mx-auto items-end flex-shrink-0 ">
+                                <button className="bg-blue-600 my-3 inline-flex justify-center py-3 w-2/3 rounded-md text-white items-center focus:outline-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-8 h-8 " viewBox="0 0 512 512">
+                                        <path d="M99.617 8.057a50.191 50.191 0 00-38.815-6.713l230.932 230.933 74.846-74.846L99.617 8.057zM32.139 20.116c-6.441 8.563-10.148 19.077-10.148 30.199v411.358c0 11.123 3.708 21.636 10.148 30.199l235.877-235.877L32.139 20.116zM464.261 212.087l-67.266-37.637-81.544 81.544 81.548 81.548 67.273-37.64c16.117-9.03 25.738-25.442 25.738-43.908s-9.621-34.877-25.749-43.907zM291.733 279.711L60.815 510.629c3.786.891 7.639 1.371 11.492 1.371a50.275 50.275 0 0027.31-8.07l266.965-149.372-74.849-74.847z"></path>
+                                    </svg>
+                                    <span className="ml-4 flex items-start flex-col leading-none">
+                                        <span className="text-xs  mb-1">GET IT ON</span>
+                                        <span className="title-font font-medium">Google Play</span>
+                                    </span>
+                                </button>
+                                <button className="bg-blue-950 inline-flex justify-center py-3 w-2/3 rounded-md text-white items-center focus:outline-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-8 h-8" viewBox="0 0 305 305">
+                                        <path d="M40.74 112.12c-25.79 44.74-9.4 112.65 19.12 153.82C74.09 286.52 88.5 305 108.24 305c.37 0 .74 0 1.13-.02 9.27-.37 15.97-3.23 22.45-5.99 7.27-3.1 14.8-6.3 26.6-6.3 11.22 0 18.39 3.1 25.31 6.1 6.83 2.95 13.87 6 24.26 5.81 22.23-.41 35.88-20.35 47.92-37.94a168.18 168.18 0 0021-43l.09-.28a2.5 2.5 0 00-1.33-3.06l-.18-.08c-3.92-1.6-38.26-16.84-38.62-58.36-.34-33.74 25.76-51.6 31-54.84l.24-.15a2.5 2.5 0 00.7-3.51c-18-26.37-45.62-30.34-56.73-30.82a50.04 50.04 0 00-4.95-.24c-13.06 0-25.56 4.93-35.61 8.9-6.94 2.73-12.93 5.09-17.06 5.09-4.64 0-10.67-2.4-17.65-5.16-9.33-3.7-19.9-7.9-31.1-7.9l-.79.01c-26.03.38-50.62 15.27-64.18 38.86z"></path>
+                                        <path d="M212.1 0c-15.76.64-34.67 10.35-45.97 23.58-9.6 11.13-19 29.68-16.52 48.38a2.5 2.5 0 002.29 2.17c1.06.08 2.15.12 3.23.12 15.41 0 32.04-8.52 43.4-22.25 11.94-14.5 17.99-33.1 16.16-49.77A2.52 2.52 0 00212.1 0z"></path>
+                                    </svg>
+                                    <span className="ml-4 flex items-start flex-col leading-none">
+                                        <span className="text-xs  mb-1">Download on the</span>
+                                        <span className="title-font font-medium">App Store</span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div className="bg-black/5 p-6 text-center flex justify-between px-20 ">
+                <div className=" p-6 text-center flex justify-between px-20 ">
                     <span>© 2025. All rights reserved by Thai.</span>
-                    <a className="font-semibold" href="https://tw-elements.com/">TW Elements</a>
+                    <a className="font-semibold" href="https://tw-elements.com/">Download App</a>
                 </div>
-
             </footer>
-            <section className="text-gray-600 body-font">
-                <div className="container px-5 py-24 mx-auto flex items-center md:flex-row flex-col">
-                    <div className="flex flex-col md:pr-10 md:mb-0 mb-6 pr-0 w-full md:w-auto md:text-left text-center">
-                        <h2 className="text-xs text-red-500 tracking-widest font-medium title-font mb-1">ROOF PARTY POLAROID</h2>
-                        <h1 className="md:text-3xl text-2xl font-medium title-font text-gray-900">Master Cleanse Reliac Heirloom</h1>
-                    </div>
-                    <div className="flex md:ml-auto md:mr-0 mx-auto items-center flex-shrink-0 space-x-4">
-                        <button className="bg-gray-100 inline-flex py-3 px-5 rounded-lg items-center hover:bg-gray-200 focus:outline-none">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-6 h-6" viewBox="0 0 512 512">
-                                <path d="M99.617 8.057a50.191 50.191 0 00-38.815-6.713l230.932 230.933 74.846-74.846L99.617 8.057zM32.139 20.116c-6.441 8.563-10.148 19.077-10.148 30.199v411.358c0 11.123 3.708 21.636 10.148 30.199l235.877-235.877L32.139 20.116zM464.261 212.087l-67.266-37.637-81.544 81.544 81.548 81.548 67.273-37.64c16.117-9.03 25.738-25.442 25.738-43.908s-9.621-34.877-25.749-43.907zM291.733 279.711L60.815 510.629c3.786.891 7.639 1.371 11.492 1.371a50.275 50.275 0 0027.31-8.07l266.965-149.372-74.849-74.847z"></path>
-                            </svg>
-                            <span className="ml-4 flex items-start flex-col leading-none">
-                                <span className="text-xs text-gray-600 mb-1">GET IT ON</span>
-                                <span className="title-font font-medium">Google Play</span>
-                            </span>
-                        </button>
-                        <button className="bg-gray-100 inline-flex py-3 px-5 rounded-lg items-center hover:bg-gray-200 focus:outline-none">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-6 h-6" viewBox="0 0 305 305">
-                                <path d="M40.74 112.12c-25.79 44.74-9.4 112.65 19.12 153.82C74.09 286.52 88.5 305 108.24 305c.37 0 .74 0 1.13-.02 9.27-.37 15.97-3.23 22.45-5.99 7.27-3.1 14.8-6.3 26.6-6.3 11.22 0 18.39 3.1 25.31 6.1 6.83 2.95 13.87 6 24.26 5.81 22.23-.41 35.88-20.35 47.92-37.94a168.18 168.18 0 0021-43l.09-.28a2.5 2.5 0 00-1.33-3.06l-.18-.08c-3.92-1.6-38.26-16.84-38.62-58.36-.34-33.74 25.76-51.6 31-54.84l.24-.15a2.5 2.5 0 00.7-3.51c-18-26.37-45.62-30.34-56.73-30.82a50.04 50.04 0 00-4.95-.24c-13.06 0-25.56 4.93-35.61 8.9-6.94 2.73-12.93 5.09-17.06 5.09-4.64 0-10.67-2.4-17.65-5.16-9.33-3.7-19.9-7.9-31.1-7.9l-.79.01c-26.03.38-50.62 15.27-64.18 38.86z"></path>
-                                <path d="M212.1 0c-15.76.64-34.67 10.35-45.97 23.58-9.6 11.13-19 29.68-16.52 48.38a2.5 2.5 0 002.29 2.17c1.06.08 2.15.12 3.23.12 15.41 0 32.04-8.52 43.4-22.25 11.94-14.5 17.99-33.1 16.16-49.77A2.52 2.52 0 00212.1 0z"></path>
-                            </svg>
-                            <span className="ml-4 flex items-start flex-col leading-none">
-                                <span className="text-xs text-gray-600 mb-1">Download on the</span>
-                                <span className="title-font font-medium">App Store</span>
-                            </span>
-                        </button>
-                    </div>
-                </div>
-            </section>
         </>
     );
 }
