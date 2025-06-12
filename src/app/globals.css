@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  /* --color-mint-500: oklch(0.72 0.11 178); */
+  --color-primary: #3c50e0; 
+  --color-dark: #1c274c;
 }
 
 .swiper {

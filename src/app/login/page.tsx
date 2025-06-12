@@ -7,7 +7,7 @@ const Page = () => {
         <div className="  pt-[10%]">
             <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className=" flex justify-between items-baseline border-b border-gray-200 py-8">
-                    <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+                    <h1 className="text-4xl font-bold tracking-tight text-dark">
                         Login
                     </h1>
                     <div className=' place-items-end self-center'>

@@ -4,6 +4,7 @@ import { Dropdown, Input, MenuProps, Space } from "antd";
 import { ChevronDown, Clock, Heart, PhoneCall, Search, ShoppingCart, User } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import HoverLink from "./HoverLink";
 
 const items: MenuProps['items'] = [
   {
@@ -74,22 +75,22 @@ const Header = () => {
 
           </div>
 
-          <div className="hidden gap-3 lg:flex lg:justify-end items-center">
-            <PhoneCall className="text-blue-500" size={25}></PhoneCall>
+          <div className="hidden gap-3 lg:flex lg:justify-end  items-center ">
+            <PhoneCall className="text-primary" size={25}></PhoneCall>
             <div>
               <p className="text-gray-500 text-xs">24/7 SUPPORT</p>
               <p className="font-bold ">0123456789</p>
             </div>
           </div>
           <div className="hidden gap-2 lg:flex lg:justify-end items-center">
-            <User className="text-blue-500" size={30}></User>
+            <User className="text-primary" size={25}></User>
             <div>
-              <p className="text-gray-500 text-xs uppercase">Account</p>
-              <p className="font-bold ">Log in</p>
+              <p className="text-gray-500  text-xs uppercase">Account</p>
+              <HoverLink text="Log in" link="login" type="medium"></HoverLink>
             </div>
             <div className="relative">
-              <ShoppingCart size={30} className="ml-2"></ShoppingCart>
-              <div className="absolute top-[-2] w-3.5 h-3.5 text-[10px] text-center right-[-2] bg-blue-600 text-white rounded-full">1</div>
+              <ShoppingCart size={25} className="text-primary ml-2"></ShoppingCart>
+              <div className="absolute top-[-5] w-3.5 h-3.5 text-[10px] text-center right-[-5] bg-blue-600 text-white rounded-full">1</div>
             </div>
             <div >
               <p className="text-gray-500 text-xs text-end uppercase">Cart</p>
@@ -151,7 +152,7 @@ const Header = () => {
         <nav className=" mx-auto flex max-w-7xl items-center justify-between px-6 py-3 lg:px-8" aria-label="Global">
           <div >
             <Link href={'/'} className={`mr-5 relative ${hoverStyle} hover:after:w-full`}>Home</Link>
-            <Link href={'/'} className={`mr-5 relative ${hoverStyle} hover:after:w-full `}>Shop</Link>
+            <Link href={'/shop'} className={`mr-5 relative ${hoverStyle} hover:after:w-full `}>Shop</Link>
             <Dropdown className={`mr-2 relative ${hoverStyle} hover:after:w-full`} menu={{ items }} placement="topCenter" >
               <a onClick={(e) => e.preventDefault()}>
                 <Space size={0} >

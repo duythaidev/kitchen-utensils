@@ -1,6 +1,7 @@
 import Footer from '@/components/Footer';
 import './globals.css'
 import Header from '@/components/Header';
+import { AntdRegistry } from '@ant-design/nextjs-registry';
 
 export default function RootLayout({
   children,
@@ -12,9 +13,11 @@ export default function RootLayout({
       <body
         className={``}
       >
-        <Header></Header>
-        {children}
-        <Footer></Footer>
+        <AntdRegistry>
+          <Header></Header>
+          {children}
+          <Footer></Footer>
+        </AntdRegistry>
       </body>
     </html>
   );
