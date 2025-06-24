@@ -3,6 +3,7 @@
 @theme {
   --color-primary: #3c50e0; 
   --color-dark: #1c274c;
+  --color-gray: #F3F4F6;
 }
 
 .swiper {

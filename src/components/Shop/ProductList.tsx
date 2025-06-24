@@ -1,6 +1,6 @@
 'use client'
-import { Button, Flex, Form, Modal, Select } from "antd";
-import { ArrowDownNarrowWide, ChevronDown, ChevronUp, Filter, ShoppingBag, ShoppingCart } from "lucide-react";
+import { Button, Flex, Form, Input, Modal, Select } from "antd";
+import { ArrowDownNarrowWide, ChevronDown, ChevronUp, Filter, Search, ShoppingBag, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import ModalContent from "./ModalContent";
 import HoverLink from "../HoverLink";
@@ -31,11 +31,21 @@ const ProductList = () => {
                                 <button className="text-blue-600 hover:text-blue-700 cursor-pointer" onClick={() => { setHiddenCategories(false) }}>Clean All</button>
                             </div>
                         </div>
-                        <div className='col-span-3 place-items-end self-center bg-white shadow-1 rounded-lg px-5'>
-                            <Form>
+                        <div className='col-span-3 flex justify-between bg-white shadow-1 rounded-lg px-5'>
+                            <div className="flex items-center gap-4">
+                                <Input
+                                    style={{ width: '200px' }}
+                                    placeholder="Search products by name"
+                                    onChange={(e) => setFilter(e.target.value)}
+                                />
+                                <Button style={{padding:10}}>
+                                    <Search className="w-4 h-4" />
+                                </Button>
+                            </div>
+                            <Form className="flex items-center" >
                                 <div className="flex items-center space-x-4">
                                     <div className="my-2">
-                                        <Form.Item style={{ marginBottom: 0 }} name="filter" > <Select placeholder={<Flex align="center" gap={4}> <Filter className="w-4 h-4" /> <span> Filters </span> </Flex>} onChange={() => { }} size="large" style={{ width: '100px' }} >
+                                        <Form.Item style={{ marginBottom: 0 }} name="filter" > <Select placeholder={<Flex align="center" gap={4}> <Filter className="w-4 h-4" /> <span> Filters </span> </Flex>} onChange={() => { }} style={{ width: '100px' }} >
                                             <Select.Option value="1" > 1 </Select.Option>
                                             <Select.Option value="2">2</Select.Option>
                                             <Select.Option value="3">3</Select.Option>
@@ -44,7 +54,7 @@ const ProductList = () => {
                                     </div>
                                     <div className="my-2">
                                         <Form.Item style={{ marginBottom: 0 }} name="sort" >
-                                            <Select placeholder={<Flex align="center" gap={4}> <ArrowDownNarrowWide className="w-4 h-4" /> <span> Sort </span> </Flex>} onChange={() => { }} size="large" style={{ width: '100px' }} >
+                                            <Select placeholder={<Flex align="center" gap={4}> <ArrowDownNarrowWide className="w-4 h-4" /> <span> Sort </span> </Flex>} onChange={() => { }} style={{ width: '100px' }} >
                                                 <Select.Option value="1" > 1 </Select.Option>
                                                 <Select.Option value="2">2</Select.Option>
                                                 <Select.Option value="3">3</Select.Option>
@@ -120,7 +130,7 @@ const ProductList = () => {
                             {/* Product grid */}
                             <div className="relative lg:col-span-3 ">
 
-                                <div className=" group my-10 flex w-full max-w-xs flex-col overflow-hidden ">
+                                <div className=" group mb-10 flex w-full max-w-xs flex-col overflow-hidden ">
                                     <div className="relative flex h-80 w-72 overflow-hidden" >
                                         <span className="absolute top-0 left-0 w-28 translate-y-5 -translate-x-6 -rotate-45 bg-black text-center text-sm text-white z-10">Sale</span>
                                         <img className="absolute top-0 right-0 h-full w-full object-cover" src="https://images.unsplash.com/photo-1578996953841-b187dbe4bc8a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mzl8fGJsYXplcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60" alt="product image" />
