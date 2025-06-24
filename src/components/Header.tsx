@@ -3,7 +3,7 @@
 import { Dropdown, Input, MenuProps, Space } from "antd";
 import { ChevronDown, Clock, Heart, PhoneCall, Search, ShoppingCart, User } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HoverLink from "./HoverLink";
 import { redirect } from "next/navigation";
 import MobileHeader from "./Mobile/MobileHeader";
@@ -38,11 +38,22 @@ const hoverStyle = `after:content-[''] after:w-0 after:absolute after:left-0 aft
 
 const Header = () => {
   const [showNav, setShowNav] = useState<boolean>(false)
+  const [stickyMenu, setStickyMenu] = useState<boolean>(false);
+    const handleStickyMenu = () => {
+    if (window.scrollY >= 80) {
+      setStickyMenu(true);
+    } else {
+      setStickyMenu(false);
+    }
+  };
 
+  useEffect(() => {
+    window.addEventListener("scroll", handleStickyMenu);
+  });
   return (
-    <header className="fixed w-full z-20 shadow-sm">
+    <header className={`fixed block w-full z-20 border-b border-gray-200 ${stickyMenu && "shadow-sm  border-none"} transition-all`}>
       <div className="border-b border-gray-300   bg-white ">
-        <nav className=" mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
+        <nav className={`mx-auto flex max-w-7xl items-center justify-between transition-all ${stickyMenu ? "p-4" : "p-6"} lg:px-8`} aria-label="Global">
           <div className="flex items-center">
             <a href="#" className="-m-1.5 p-1.5">
               <img className=" w-[35px]" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Tailwind_CSS_Logo.svg/2560px-Tailwind_CSS_Logo.svg.png" alt="" />
@@ -85,7 +96,7 @@ const Header = () => {
             </div>
           </div>
           <div className="hidden gap-2 lg:flex lg:justify-end items-center">
-            <User className="text-primary" size={25}></User>
+            <User className="hover:text-blue-500 cursor-pointer text-primary" size={25}></User>
             <div>
               <p className="text-gray-500  text-xs uppercase">Account</p>
               <HoverLink text="Log in" link="login" type="medium"></HoverLink>
@@ -103,7 +114,7 @@ const Header = () => {
         <MobileHeader showNav={showNav} setShowNav={setShowNav}></MobileHeader>
       </div>
       <div className="w-full bg-white px-20">
-        <nav className=" mx-auto flex max-w-7xl items-center justify-between px-6 py-3 lg:px-8" aria-label="Global">
+        <nav className={` mx-auto flex max-w-7xl items-center justify-between  transition-all px-8 ${stickyMenu ? 'py-1' : 'py-2'}`} aria-label="Global">
           <div >
             <Link href={'/'} className={`mr-5 relative ${hoverStyle} hover:after:w-full text-dark font-semibold`}>Home</Link>
             <Link href={'/shop'} className={`mr-5 relative ${hoverStyle} hover:after:w-full text-dark font-light`}>Shop</Link>
@@ -121,7 +132,7 @@ const Header = () => {
          
           </div>
           <div className="flex gap-3">
-            <div className="flex items-center gap-2 hover:text-blue-500 cursor-pointer text-dark font-light"><Clock size={20} />Recently viewed</div>
+            <div className="flex items-center ga  p-2 hover:text-blue-500 cursor-pointer text-dark font-light"><Clock size={20} />Recently viewed</div>
             <div className="flex items-center gap-2 hover:text-blue-500 cursor-pointer text-dark font-light"><Heart size={20} />Wishlist</div>
           </div>
         </nav>

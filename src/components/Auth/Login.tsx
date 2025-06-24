@@ -1,8 +1,10 @@
 'use client'
-
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 
-const Page = () => {
+const Login = () => {
+    const { data } = useSession()
+    console.log(data)
     return (
         <div className="">
             <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -127,6 +129,8 @@ const Page = () => {
                             </div>
                         </div>
                         <div className="m-auto mt-6 w-fit md:mt-8">
+                            <button onClick={() => signIn('google')}>Sign in with Google</button>
+                            {process.env.GOOGLE_CLIENT_ID}
                             <span className="m-auto text-gray-500">Don't have an account?
                                 <Link className="ml-2 hover:text-indigo-600 text-black" href="/register">Create Account</Link>
                             </span>
@@ -138,4 +142,4 @@ const Page = () => {
     );
 }
 
-export default Page;
+export default Login;
