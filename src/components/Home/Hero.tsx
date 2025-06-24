@@ -1,10 +1,10 @@
 import { Carousel } from "antd";
-import {  ChevronLeft, ChevronRight, Heart, MessageCircleMore, Rocket, ShieldCheck, Undo2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Heart, MessageCircleMore, Rocket, ShieldCheck, Undo2 } from "lucide-react";
 import Link from "next/link";
 
 const Hero = () => {
     return (
-        <section className="bg-[#E5EAF4] py-24 sm:py-32">
+        <section className="bg-[#E5EAF4] py-24 sm:pb-16 sm:pt-2">
             <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
                 {/* <h2 className="text-center text-base/7 font-semibold text-indigo-600">Deploy faster</h2>
                 <p className="mx-auto mt-2 max-w-lg text-center text-4xl font-semibold tracking-tight text-balance text-gray-950 sm:text-5xl">Everything you need to deploy your app</p> */}
@@ -14,8 +14,7 @@ const Hero = () => {
                     <div className="relative lg:col-span-2 lg:row-span-2">
                         <div className="absolute inset-px rounded-lg bg-white"></div>
                         <Carousel arrows
-                            prevArrow={<ChevronLeft color="#000" />}
-                            nextArrow={<ChevronRight color="#000" />}
+                            className="[&>button]:text-black!"
                             infinite>
                             <div>
                                 <div className="relative px-8 py-12 flex h-[35rem] overflow-hidden ">

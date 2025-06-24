@@ -15,7 +15,9 @@ export default function RootLayout({
       >
         <AntdRegistry>
           <Header></Header>
-          {children}
+          <div className='pt-[135px]'>
+            {children}
+          </div>
           <Footer></Footer>
         </AntdRegistry>
       </body>

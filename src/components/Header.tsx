@@ -45,25 +45,25 @@ const Header = () => {
             <a href="#" className="-m-1.5 p-1.5">
               <img className="h-8 w-auto" src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="" />
             </a>
-            <p className="ml-2 font-bold font-mono">ThaiDevShop</p>
+            <Link href="/" className="ml-2 font-bold font-mono">ThaiDevShop</Link>
           </div>
 
           <div className="flex lg:hidden">
             <button type="button" className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
               <span className="sr-only">Open main menu</span>
-              <svg className="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              <svg className="size-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
               </svg>
             </button>
           </div>
           <div className="hidden lg:flex items-center rounded-md border-gray-200 bg-gray-100 w-1/3">
             <div className="relative pl-3.5 py-2">
-              <Dropdown menu={{ items }} placement="topCenter" trigger={['click']}>
+              <Dropdown menu={{ items }} placement="top" trigger={['click']}>
                 <a onClick={(e) => e.preventDefault()}>
                   <Space >
                     Click me
                     <svg className="size-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                      <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                      <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
                     </svg>
                   </Space>
                 </a>
@@ -82,6 +82,7 @@ const Header = () => {
               <p className="font-bold ">0123456789</p>
             </div>
           </div>
+          <Link href={'/cart'}>
           <div className="hidden gap-2 lg:flex lg:justify-end items-center">
             <User className="text-primary" size={25}></User>
             <div>
@@ -97,6 +98,8 @@ const Header = () => {
               <p className="font-bold text-end">$100</p>
             </div>
           </div>
+          </Link>
+
         </nav>
         {/* <!-- Mobile menu, show/hide based on menu open state. --> */}
         <div className="lg:hidden" role="dialog" aria-modal="true">
@@ -110,8 +113,8 @@ const Header = () => {
               </a>
               <button type="button" className="-m-2.5 rounded-md p-2.5 text-gray-700">
                 <span className="sr-only">Close menu</span>
-                <svg className="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                <svg className="size-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
@@ -123,7 +126,7 @@ const Header = () => {
                       Product
 
                       <svg className="size-5 flex-none" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                        <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                        <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
                       </svg>
                     </button>
                     <div className="mt-2 space-y-2" id="disclosure-1">
@@ -153,32 +156,32 @@ const Header = () => {
           <div >
             <Link href={'/'} className={`mr-5 relative ${hoverStyle} hover:after:w-full`}>Home</Link>
             <Link href={'/shop'} className={`mr-5 relative ${hoverStyle} hover:after:w-full `}>Shop</Link>
-            <Dropdown className={`mr-2 relative ${hoverStyle} hover:after:w-full`} menu={{ items }} placement="topCenter" >
+            <Dropdown className={`mr-2 relative ${hoverStyle} hover:after:w-full`} menu={{ items }} placement="top" >
               <a onClick={(e) => e.preventDefault()}>
                 <Space size={0} >
                   Click me
                   <svg className="size-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                    <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                    <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
                   </svg>
                 </Space>
               </a>
             </Dropdown>
-            <Dropdown className="pr-2" menu={{ items }} placement="topCenter" >
+            <Dropdown className="pr-2" menu={{ items }} placement="top" >
               <a onClick={(e) => e.preventDefault()}>
                 <Space size={0} >
                   Click me
                   <svg className="size-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                    <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                    <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
                   </svg>
                 </Space>
               </a>
             </Dropdown>
-            <Dropdown menu={{ items }} placement="topCenter" >
+            <Dropdown menu={{ items }} placement="top" >
               <a onClick={(e) => e.preventDefault()}>
                 <Space size={0}>
                   Click me
                   <svg className="size-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                    <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                    <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
                   </svg>
                 </Space>
               </a>
