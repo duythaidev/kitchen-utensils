@@ -3,11 +3,12 @@ import { Button, Flex, Form, Input, Modal, Select } from "antd";
 import { ArrowDownNarrowWide, ChevronDown, ChevronUp, Filter, Search, ShoppingBag, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import ModalContent from "./ModalContent";
-import HoverLink from "../HoverLink";
+import HoverLink from "../Custom/HoverLink";
 import ProductCard from "./ProductCard";
 
 const ProductList = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
     const [filter, setFilter] = useState('');
     const [sort, setSort] = useState('');
     const showModal = () => {
@@ -46,16 +47,21 @@ const ProductList = () => {
                             <Form className="flex items-center" >
                                 <div className="flex items-center space-x-4">
                                     <div className="my-2">
-                                        <Form.Item style={{ marginBottom: 0 }} name="filter" > <Select placeholder={<Flex align="center" gap={4}> <Filter className="w-4 h-4" /> <span> Filters </span> </Flex>} onChange={() => { }} style={{ width: '100px' }} >
-                                            <Select.Option value="1" > 1 </Select.Option>
-                                            <Select.Option value="2">2</Select.Option>
-                                            <Select.Option value="3">3</Select.Option>
-                                        </Select>
+                                        <Form.Item style={{ marginBottom: 0 }} name="filter" >
+                                            <Select placeholder={<Flex align="center" gap={4}> <Filter className="w-4 h-4" /> <span> Filters </span> </Flex>} onChange={() => { }} style={{ width: '100px' }} >
+                                                <Select.Option value="1" > 1 </Select.Option>
+                                                <Select.Option value="2">2</Select.Option>
+                                                <Select.Option value="3">3</Select.Option>
+                                            </Select>
                                         </Form.Item>
                                     </div>
                                     <div className="my-2">
                                         <Form.Item style={{ marginBottom: 0 }} name="sort" >
-                                            <Select placeholder={<Flex align="center" gap={4}> <ArrowDownNarrowWide className="w-4 h-4" /> <span> Sort </span> </Flex>} onChange={() => { }} style={{ width: '100px' }} >
+                                            <Select placeholder={
+                                                <Flex align="center" gap={4}>
+                                                    <ArrowDownNarrowWide className="w-4 h-4" /> <span> Sort </span>
+                                                </Flex>
+                                            } onChange={() => { }} style={{ width: '100px' }} >
                                                 <Select.Option value="1" > 1 </Select.Option>
                                                 <Select.Option value="2">2</Select.Option>
                                                 <Select.Option value="3">3</Select.Option>
@@ -132,11 +138,11 @@ const ProductList = () => {
                             <div className="relative lg:col-span-3 ">
 
                                 <div className="grid grid-cols-1 gap-x-8 gap-y-8 lg:grid-cols-3">
-                                  
-                                    <ProductCard></ProductCard>
-                                    <ProductCard></ProductCard>
-                                    <ProductCard></ProductCard>
-                                    <ProductCard></ProductCard>
+
+                                    <ProductCard showModal={showModal}></ProductCard>
+                                    <ProductCard showModal={showModal}></ProductCard>
+                                    <ProductCard showModal={showModal}></ProductCard>
+                                    <ProductCard showModal={showModal}></ProductCard>
                                 </div>
                                 {/* Your content */}
                             </div>

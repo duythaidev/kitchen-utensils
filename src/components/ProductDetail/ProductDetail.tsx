@@ -1,6 +1,5 @@
 'use client'
 
-import { Space } from "antd";
 import { ShoppingCart } from "lucide-react";
 import { useState } from "react";
 const tabs = [
@@ -101,10 +100,10 @@ const ProductDetailPage = () => {
                             onClick={handleAddToCart}
                             className="mt-8 w-full flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-md text-base font-medium"
                         >
-                            <Space>
+                            <div className="flex items-center justify-center mr-2">
                                 <ShoppingCart className="w-4 h-4" />
                                 Add to bag
-                            </Space>
+                            </div>
                         </button>
                     </div>
                 </div>

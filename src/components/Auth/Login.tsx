@@ -1,10 +1,44 @@
 'use client'
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
+import { redirect, useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import Spinner from "../Custom/Spin";
 
 const Login = () => {
-    const { data } = useSession()
-    console.log(data)
+    const [loading, setLoading] = useState<boolean>(false);
+    const { data: session } = useSession()
+    console.log("session", session)
+    const handleLogin = async (formData: FormData) => {
+        console.log("Submitting form", formData);
+        setLoading(true);
+        const email = formData.get('email') as string;
+        const password = formData.get('password') as string;
+
+        try {
+            const response: any = await signIn("credentials", {
+                email,
+                password,
+                redirect: false,
+            });
+            console.log({ response });
+            // if (!response?.error) {
+            //     redirect("/");
+            // }
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            // Process response here
+            console.log("Login Successful", response);
+            setLoading(false);
+            toast.success("Login Successful");
+        } catch (error: any) {
+            console.error("Login Failed:", error);
+            toast.error(`Login Failed: ${error.message}`);
+        }
+    }
     return (
         <div className="">
             <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -47,11 +81,11 @@ const Login = () => {
                             </h1>
                             <p className="text-gray-500">Enter your detail below</p>
                         </div>
-                        <form className="space-y-6">
+                        <form className="space-y-6" action={handleLogin}>
                             <div>
                                 <p className="block text-sm font-medium text-gray-500 ">Email</p>
                                 <div className="mt-1">
-                                    <input id="email" type="text" data-testid="username" required placeholder="asdjhkad"
+                                    <input name="email" type="text" data-testid="username" required placeholder="asdjhkad"
                                         className="block w-full transition bg-gray-50 appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400  focus:border-indigo-500 focus:outline-none focus:ring-indigo-500      sm:text-sm"
                                     />
                                 </div>
@@ -67,8 +101,6 @@ const Login = () => {
                             </div>
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center">
-                                    <input id="remember_me" name="remember_me" type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500   disabled:cursor-wait disabled:opacity-50" />
-                                    <p className="ml-2 block text-sm text-gray-900 ">Remember me</p>
                                 </div>
                                 <div className="text-sm">
                                     <a className="font-medium text-gray-400 hover:text-gray-600" href="/">
@@ -77,14 +109,20 @@ const Login = () => {
                                 </div>
                             </div>
                             <div>
-                                <button data-testid="login" type="submit"
-                                    className="group relative flex w-full justify-center rounded-md border border-transparent bg-blue-950 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2   disabled:cursor-wait disabled:opacity-50">
+                                <button disabled={loading} data-testid="login" type="submit"
+                                    className="cursor-pointer group relative flex w-full justify-center rounded-md border border-transparent bg-blue-950 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2   disabled:cursor-wait disabled:opacity-50">
                                     <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                                         <svg className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                             <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"></path>
                                         </svg>
                                     </span>
-                                    Sign In
+                                    <span>
+                                        Sign In
+                                    </span>
+
+                                    {loading &&
+                                        <Spinner></Spinner>
+                                    }
                                 </button>
                             </div>
                         </form>
@@ -99,7 +137,8 @@ const Login = () => {
                             </div>
                             <div className="mt-6 grid grid-cols-2 gap-3">
                                 <button
-                                    className="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white  px-4 py-2 text-sm font-medium text-gray-500  shadow-sm hover:bg-gray-50  disabled:cursor-wait disabled:opacity-50">
+                                    onClick={() => signIn('google')}
+                                    className="cursor-pointer inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white  px-4 py-2 text-sm font-medium text-gray-500  shadow-sm hover:bg-gray-50  disabled:cursor-wait disabled:opacity-50">
                                     <span className="sr-only">Sign in with Google</span>
                                     <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                         <clipPath id="p.0">
@@ -129,8 +168,6 @@ const Login = () => {
                             </div>
                         </div>
                         <div className="m-auto mt-6 w-fit md:mt-8">
-                            <button onClick={() => signIn('google')}>Sign in with Google</button>
-                            {process.env.GOOGLE_CLIENT_ID}
                             <span className="m-auto text-gray-500">Don't have an account?
                                 <Link className="ml-2 hover:text-indigo-600 text-black" href="/register">Create Account</Link>
                             </span>
