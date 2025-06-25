@@ -1,5 +1,4 @@
 'use client'
-import { Space } from "antd";
 import { ShoppingCart } from "lucide-react";
 import { useState } from "react";
 
@@ -165,10 +164,10 @@ const ModalContent = () => {
                                             </div>
 
                                             <button type="submit" className=" mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden">
-                                                <Space>
+                                                <div className="flex items-center justify-center mr-2">
                                                     <ShoppingCart className="size-4" />
                                                     Add to bag
-                                                </Space>
+                                                </div>
                                             </button>
                                         </form>
                                     </section>

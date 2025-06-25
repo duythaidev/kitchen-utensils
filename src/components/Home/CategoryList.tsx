@@ -1,5 +1,4 @@
 'use client'
-import { Flex } from "antd";
 import { Tag } from "lucide-react";
 import Image from "next/image";
 import Link from 'next/link'
@@ -21,7 +20,7 @@ const CategoryList = () => {
                         </div>
                     </div>
 
-                    <Flex justify="center" gap={50}>
+                    <div className="flex justify-center gap-12">
                         <Link href="/shop" className="group flex w-[150px] flex-col items-center">
                             <div className="max-w-[130px] w-full bg-[#F2F3F8] h-32.5 rounded-full flex items-center justify-center mb-4">
                                 {/* <img alt="Category" src="" width="82" height="62" style={{ color: 'transparent' }} /> */}
@@ -85,7 +84,7 @@ const CategoryList = () => {
                             </div>
                         </Link>
 
-                    </Flex>
+                    </div>
                 </div>
             </div>
         </section>

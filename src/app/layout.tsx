@@ -4,14 +4,15 @@ import Header from '@/components/Header';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import '@ant-design/v5-patch-for-react-19';
 import NextAuthWrapper from '@/components/NextAuthWrapper';
+import { ToastContainer } from 'react-toastify';
 
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
   return (
-    <NextAuthWrapper>
-      <html lang="en">
-        <body
-          className={``}
-        >
+    <html lang="en">
+      <body
+        className={``}
+      >
+        <NextAuthWrapper>
           <AntdRegistry>
             <Header></Header>
             <div className='pt-[135px]'>
@@ -19,8 +20,10 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
             </div>
             <Footer></Footer>
           </AntdRegistry>
-        </body>
-      </html>
-    </NextAuthWrapper>
+          <ToastContainer />
+
+        </NextAuthWrapper>
+      </body>
+    </html>
   );
 }
