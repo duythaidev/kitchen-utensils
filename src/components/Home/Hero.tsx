@@ -1,6 +1,8 @@
+'use client'
 import { Carousel } from "antd";
 import { ChevronLeft, ChevronRight, Heart, MessageCircleMore, Rocket, ShieldCheck, Undo2 } from "lucide-react";
 import Link from "next/link";
+import CustomCarousel from "../Carousel/CustomCarousel";
 
 const Hero = () => {
     return (
@@ -13,82 +15,10 @@ const Hero = () => {
                     {/* Slider */}
                     <div className="relative lg:col-span-2 lg:row-span-2">
                         <div className="absolute inset-px rounded-lg bg-white"></div>
-                        <Carousel arrows
-                            className="[&>button]:text-black!"
-                            infinite>
-                            <div>
-                                <div className="relative px-8 py-12 flex h-[35rem] overflow-hidden ">
-                                    <div className="flex flex-col w-1/2 justify-around lg:pl-8 lg:py-10 sm:pl-10 sm:pt-10 ">
-                                        <div className="flex items-end">
-                                            <span className=" text-blue-700 font-bold text-5xl tracking-tight max-lg:text-center">
-                                                30%
-                                            </span>
-                                            <span className="ml-5 text-xl inline-block w-2.5 uppercase leading-none">sale off</span>
-                                        </div>
-                                        <div>
-                                            <Link href="/" className="hover:text-blue-700 font-bold block text-3xl tracking-tight !text-gray-950 max-lg:text-center">Macbook Pro - 512/16GB</Link>
-                                            <p className="  max-w-lg mt-5 text-gray-600 ">
-                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, minima minus? Laborum ullam, in ipsam ducimus saepe ea illum. Deleniti ad corrupti omnis nam inventore quas aliquam quae iure illo.
-                                            </p>
-                                        </div>
-                                        <a href="/" className="rounded-md w-2/5 text-center !bg-[#1c274c] px-5 py-3.5 text-sm font-semibold !text-white shadow-xs !transition duration-200 hover:!bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                                            Get started
-                                        </a>
-                                    </div>
-                                    <div className="flex flex-col max-w-1/2 justify-center px-8 py-8 sm:px-10 sm:pt-10 ">
-                                        <img src="https://cdn-icons-png.freepik.com/512/1/1694.png" alt="" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div className="relative px-8 py-12 flex h-[35rem] overflow-hidden ">
-                                    <div className="flex flex-col w-1/2 justify-around lg:pl-8 lg:py-10 sm:pl-10 sm:pt-10 ">
-                                        <div className="flex items-end">
-                                            <span className=" text-blue-700 font-bold text-5xl tracking-tight max-lg:text-center">
-                                                30%
-                                            </span>
-                                            <span className="ml-5 text-xl inline-block w-2.5 uppercase leading-none">sale off</span>
-                                        </div>
-                                        <div>
-                                            <Link href="/" className="hover:text-blue-700 font-bold block text-3xl tracking-tight text-gray-950 max-lg:text-center">Macbook Pro - 512/16GB</Link>
-                                            <p className="  max-w-lg text-sm/6 mt-5 text-gray-600 ">
-                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, minima minus? Laborum ullam, in ipsam ducimus saepe ea illum. Deleniti ad corrupti omnis nam inventore quas aliquam quae iure illo.
-                                            </p>
-                                        </div>
-                                        <a href="/" className="rounded-md w-2/5 text-center !bg-[#1c274c] px-5 py-3.5 text-sm font-semibold !text-white shadow-xs !transition duration-200 hover:!bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                                            Get started
-                                        </a>
-                                    </div>
-                                    <div className="flex flex-col max-w-1/2 justify-center px-8 py-8 sm:px-10 sm:pt-10 ">
-                                        <img src="https://cdn-icons-png.freepik.com/512/1/1694.png" alt="" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div className="relative px-8 py-12 flex h-[35rem] overflow-hidden ">
-                                    <div className="flex flex-col w-1/2 justify-around lg:pl-8 lg:py-10 sm:pl-10 sm:pt-10 ">
-                                        <div className="flex items-end">
-                                            <span className=" text-blue-700 font-bold text-5xl tracking-tight max-lg:text-center">
-                                                30%
-                                            </span>
-                                            <span className="ml-5 text-xl inline-block w-2.5 uppercase leading-none">sale off</span>
-                                        </div>
-                                        <div>
-                                            <Link href="/" className="hover:text-blue-700 font-bold block text-3xl tracking-tight text-gray-950 max-lg:text-center">Macbook Pro - 512/16GB</Link>
-                                            <p className="  max-w-lg text-sm/6 mt-5 text-gray-600 ">
-                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, minima minus? Laborum ullam, in ipsam ducimus saepe ea illum. Deleniti ad corrupti omnis nam inventore quas aliquam quae iure illo.
-                                            </p>
-                                        </div>
-                                        <a href="/" className="rounded-md w-2/5 text-center !bg-[#1c274c] px-5 py-3.5 text-sm font-semibold !text-white shadow-xs !transition duration-200 hover:!bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                                            Get started
-                                        </a>
-                                    </div>
-                                    <div className="flex flex-col max-w-1/2 justify-center px-8 py-8 sm:px-10 sm:pt-10 ">
-                                        <img src="https://cdn-icons-png.freepik.com/512/1/1694.png" alt="" />
-                                    </div>
-                                </div>
-                            </div>
-                        </Carousel>
+                        <CustomCarousel />
+                        
+        
+
                         {/* <div className="relative px-8 py-12 flex h-[35rem] overflow-hidden ">
                             <div className="flex flex-col w-1/2 justify-around lg:pl-8 lg:py-10 sm:pl-10 sm:pt-10 ">
                                 <div className="flex items-end">

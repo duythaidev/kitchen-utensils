@@ -22,12 +22,12 @@ const Promotion = () => {
               A15 Bionic, with a 5‑core GPU, powers all the latest features.
             </p>
 
-            <a
+            <Link
               href="#"
-              className="inline-flex font-medium text-custom-sm text-white bg-blue py-[11px] px-9.5 rounded-md ease-out duration-200 hover:bg-blue-dark mt-7.5"
+              className="inline-flex font-medium text-custom-sm text-white bg-blue-600 py-[11px] px-9.5 rounded-md ease-out duration-200 hover:bg-blue-800 mt-7.5"
             >
               Buy Now
-            </a>
+            </Link>
           </div>
 
           <Image

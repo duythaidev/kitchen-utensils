@@ -1,7 +1,11 @@
 import Link from "next/link";
-
-const HoverLink = ({ link, type, text }: { text: string, link: string, type: 'bold' | 'normal' | 'medium' }) =>
-  <Link href={`${link}`} className={`font-${type} hover:text-primary`}>{text}</Link>
+interface HoverLinkProps {
+    link: string;
+    className?: string;
+    children: React.ReactNode;
+}
+const HoverLink = ({ link,  className, children }: HoverLinkProps) =>
+  <Link href={`${link}`} className={` hover:text-blue-700 ${className}`}>{children}</Link>
 
 
 export default HoverLink;

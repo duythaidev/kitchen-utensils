@@ -1,12 +1,14 @@
 'use client';
 
 import { signIn, signOut, useSession } from "next-auth/react";
+import CustomCarousel from "./Carousel/CustomCarousel";
 
 const Test = () => {
     const { data: session } = useSession()
     console.log(session);
     return (
         <div className="flex flex-col items-center justify-center min-h-screen">
+            <CustomCarousel />
             {
                 session ? (
                     <div>

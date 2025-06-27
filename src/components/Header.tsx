@@ -114,9 +114,13 @@ const Header = () => {
             <div>
               <p className="text-gray-500  text-xs uppercase">Account</p>
               {session?.user ?
-                <HoverLink text={session?.user.name || 'Profile'} link="profile" type="medium"></HoverLink>
+                <HoverLink link="profile" className="text-dark font-medium hover:text-blue-500">
+                  {session?.user.name || 'Profile'}
+                </HoverLink>
                 :
-                <HoverLink text="Log in" link="login" type="medium"></HoverLink>
+                <HoverLink link="login" className="text-dark font-medium hover:text-blue-500">
+                  Log in
+                </HoverLink>
               }
             </div>
             <div onClick={() => { redirect('/cart') }} className="relative">

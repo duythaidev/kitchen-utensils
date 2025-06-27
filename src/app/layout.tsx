@@ -14,11 +14,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
       >
         <NextAuthWrapper>
           <AntdRegistry>
-            <Header></Header>
-            <div className='pt-[135px]'>
-              {children}
-            </div>
-            <Footer></Footer>
+            {children}
           </AntdRegistry>
           <ToastContainer />
 
