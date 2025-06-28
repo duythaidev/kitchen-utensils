@@ -109,6 +109,8 @@ import {
 } from "@/components/ui/tabs"
 import { columnsMap, DataTableProps, InferData, ordersColumns, productsColumns, TableCellViewer, TableType, usersColumns } from "./data-table-columns"
 import { ChevronDown, Filter } from "lucide-react"
+import AddUserModal from "../Modals/User/AddUserModal"
+import AddProductModal from "../Modals/Product/AddProductModal"
 
 
 function DraggableRow<T extends TableType>({ row }: { row: Row<InferData<T>> }) {
@@ -201,6 +203,8 @@ export function DataTable<T extends TableType>({ data: initialData, type }: Data
     }
   }
 
+  console.log(columns)
+
   return (
     <Tabs
       defaultValue="outline"
@@ -273,6 +277,7 @@ export function DataTable<T extends TableType>({ data: initialData, type }: Data
                     .filter((column) => column.getCanSort())
                     .map((column, index) => {
                       const col: any = columns.find((c: any) => c.accessorKey === column.id)
+                      console.log(col)
                       if (col) {
                         return (
                           <DropdownMenuRadioItem key={column.id} value={column.id}>
@@ -310,17 +315,11 @@ export function DataTable<T extends TableType>({ data: initialData, type }: Data
           </div>
           {
             type === "users" &&
-            <Button variant="default" size="sm">
-              <IconPlus />
-              <span className="hidden lg:inline">Add User</span>
-            </Button>
+            <AddUserModal />
           }
           {
             type === "products" &&
-            <Button variant="default" size="sm">
-              <IconPlus />
-              <span className="hidden lg:inline">Add Product</span>
-            </Button>
+            <AddProductModal />
           }
         </div>
       </div>

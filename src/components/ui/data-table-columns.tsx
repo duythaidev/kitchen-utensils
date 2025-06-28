@@ -409,7 +409,7 @@ export const productsColumns: ColumnDef<z.infer<typeof productSchema>>[] = [
   },
   {
     accessorKey: "product_name",
-    header: "Product",
+    header: "Name",
     cell: ({ row }) => (
       <div className="font-medium">
         {row.original.product_name.length > 30
@@ -420,23 +420,23 @@ export const productsColumns: ColumnDef<z.infer<typeof productSchema>>[] = [
   },
   {
     accessorKey: "price",
-    header: () => <div className="text-right">Price</div>,
+    header: "Price",
     cell: ({ row }) => (
-      <div className="text-right font-medium text-primary">
+      <div className=" font-medium text-primary">
         ${row.original.price.toFixed(2)}
       </div>
     ),
   },
   {
     accessorKey: "discounted_price",
-    header: () => <div className="text-right">Discount</div>,
+    header: "Discount",
     cell: ({ row }) =>
       row.original.discounted_price ? (
-        <div className="text-right text-green-600 font-medium">
+        <div className=" text-green-600 font-medium">
           ${row.original.discounted_price.toFixed(2)}
         </div>
       ) : (
-        <div className="text-right text-muted-foreground">–</div>
+        <div className=" text-muted-foreground">–</div>
       ),
   },
   // {
@@ -449,7 +449,7 @@ export const productsColumns: ColumnDef<z.infer<typeof productSchema>>[] = [
   //   ),
   // },
   {
-    accessorKey: "category.name", // Nếu bạn muốn hiển thị tên category
+    id: "category.name", // Nếu bạn muốn hiển thị tên category
     header: "Category",
     cell: ({ row }) => (
       <Badge variant="outline" className="text-muted-foreground px-1.5">
