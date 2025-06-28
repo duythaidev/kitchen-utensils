@@ -1,11 +1,30 @@
 'use client'
-import { Button, Flex, Form, Input, Modal, Select } from "antd";
+import { Flex, Form, Modal, Select } from "antd";
 import { ArrowDownNarrowWide, ChevronDown, ChevronUp, Filter, Search, ShoppingBag, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import ModalContent from "./ModalContent";
 import HoverLink from "../Custom/HoverLink";
 import ProductCard from "./ProductCard";
-
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { DialogClose } from "@radix-ui/react-dialog";
 const ProductList = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
@@ -40,36 +59,62 @@ const ProductList = () => {
                                     placeholder="Search products by name"
                                     onChange={(e) => setFilter(e.target.value)}
                                 />
-                                <Button style={{ padding: 10 }}>
-                                    <Search className="w-4 h-4" />
+                                <Button className="bg-white hover:bg-gray-100 cursor-pointer border" style={{ padding: 10 }}>
+                                    <Search color="black" className="w-4 h-4" />
                                 </Button>
+                                <Dialog >
+                                    <DialogTrigger>Open</DialogTrigger>
+                                    <DialogContent className={`lg:max-w-screen-lg overflow-y-scroll max-h-screen 
+                                          [&::-webkit-scrollbar]:w-2
+                                        [&::-webkit-scrollbar-track]:rounded-full
+                                        [&::-webkit-scrollbar-track]:bg-white
+                                        [&::-webkit-scrollbar-thumb]:rounded-full
+                                        [&::-webkit-scrollbar-thumb]:bg-white
+                                        [&::-webkit-scrollbar-track]:my-5
+                                        [&::-webkit-scrollbar-thumb]:w-2
+                                        `}>
+                                        <ModalContent></ModalContent>
+                                    </DialogContent>
+                                </Dialog>
                             </div>
-                            <Form className="flex items-center" >
+                            <div className="flex items-center" >
                                 <div className="flex items-center space-x-4">
+
                                     <div className="my-2">
-                                        <Form.Item style={{ marginBottom: 0 }} name="filter" >
-                                            <Select placeholder={<Flex align="center" gap={4}> <Filter className="w-4 h-4" /> <span> Filters </span> </Flex>} onChange={() => { }} style={{ width: '100px' }} >
-                                                <Select.Option value="1" > 1 </Select.Option>
-                                                <Select.Option value="2">2</Select.Option>
-                                                <Select.Option value="3">3</Select.Option>
-                                            </Select>
-                                        </Form.Item>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="outline" className="cursor-pointer w-[100px] flex items-center gap-2">
+                                                    <Filter className="w-4 h-4" />
+                                                    <span>{sort ? `${sort}` : "Sort"} </span>
+                                                    <ChevronDown className="inline w-4 h-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent>
+                                                <DropdownMenuItem onSelect={() => setSort("1")}>1</DropdownMenuItem>
+                                                <DropdownMenuItem onSelect={() => setSort("2")}>2</DropdownMenuItem>
+                                                <DropdownMenuItem onSelect={() => setSort("3")}>3</DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
                                     </div>
                                     <div className="my-2">
-                                        <Form.Item style={{ marginBottom: 0 }} name="sort" >
-                                            <Select placeholder={
-                                                <Flex align="center" gap={4}>
-                                                    <ArrowDownNarrowWide className="w-4 h-4" /> <span> Sort </span>
-                                                </Flex>
-                                            } onChange={() => { }} style={{ width: '100px' }} >
-                                                <Select.Option value="1" > 1 </Select.Option>
-                                                <Select.Option value="2">2</Select.Option>
-                                                <Select.Option value="3">3</Select.Option>
-                                            </Select>
-                                        </Form.Item>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="outline" className="cursor-pointer w-[100px] flex items-center gap-2">
+                                                    <ArrowDownNarrowWide className="w-4 h-4" />
+                                                    <span>{sort ? `${sort}` : "Sort"} </span>
+                                                    <ChevronDown className="inline w-4 h-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent>
+                                                <DropdownMenuItem onSelect={() => setSort("1")}>1</DropdownMenuItem>
+                                                <DropdownMenuItem onSelect={() => setSort("2")}>2</DropdownMenuItem>
+                                                <DropdownMenuItem onSelect={() => setSort("3")}>3</DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
                                     </div>
                                 </div>
-                            </Form>
+
+                            </div>
                         </div>
                     </div>
                     <section aria-labelledby="products-heading" className="pt-6 pb-24">
@@ -150,7 +195,7 @@ const ProductList = () => {
                     </section>
                 </main>
             </div>
-            <Modal
+            {/* <Modal
                 closable={{ 'aria-label': 'Custom Close Button' }}
                 open={isModalOpen}
                 onOk={handleOk}
@@ -168,7 +213,7 @@ const ProductList = () => {
                 footer={null}
             >
                 <ModalContent></ModalContent>
-            </Modal>
+            </Modal> */}
         </>
     );
 }

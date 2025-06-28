@@ -1,45 +1,25 @@
 'use client'
 
-import { Dropdown, Input, MenuProps, Space } from "antd";
-import { ChevronDown, Clock, Heart, PhoneCall, Search, ShoppingCart, User } from "lucide-react";
 import Link from "next/link";
+import { ChevronDown, Clock, Heart, PhoneCall, Search, ShoppingCart, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import HoverLink from "./Custom/HoverLink";
 import { redirect } from "next/navigation";
 import MobileHeader from "./Mobile/MobileHeader";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from "@/components/ui/navigation-menu"
+import { Input } from "./ui/input";
 
-const items: MenuProps['items'] = [
-  {
-    label: (
-      <Link href="admin" rel="noopener noreferrer">
-        Dashboard
-      </Link>
-    ),
-    key: '0',
-  },
-  {
-    type: 'divider',
-  },
-  {
-    label: (
-      <Link href="admin/accounts" rel="noopener noreferrer">
-        Manage Accounts
-      </Link>
-    ),
-    key: '1',
-  },
-  {
-    type: 'divider',
-  },
-  {
-    label: <Link href="admin/products" rel="noopener noreferrer">
-        Manage Products
-      </Link>,
-    key: '2',
-  },
-];
 
 const hoverStyle = `after:content-[''] after:w-0 after:absolute after:left-0 after:top-[-10] after:h-0.5  after:bg-blue-500 after:duration-500`
 
@@ -79,19 +59,21 @@ const Header = () => {
           </div>
           <div className="hidden lg:flex items-center rounded-md border-gray-200 bg-gray-100 w-1/3">
             <div className="relative pl-3.5 py-2">
-              <Dropdown menu={{ items }} placement="top" trigger={['click']}>
-                <a onClick={(e) => e.preventDefault()}>
-                  <Space >
-                    Click me
-                    <svg className="size-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                      <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
-                    </svg>
-                  </Space>
-                </a>
-              </Dropdown>
+
+              <NavigationMenu>
+                <NavigationMenuList>
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger className="p-0 font-normal">All Categories</NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <NavigationMenuLink className="w-[100px]">All Categories</NavigationMenuLink>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
             </div>
-            <div className="border-l border-gray-300 px-2 ml-2 flex-1">
-              <Input size="small" placeholder="large size" className="h-full " variant="borderless" suffix={<Search color="#aaa" size={20} />} />
+            <div className="relative border-l border-gray-300 px-2 ml-2 flex-1">
+              <Input type="email" className="w-[95%] border-none! bg-gray-100! focus-visible:ring-[0px] " placeholder="Search" />
+              <Search size={20} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"></Search>
             </div>
 
           </div>
@@ -141,7 +123,7 @@ const Header = () => {
             <Link href={'/'} className={`mr-5 relative ${hoverStyle} hover:after:w-full text-dark font-semibold`}>Home</Link>
             <Link href={'/shop'} className={`mr-5 relative ${hoverStyle} hover:after:w-full text-dark font-light`}>Shop</Link>
             <Link href={'/contact'} className={`mr-5 relative ${hoverStyle} hover:after:w-full text-dark font-light`}>Contact</Link>
-            <Dropdown className={`mr-2 relative ${hoverStyle} hover:after:w-full`} menu={{ items }} placement="top" >
+            {/* <Dropdown className={`mr-2 relative ${hoverStyle} hover:after:w-full`} menu={{ items }} placement="top" >
               <a onClick={(e) => e.preventDefault()}>
                 <Space size={0} className="text-dark font-light">
                   Admin
@@ -150,8 +132,21 @@ const Header = () => {
                   </svg>
                 </Space>
               </a>
-            </Dropdown>
-
+            </Dropdown> */}
+            <NavigationMenu className="inline-block">
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="p-0 font-light text-[16px] text-dark bg-background hover:bg-background">Admin</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <NavigationMenuLink className="w-[100px]" href="/admin">Dashboard</NavigationMenuLink>
+                    <NavigationMenuLink className="w-[100px]" href="/admin/users">Users</NavigationMenuLink>
+                    <NavigationMenuLink className="w-[100px]" href="/admin/products">Products</NavigationMenuLink>
+                    <NavigationMenuLink className="w-[100px]" href="/admin/orders">Orders</NavigationMenuLink>
+                    {/* <NavigationMenuLink className="w-[100px]" href="/admin/settings">Settings</NavigationMenuLink> */}
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
           </div>
           <div className="flex gap-3">
             <div className="flex items-center gap-2 hover:text-blue-500 cursor-pointer text-dark font-light"><Clock size={20} />Recently viewed</div>

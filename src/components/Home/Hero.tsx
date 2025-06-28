@@ -1,5 +1,4 @@
 'use client'
-import { Carousel } from "antd";
 import { ChevronLeft, ChevronRight, Heart, MessageCircleMore, Rocket, ShieldCheck, Undo2 } from "lucide-react";
 import Link from "next/link";
 import CustomCarousel from "../Carousel/CustomCarousel";

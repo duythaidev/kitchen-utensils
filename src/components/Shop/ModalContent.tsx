@@ -9,15 +9,15 @@ const ModalContent = () => {
         console.log('Add to cart');
     }
     return (
-        <div className="" >
+        <div >
 
             <div className="  w-full overflow-y-auto">
                 <div className="flex min-h-full items-stretch justify-center text-center md:items-center">
 
-                    <div className="flex w-full transform text-left text-base transition md:my-8 md:max-w-2xl md:px-4 lg:max-w-4xl">
+                    <div className="flex w-full transform text-left text-base transition  md:max-w-2xl lg:max-w-4xl">
                         <div className="relative flex w-full items-center overflow-hidden bg-white ">
 
-                            <div className="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8">
+                            <div className="grid w-full grid-cols-1 items-start gap-x-6 p-1 gap-y-8 sm:grid-cols-12 lg:gap-x-8">
                                 <img src="https://tailwindcss.com/plus-assets/img/ecommerce-images/product-quick-preview-02-detail.jpg" alt="Two each of gray, white, and black shirts arranged on table." className="aspect-2/3 w-full rounded-lg bg-gray-100 object-cover sm:col-span-4 lg:col-span-5" />
                                 <div className="sm:col-span-8 lg:col-span-7">
                                     <span className="inline-block text-custom-xs font-medium text-white py-1 px-3 bg-green-600 mb-6.5">
@@ -30,7 +30,9 @@ const ModalContent = () => {
                                         <h3 id="information-heading" className="sr-only">Product information</h3>
 
                                         <p className="text-2xl text-gray-900">$192</p>
-                                        <p className="mt-4 text-base text-gray-500">This 6-pack of basic tees is made from 100% cotton and comes in a variety of colors. Each shirt is designed for comfort and durability, making them perfect for everyday wear.</p>
+                                        <p className="mt-4 text-base text-gray-500">
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut eum in minus voluptatum. Nemo corrupti, necessitatibus sequi veritatis optio, ab soluta iste alias quia, commodi vero aliquam aspernatur est asperiores.
+                                            This 6-pack of basic tees is made from 100% cotton and comes in a variety of colors. Each shirt is designed for comfort and durability, making them perfect for everyday wear.</p>
                                         <div className="mt-6">
                                             <h4 className="sr-only">Reviews</h4>
                                             <div className="flex items-center">
@@ -61,25 +63,7 @@ const ModalContent = () => {
                                         <h3 id="options-heading" className="sr-only">Product options</h3>
 
                                         <form>
-                                            <fieldset aria-label="Choose a color">
-                                                <legend className="text-sm font-medium text-gray-900">Color</legend>
-
-                                                <div className="mt-4 flex items-center gap-x-3">
-                                                    <label aria-label="White" className="relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 ring-gray-400 focus:outline-hidden">
-                                                        <input type="radio" name="color-choice" value="White" className="sr-only" />
-                                                        <span aria-hidden="true" className="size-8 rounded-full border border-black/10 bg-white"></span>
-                                                    </label>
-                                                    <label aria-label="Gray" className="relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 ring-gray-400 focus:outline-hidden">
-                                                        <input type="radio" name="color-choice" value="Gray" className="sr-only" />
-                                                        <span aria-hidden="true" className="size-8 rounded-full border border-black/10 bg-gray-200"></span>
-                                                    </label>
-                                                    <label aria-label="Black" className="relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 ring-gray-900 focus:outline-hidden">
-                                                        <input type="radio" name="color-choice" value="Black" className="sr-only" />
-                                                        <span aria-hidden="true" className="size-8 rounded-full border border-black/10 bg-gray-900"></span>
-                                                    </label>
-                                                </div>
-                                            </fieldset>
-
+                              
                                             <div className="flex flex-wrap justify-between gap-5 mt-6 mb-7.5">
                                                 <div>
                                                     <h4 className="font-semibold text-lg text-dark mb-3.5">
