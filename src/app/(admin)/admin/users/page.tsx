@@ -1,10 +1,9 @@
 import { DataTable } from "@/components/ui/data-table";
 import data from "./data.json";
-import { UsersTable } from "@/components/ui/users-table";
 const Page = () => {
     return (
         <div>
-            <UsersTable data={data} />
+            <DataTable data={data} type="users" />
         </div>
     );
 }

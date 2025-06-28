@@ -1,18 +1,7 @@
 "use client"
 
 import * as React from "react"
-import {
-  closestCenter,
-  DndContext,
-  KeyboardSensor,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-  type DragEndEvent,
-  type UniqueIdentifier,
-} from "@dnd-kit/core"
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers"
+
 import {
   arrayMove,
   SortableContext,
@@ -21,33 +10,16 @@ import {
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import {
-  IconChevronDown,
-  IconChevronLeft,
-  IconChevronRight,
-  IconChevronsLeft,
-  IconChevronsRight,
+
   IconCircleCheckFilled,
   IconDotsVertical,
   IconGripVertical,
-  IconLayoutColumns,
   IconLoader,
-  IconPlus,
   IconTrendingUp,
 } from "@tabler/icons-react"
 import {
   ColumnDef,
-  ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  Row,
-  SortingState,
-  useReactTable,
-  VisibilityState,
+
 } from "@tanstack/react-table"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 import { toast } from "sonner"
@@ -91,20 +63,17 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
+
+import { CircleCheck, CircleX, Eye, Pencil, Phone, Trash } from "lucide-react"
+import { Avatar, AvatarFallback, AvatarImage } from "./avatar"
+import { Dialog, DialogContent, DialogTrigger } from "./dialog"
+import ModalContent from "../Shop/PreviewProductModal"
+import ViewUserModal from "../Modals/User/ViewUserModal"
+import EditUserModal from "../Modals/User/EditUserModal"
+import BanUserModal from "../Modals/User/BanUserModal"
+import ViewProductModal from "../Modals/Product/ViewProductModal"
+import EditProductModal from "../Modals/Product/EditProductModal"
+import DeleteProductModal from "../Modals/Product/DeleteProductModal"
 
 const chartData = [
   { month: "January", desktop: 186, mobile: 80 },
@@ -125,17 +94,9 @@ const chartConfig = {
     color: "var(--primary)",
   },
 } satisfies ChartConfig
-export const schema = z.object({
-  id: z.number(),
-  header: z.string(),
-  type: z.string(),
-  status: z.string(),
-  target: z.string(),
-  limit: z.string(),
-  reviewer: z.string(),
-})
 
-function DragHandle({ id }: { id: number }) {
+
+export function DragHandle({ id }: { id: number }) {
   const { attributes, listeners } = useSortable({
     id,
   })
@@ -153,7 +114,7 @@ function DragHandle({ id }: { id: number }) {
     </Button>
   )
 }
-function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
+export function TableCellViewer<T extends TableType>({ item }: { item: InferData<T> }) {
   const isMobile = useIsMobile()
 
   return (
@@ -325,8 +286,15 @@ export const userSchema = z.object({
 
 export const productSchema = z.object({
   id: z.number(),
-  name: z.string(),
+  product_name: z.string(),
   price: z.number(),
+  discounted_price: z.number(),
+  description: z.string(),
+  category: z.object({
+    name: z.string(),
+  }),
+  stock: z.number(),
+  product_image_url: z.string(),
 });
 
 export const orderSchema = z.object({
@@ -334,18 +302,6 @@ export const orderSchema = z.object({
   order_code: z.string(),
   total: z.number(),
 });
-const schemaMap = {
-  users: userSchema,
-  products: productSchema,
-  orders: orderSchema,
-};
-
-type TableType = keyof typeof schemaMap;
-
-interface DataTableProps<T extends TableType> {
-  type: T;
-  data: z.infer<(typeof schemaMap)[T]>[];
-}
 
 export const usersColumns: ColumnDef<z.infer<typeof userSchema>>[] = [
   {
@@ -354,12 +310,25 @@ export const usersColumns: ColumnDef<z.infer<typeof userSchema>>[] = [
     cell: ({ row }) => <DragHandle id={row.original.id} />,
   },
   {
+    id: "avatar_url",
+    header: "Avatar",
+    cell: ({ row }) => row.original.avatar_url ? <Avatar className="w-10 h-10 ">
+      <AvatarImage src={row.original.avatar_url} />
+      <AvatarFallback>CN</AvatarFallback>
+    </Avatar>
+      : <Avatar>
+        <AvatarImage src="https://github.com/shadcn.png" />
+        <AvatarFallback>CN</AvatarFallback>
+      </Avatar>
+  },
+  {
     accessorKey: "user_name",
     header: "Name",
+    size: 100,
+
     cell: ({ row }) => {
-      return <TableCellViewer item={row.original.user_name} />
-    },
-    enableHiding: false,
+      return <div className="font-medium">{row.original.user_name.length > 25 ? row.original.user_name.slice(0, 25) + "..." : row.original.user_name}</div>
+    }
   },
   {
     accessorKey: "email",
@@ -367,126 +336,59 @@ export const usersColumns: ColumnDef<z.infer<typeof userSchema>>[] = [
     cell: ({ row }) => (
       <div className="w-32">
         <Badge variant="outline" className="text-muted-foreground px-1.5">
-          {row.original.email}
+          {row.original.email.length > 30 ? row.original.email.slice(0, 30) + "..." : row.original.email}
         </Badge>
       </div>
     ),
   },
+
+  {
+    id: "phone",
+    header: "Phone",
+    cell: ({ row }) => (
+      <div className="w-32">
+        <Badge variant="outline" className="text-muted-foreground px-1.5">
+          <Phone className="w-4 h-4" /> {row.original.phone}
+        </Badge>
+      </div>
+    ),
+  },
+
   {
     accessorKey: "role",
     header: "Role",
     cell: ({ row }) => (
-      <Badge variant="outline" className="text-muted-foreground px-1.5">
+      <Badge variant="outline" className={`${row.original.role === "Admin" ? "text-blue-700" : "text-orange-500"} px-1.5`}>
         {row.original.role}
       </Badge>
     ),
   },
   {
-    accessorKey: "target",
-    header: () => <div className="w-full text-right">Target</div>,
-    cell: ({ row }) => (
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          toast.promise(new Promise((resolve) => setTimeout(resolve, 1000)), {
-            loading: `Saving ${row.original.user_name}`,
-            success: "Done",
-            error: "Error",
-          })
-        }}
-      >
-        <Label htmlFor={`${row.original.id}-target`} className="sr-only">
-          Target
-        </Label>
-        <Input
-          className="hover:bg-input/30 focus-visible:bg-background dark:hover:bg-input/30 dark:focus-visible:bg-input/30 h-8 w-16 border-transparent bg-transparent text-right shadow-none focus-visible:border dark:bg-transparent"
-          defaultValue={row.original.phone}
-          id={`${row.original.id}-target`}
-        />
-      </form>
-    ),
-  },
-  {
-    accessorKey: "limit",
-    header: () => <div className="w-full text-right">Limit</div>,
-    cell: ({ row }) => (
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          toast.promise(new Promise((resolve) => setTimeout(resolve, 1000)), {
-            loading: `Saving ${row.original.user_name}`,
-            success: "Done",
-            error: "Error",
-          })
-        }}
-      >
-        <Label htmlFor={`${row.original.id}-limit`} className="sr-only">
-          Limit
-        </Label>
-        <Input
-          className="hover:bg-input/30 focus-visible:bg-background dark:hover:bg-input/30 dark:focus-visible:bg-input/30 h-8 w-16 border-transparent bg-transparent text-right shadow-none focus-visible:border dark:bg-transparent"
-          defaultValue={row.original.phone}
-          id={`${row.original.id}-limit`}
-        />
-      </form>
-    ),
-  },
-  {
     accessorKey: "is_active",
     header: "Status",
-    cell: ({ row }) => {
-      const isAssigned = row.original.is_active 
-
-      if (isAssigned) {
-        return row.original.is_active
-      }
-
-      return (
-        <>
-          <Label htmlFor={`${row.original.id}-is_active`} className="sr-only">
-            Status
-          </Label>
-          <Select>
-            <SelectTrigger
-              className="w-38 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate"
-              size="sm"
-              id={`${row.original.id}-reviewer`}
-            >
-              <SelectValue placeholder="Assign reviewer" />
-            </SelectTrigger>
-            <SelectContent align="end">
-              <SelectItem value="Eddie Lake">Eddie Lake</SelectItem>
-              <SelectItem value="Jamik Tashpulatov">
-                Jamik Tashpulatov
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </>
-      )
-    },
+    cell: ({ row }) => (
+      <Badge variant="outline" className="text-muted-foreground px-1.5">
+        {row.original.is_active === true ? (
+          <CircleCheck className="text-white fill-green-500 dark:fill-green-400" />
+        ) : (
+          <CircleX className="text-white fill-red-500 dark:fill-red-400" />
+        )}
+        {row.original.is_active === true ? "Active" : "Banned"}
+      </Badge>
+    ),
   },
+
   {
     id: "actions",
-    cell: () => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-            size="icon"
-          >
-            <IconDotsVertical />
-            <span className="sr-only">Open menu</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem>Edit</DropdownMenuItem>
-          <DropdownMenuItem>Make a copy</DropdownMenuItem>
-          <DropdownMenuItem>Favorite</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+    header: "Actions",
+    cell: ({ row }) => (
+
+      <div className="flex gap-2 flex-wrap" >
+        <ViewUserModal user={row.original}></ViewUserModal>
+        <EditUserModal user={row.original}></EditUserModal>
+        <BanUserModal user={row.original}></BanUserModal>
+      </div>
+
     ),
   },
 ]
@@ -497,147 +399,87 @@ export const productsColumns: ColumnDef<z.infer<typeof productSchema>>[] = [
     cell: ({ row }) => <DragHandle id={row.original.id} />,
   },
   {
-    accessorKey: "header",
-    header: "Header",
-    cell: ({ row }) => {
-      return <TableCellViewer item={row.original} />
-    },
-    enableHiding: false,
+    id: "product_image_url",
+    header: "Image",
+    cell: ({ row }) => (
+      <Avatar className="w-10 h-10">
+        <AvatarImage src={row.original.product_image_url} />
+      </Avatar>
+    ),
   },
   {
-    accessorKey: "type",
-    header: "Section Type",
+    accessorKey: "product_name",
+    header: "Product",
     cell: ({ row }) => (
-      <div className="w-32">
-        <Badge variant="outline" className="text-muted-foreground px-1.5">
-          {row.original.type}
-        </Badge>
+      <div className="font-medium">
+        {row.original.product_name.length > 30
+          ? row.original.product_name.slice(0, 30) + "..."
+          : row.original.product_name}
       </div>
     ),
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "price",
+    header: () => <div className="text-right">Price</div>,
+    cell: ({ row }) => (
+      <div className="text-right font-medium text-primary">
+        ${row.original.price.toFixed(2)}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "discounted_price",
+    header: () => <div className="text-right">Discount</div>,
+    cell: ({ row }) =>
+      row.original.discounted_price ? (
+        <div className="text-right text-green-600 font-medium">
+          ${row.original.discounted_price.toFixed(2)}
+        </div>
+      ) : (
+        <div className="text-right text-muted-foreground">–</div>
+      ),
+  },
+  // {
+  //   accessorKey: "description",
+  //   header: "Description",
+  //   cell: ({ row }) => (
+  //     <div className="text-muted-foreground w-56 line-clamp-2">
+  //       {row.original.description}
+  //     </div>
+  //   ),
+  // },
+  {
+    accessorKey: "category.name", // Nếu bạn muốn hiển thị tên category
+    header: "Category",
     cell: ({ row }) => (
       <Badge variant="outline" className="text-muted-foreground px-1.5">
-        {row.original.status === "Done" ? (
-          <IconCircleCheckFilled className="fill-green-500 dark:fill-green-400" />
-        ) : (
-          <IconLoader />
-        )}
-        {row.original.status}
+        {row.original.category?.name ?? "Uncategorized"}
       </Badge>
     ),
   },
   {
-    accessorKey: "target",
-    header: () => <div className="w-full text-right">Target</div>,
+    accessorKey: "stock",
+    header: "Stock",
     cell: ({ row }) => (
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          toast.promise(new Promise((resolve) => setTimeout(resolve, 1000)), {
-            loading: `Saving ${row.original.header}`,
-            success: "Done",
-            error: "Error",
-          })
-        }}
-      >
-        <Label htmlFor={`${row.original.id}-target`} className="sr-only">
-          Target
-        </Label>
-        <Input
-          className="hover:bg-input/30 focus-visible:bg-background dark:hover:bg-input/30 dark:focus-visible:bg-input/30 h-8 w-16 border-transparent bg-transparent text-right shadow-none focus-visible:border dark:bg-transparent"
-          defaultValue={row.original.target}
-          id={`${row.original.id}-target`}
-        />
-      </form>
+      <Badge variant="outline" className="text-muted-foreground px-1.5">
+        {row.original.stock > 0 ? row.original.stock : <>
+          <CircleX className="text-white fill-red-500 dark:fill-red-400" />Out of stock</>}
+      </Badge>
     ),
-  },
-  {
-    accessorKey: "limit",
-    header: () => <div className="w-full text-right">Limit</div>,
-    cell: ({ row }) => (
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          toast.promise(new Promise((resolve) => setTimeout(resolve, 1000)), {
-            loading: `Saving ${row.original.header}`,
-            success: "Done",
-            error: "Error",
-          })
-        }}
-      >
-        <Label htmlFor={`${row.original.id}-limit`} className="sr-only">
-          Limit
-        </Label>
-        <Input
-          className="hover:bg-input/30 focus-visible:bg-background dark:hover:bg-input/30 dark:focus-visible:bg-input/30 h-8 w-16 border-transparent bg-transparent text-right shadow-none focus-visible:border dark:bg-transparent"
-          defaultValue={row.original.limit}
-          id={`${row.original.id}-limit`}
-        />
-      </form>
-    ),
-  },
-  {
-    accessorKey: "reviewer",
-    header: "Reviewer",
-    cell: ({ row }) => {
-      const isAssigned = row.original.reviewer !== "Assign reviewer"
-
-      if (isAssigned) {
-        return row.original.reviewer
-      }
-
-      return (
-        <>
-          <Label htmlFor={`${row.original.id}-reviewer`} className="sr-only">
-            Reviewer
-          </Label>
-          <Select>
-            <SelectTrigger
-              className="w-38 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate"
-              size="sm"
-              id={`${row.original.id}-reviewer`}
-            >
-              <SelectValue placeholder="Assign reviewer" />
-            </SelectTrigger>
-            <SelectContent align="end">
-              <SelectItem value="Eddie Lake">Eddie Lake</SelectItem>
-              <SelectItem value="Jamik Tashpulatov">
-                Jamik Tashpulatov
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </>
-      )
-    },
   },
   {
     id: "actions",
-    cell: () => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-            size="icon"
-          >
-            <IconDotsVertical />
-            <span className="sr-only">Open menu</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem>Edit</DropdownMenuItem>
-          <DropdownMenuItem>Make a copy</DropdownMenuItem>
-          <DropdownMenuItem>Favorite</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+    header: "Actions",
+    cell: ({ row }) => (
+      <div className="flex gap-2">
+        <ViewProductModal product={row.original}></ViewProductModal>
+        <EditProductModal product={row.original}></EditProductModal>
+        <DeleteProductModal product={row.original}></DeleteProductModal>
+      </div>
     ),
   },
 ]
+
 export const ordersColumns: ColumnDef<z.infer<typeof orderSchema>>[] = [
   {
     id: "drag",
@@ -786,3 +628,26 @@ export const ordersColumns: ColumnDef<z.infer<typeof orderSchema>>[] = [
     ),
   },
 ]
+
+
+export type TableType = keyof typeof schemaMap
+
+export type InferData<T extends TableType> = z.infer<(typeof schemaMap)[T]>
+
+export interface DataTableProps<T extends TableType> {
+  type: T
+  data: InferData<T>[]
+}
+
+
+export const schemaMap = {
+  users: userSchema,
+  products: productSchema,
+  orders: orderSchema,
+}
+
+export const columnsMap = {
+  users: usersColumns,
+  products: productsColumns,
+  orders: ordersColumns,
+}

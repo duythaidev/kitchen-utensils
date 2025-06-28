@@ -1,8 +1,7 @@
 'use client'
-import { Flex, Form, Modal, Select } from "antd";
 import { ArrowDownNarrowWide, ChevronDown, ChevronUp, Filter, Search, ShoppingBag, ShoppingCart } from "lucide-react";
 import { useState } from "react";
-import ModalContent from "./ModalContent";
+import ModalContent from "./PreviewProductModal";
 import HoverLink from "../Custom/HoverLink";
 import ProductCard from "./ProductCard";
 import { Input } from "../ui/input";

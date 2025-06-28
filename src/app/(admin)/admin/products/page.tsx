@@ -3,7 +3,7 @@ import data from "./data.json";
 const Page = () => {
     return (
         <div>
-            <DataTable data={data} />
+            <DataTable data={data} type="products" />
         </div>
     );
 }

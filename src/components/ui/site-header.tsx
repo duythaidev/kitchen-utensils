@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
+import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 export function SiteHeader() {
@@ -17,14 +18,12 @@ export function SiteHeader() {
         <h1 className="text-base font-medium capitalize">{pathname.substring(7).length === 0 ? "Admin" : pathname.substring(7)}</h1>
         <div className="ml-auto flex items-center gap-2">
           <Button variant="ghost" asChild size="sm" className="hidden sm:flex">
-            <a
-              href="https://github.com/shadcn-ui/ui/tree/main/apps/v4/app/(examples)/dashboard"
-              rel="noopener noreferrer"
-              target="_blank"
+            <Link
+              href="/"
               className="dark:text-foreground"
             >
-              GitHub
-            </a>
+              Home Page
+            </Link>
           </Button>
         </div>
       </div>

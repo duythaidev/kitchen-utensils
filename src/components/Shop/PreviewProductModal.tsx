@@ -3,7 +3,7 @@ import { ShoppingCart } from "lucide-react";
 import { useState } from "react";
 
 
-const ModalContent = () => {
+const PreviewProductModal = ({ product }: { product?: any }) => {
     const [quantity, setQuantity] = useState(0);
     const handleAddToCart = () => {
         console.log('Add to cart');
@@ -166,4 +166,4 @@ const ModalContent = () => {
     );
 }
 
-export default ModalContent;
+export default PreviewProductModal;

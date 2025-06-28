@@ -7,6 +7,7 @@ import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar"
+import { Skeleton } from "@/components/ui/skeleton"
 
 
 export default function Page() {
@@ -18,6 +19,10 @@ export default function Page() {
           <div className="px-4 lg:px-6">
             <ChartAreaInteractive />
           </div>
+          <div className="flex flex-col space-y-3">
+        <Skeleton className="h-[300px] w-full rounded-xl" />
+
+      </div>
         </div>
       </div>
     </div>

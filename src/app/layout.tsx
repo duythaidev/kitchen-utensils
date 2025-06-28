@@ -1,10 +1,10 @@
 import Footer from '@/components/Footer';
 import './globals.css'
 import Header from '@/components/Header';
-import { AntdRegistry } from '@ant-design/nextjs-registry';
-import '@ant-design/v5-patch-for-react-19';
 import NextAuthWrapper from '@/components/NextAuthWrapper';
 import { ToastContainer } from 'react-toastify';
+// import ProgressBarProvider from '@/components/ProgressBarProvider';
+import NextTopLoader from 'nextjs-toploader';
 
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
   return (
@@ -13,11 +13,9 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
         className={``}
       >
         <NextAuthWrapper>
-          <AntdRegistry>
-            {children}
-          </AntdRegistry>
+          <NextTopLoader showSpinner={false} height={2}/>
+          {children}
           <ToastContainer />
-
         </NextAuthWrapper>
       </body>
     </html>
