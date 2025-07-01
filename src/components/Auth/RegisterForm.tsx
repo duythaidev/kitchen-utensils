@@ -2,7 +2,7 @@
 
 import { useFormState } from 'react-dom'
 import { useEffect, useState } from 'react'
-import { createUser } from '@/actions/auth.actions'
+import { createUser } from '@/actions/auth.action'
 import { validateEmail, validateLength } from '@/utils/validate'
 import { toast } from 'react-toastify'
 import { redirect } from 'next/navigation'

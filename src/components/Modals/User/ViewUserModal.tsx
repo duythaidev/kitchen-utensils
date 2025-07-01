@@ -41,8 +41,20 @@ const UserModalContent = ({ user }: { user: any }) => {
 
         <div className="grid gap-4">
             <div className="grid gap-3 mx-auto">
-                <Label>Avatar</Label>
-                <Image src={user.avatar} alt="User Avatar" width={100} height={100} />
+                {
+                    user.avatar_url ? (
+                        <Image
+                            src={user.avatar_url}
+                            alt="Current Avatar"
+                            width={100}
+                            height={100}
+                            className="rounded-full mx-auto"
+                        />
+                    ) : (
+                        <div className="w-[100px] h-[100px] bg-gray-200 rounded-full mx-auto" />
+                    )
+                }
+
             </div>
             <div className="grid gap-3">
                 <Label>Username</Label>

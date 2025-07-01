@@ -1,13 +1,5 @@
-import { AppSidebar } from "@/components/ui/app-sidebar"
 import { ChartAreaInteractive } from "@/components/ui/chart-area-interactive"
-import { DataTable } from "@/components/ui/data-table"
 import { SectionCards } from "@/components/ui/section-cards"
-import { SiteHeader } from "@/components/ui/site-header"
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar"
-import { Skeleton } from "@/components/ui/skeleton"
 
 
 export default function Page() {

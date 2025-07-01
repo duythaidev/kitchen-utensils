@@ -1,3 +1,4 @@
+'use client'
 import { CirclePlus, Plus } from "lucide-react"
 import {
     Dialog, DialogClose, DialogContent, DialogDescription,
@@ -11,6 +12,8 @@ import { useState } from "react"
 import {
     Select, SelectValue, SelectTrigger, SelectContent, SelectItem
 } from "../../ui/select"
+import { handleCreateUserAction } from "@/actions/admin.action"
+import { toast } from "react-toastify"
 
 const AddUserModal = () => {
     const [userData, setUserData] = useState({
@@ -22,6 +25,15 @@ const AddUserModal = () => {
         avatar_url: "",
     })
     const [avatar, setAvatar] = useState<File | null>(null)
+
+    const handleAddUser = async (values: any) => {
+        console.log('Success:', values);
+        const res = await handleCreateUserAction(values);
+        if (res?.id) {
+            toast.success("Create succeed!")
+        }
+
+    };
 
     return (
         <Dialog>

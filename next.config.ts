@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
     BACKEND_API: process.env.BACKEND_API || 'http://localhost:8080',
   },
   images: {
-    domains: ['www.tefal.com.au', 'upload.wikimedia.org', 'lh3.googleusercontent.com', 'placehold.jp'],
+    domains: ['www.tefal.com.au', 'upload.wikimedia.org', 'lh3.googleusercontent.com', 'placehold.jp', 'i.ibb.co'],
   },
 };
 

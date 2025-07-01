@@ -28,9 +28,9 @@ const EditUserModal = ({ user }: { user: any }) => {
             </DialogTrigger>
             <DialogContent className={`lg:max-w-1/2 overflow-y-scroll max-h-screen [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-white [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white [&::-webkit-scrollbar-track]:my-5 [&::-webkit-scrollbar-thumb]:w-2 `}>
                 <DialogHeader>
-                    <DialogTitle>Edit User Details</DialogTitle>
+                    <DialogTitle>Edit User Information</DialogTitle>
                     <DialogDescription>
-                        Edit user details here.
+                        Edit user information here.
                     </DialogDescription>
                 </DialogHeader>
                 <EditUserModalContent user={user}></EditUserModalContent>
@@ -52,7 +52,7 @@ const EditUserModalContent = ({ user }: { user: any }) => {
 
         <div className="grid gap-4">
             <div className="grid gap-3 mx-auto items-center">
-                <Label className="text-center">Avatar</Label>
+                <Label className="text-center justify-center">Avatar</Label>
 
                 {/* Nếu có avatar mới được chọn thì preview ảnh mới */}
                 {avatar ? (
@@ -83,7 +83,7 @@ const EditUserModalContent = ({ user }: { user: any }) => {
                     onClick={() => document.getElementById('picture-input')?.click()}
                     className="w-fit mx-auto"
                 >
-                    {userData.avatar_ ? "Đổi ảnh" : "Chọn ảnh"}
+                    {userData.avatar_url ? "Change Avatar" : "Add Avatar"}
                 </Button>
                 <input
                     id="picture-input"

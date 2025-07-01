@@ -19,6 +19,7 @@ import {
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu"
 import { Input } from "./ui/input";
+import { Separator } from "./ui/separator";
 
 
 const hoverStyle = `after:content-[''] after:w-0 after:absolute after:left-0 after:top-[-10] after:h-0.5  after:bg-blue-500 after:duration-500`
@@ -27,6 +28,7 @@ const Header = () => {
   const { data: session } = useSession()
   const [showNav, setShowNav] = useState<boolean>(false)
   const [stickyMenu, setStickyMenu] = useState<boolean>(false);
+  console.log("header session", session)
   const handleStickyMenu = () => {
     if (window.scrollY >= 80) {
       setStickyMenu(true);
@@ -60,8 +62,8 @@ const Header = () => {
           <div className="hidden lg:flex items-center rounded-md border-gray-200 bg-gray-100 w-1/3">
             <div className="relative pl-3.5 py-2">
 
-              <NavigationMenu>
-                <NavigationMenuList>
+              <NavigationMenu >
+                <NavigationMenuList >
                   <NavigationMenuItem>
                     <NavigationMenuTrigger className="p-0 font-normal">All Categories</NavigationMenuTrigger>
                     <NavigationMenuContent>
@@ -86,9 +88,9 @@ const Header = () => {
             </div>
           </div>
           <div className="hidden gap-2 lg:flex lg:justify-end items-center">
-            {session?.user?.image ?
-              <div className="w-8 h-8 flex items-center justify-center cursor-pointer hover:bg-gray-100 rounded-full">
-                <Image alt="profile image" className="rounded-full " width={30} height={30} src={session?.user.image || ''}></Image>
+            {session?.user?.avatar_url ?
+              <div className="w-8 h-8 flex items-center justify-center cursor-pointer hover:bg-gray-100 rounded-full overflow-hidden">
+                <Image alt="profile image" className="rounded-full " width={30} height={30} src={session?.user.avatar_url || ''}></Image>
               </div>
               :
               <User className="hover:text-blue-500 cursor-pointer text-primary" size={25}></User>
@@ -97,7 +99,7 @@ const Header = () => {
               <p className="text-gray-500  text-xs uppercase">Account</p>
               {session?.user ?
                 <HoverLink link="profile" className="text-dark font-medium hover:text-blue-500">
-                  {session?.user.name || 'Profile'}
+                  {session?.user.user_name ? ((session?.user.user_name.length > 10) ? session?.user.user_name.slice(0, 10) + '...' : session?.user.user_name) : 'No name'}
                 </HoverLink>
                 :
                 <HoverLink link="login" className="text-dark font-medium hover:text-blue-500">
@@ -133,12 +135,13 @@ const Header = () => {
                 </Space>
               </a>
             </Dropdown> */}
-            <NavigationMenu className="inline-block">
-              <NavigationMenuList>
+            <NavigationMenu className="inline-block" >
+              <NavigationMenuList  >
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="p-0 font-light text-[16px] text-dark bg-background hover:bg-background">Admin</NavigationMenuTrigger>
-                  <NavigationMenuContent>
+                  <NavigationMenuContent >
                     <NavigationMenuLink className="w-[100px]" href="/admin">Dashboard</NavigationMenuLink>
+                    <Separator />
                     <NavigationMenuLink className="w-[100px]" href="/admin/users">Users</NavigationMenuLink>
                     <NavigationMenuLink className="w-[100px]" href="/admin/products">Products</NavigationMenuLink>
                     <NavigationMenuLink className="w-[100px]" href="/admin/orders">Orders</NavigationMenuLink>

@@ -49,7 +49,7 @@ const Footer = () => {
                                 + 01 234 567 88
                             </p>
 
-                            <div className="flex">
+                            <div className="mb-5 flex items-center justify-center md:justify-start">
                                 <a href="#!" className="text-gray-500 me-6 [&>svg]:h-4 [&>svg]:w-4">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"

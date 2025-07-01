@@ -4,10 +4,13 @@ import Spinner from "@/components/Custom/Spinner";
 import { Skeleton } from "@/components/ui/skeleton";
 // import { useRouter } from "next/navigation"
 import { useRouter } from 'nextjs-toploader/app';
+import { useEffect } from "react";
 
 export default function Page() {
   const router = useRouter();
-  router.push("/admin/dashboard");
+  useEffect(() => {
+    router.push("/admin/dashboard");
+  }, []);
   return (
     <div className="md:p-6 flex flex-wrap gap-6">
       {/* <h1 className="text-center"><Spinner></Spinner></h1>

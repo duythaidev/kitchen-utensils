@@ -1,16 +1,14 @@
-import NextAuth, { Session } from "next-auth"
+import NextAuth, { DefaultSession, Session } from "next-auth"
 import { JWT } from "next-auth/jwt";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-
-interface ISession extends Session {
-    accessToken?: string,
-    refreshToken?: string; // refreshToken có thể là undefined nếu user đã đồng ý trước đó
-}
 import { NextAuthOptions } from "next-auth";
+
+
 export const authOptions: NextAuthOptions = {
     session: {
         strategy: "jwt",
+        maxAge: 60 * 60, // 1 hour
     },
     pages: {
         signIn: '/login',
@@ -24,20 +22,38 @@ export const authOptions: NextAuthOptions = {
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials, req) {
-                // Add logic here to look up the user from the credentials supplied
-                console.log("credentials", credentials)
-                const { email, password } = credentials as { email: string, password: string };
-                return {
-                    id: "1",
-                    name: "John Doe",
-                    email: email,
+                try {
+                    const res = await fetch("http://localhost:8080/api/v1/auth/login", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            email: credentials?.email,
+                            password: credentials?.password,
+                        }),
+                    });
+
+                    const data = await res.json();
+                    console.log("data", data)
+
+                    if (!res.ok || !data.access_token) {
+                        throw new Error("Login failed");
+                    }
+
+                    // add token to callback 
+                    return {
+                        id: data.user.id,
+                        user_name: data.user.user_name,
+                        email: data.user.email,
+                        avatar_url: data.user.avatar_url,
+                        accessToken: data.access_token,
+                    };
+                } catch (error) {
+                    console.error("Login error:", error);
+                    return null;
                 }
-                // If you return null then an error will be displayed advising the user to check their details.
-                return null
-
-                // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
             },
-
         }),
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -51,26 +67,56 @@ export const authOptions: NextAuthOptions = {
             }
         }),
     ],
-    // callbacks: {
-    //     async jwt({ token, account }) {
-    //         // account chỉ có lần đầu login (not on every request)
-    //         if (account) {
-    //             token.accessToken = account.access_token;
-    //             token.refreshToken = account.refresh_token; // có thể undefined nếu user đã đồng ý trước đó
-    //             token.expires_at = account.expires_at;
-    //         }
-    //         return token;
-    //     },
-    //     async session({ session, token }: { session: ISession, token: JWT }) {
-    //         // gắn access token vào session
-    //         session.accessToken = token.accessToken as string;
-    //         session.refreshToken = token.refreshToken as string; // có thể undefined nếu user đã đồng ý trước đó
-    //         return session;
-    //     },
-    // },
-    // session: {
-    //     strategy: "jwt", // nếu bạn đang dùng database thì nên để 'database'
-    // },
+    callbacks: {
+        // add accessToken to token
+        async jwt({ token, user, account, trigger, session }: { token: any; user?: any; account?: any; trigger?: string; session?: any }) {
+            // Credentials login
+            if (user?.accessToken) {
+                token.accessToken = user.accessToken;
+                token.user = user;
+            }
+            if (trigger === "update") {
+                // console.log(session)
+                if (session?.user.user_name) {
+                    token.user.user_name = session?.user.user_name;
+                }
+                if (session?.user.avatar_url) {
+                    token.user.avatar_url = session?.user.avatar_url;
+                }
+                
+            }
+            // Google login
+            if (account?.provider === "google") {
+                const res = await fetch("http://localhost:8080/api/v1/auth/google", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        email: token.email,
+                        user_name: token.name,
+                        auth_provider: account?.provider, // Google ID
+                    }),
+                });
+
+                const data = await res.json();
+
+                token.accessToken = data.access_token; // Gán JWT từ backend
+            }
+
+            return token;
+        },
+        // add accessToken to session
+        async session({ session, token }: { session: any, token: any }) {
+            session.accessToken = token.accessToken as string
+            session.user!.accessToken = token.accessToken as string
+            session.user!.avatar_url = token.user.avatar_url as string
+            session.user!.user_name = token.user.user_name as string
+            session.user!.email = token.user.email as string
+            return session;
+        },
+    }
+
 }
 const handler = NextAuth(authOptions)
 
