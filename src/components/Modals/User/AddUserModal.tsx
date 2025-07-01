@@ -14,8 +14,12 @@ import {
 } from "../../ui/select"
 import { handleCreateUserAction } from "@/actions/admin.action"
 import { toast } from "react-toastify"
+import { useSession } from "next-auth/react"
+import CustomButton from "@/components/Custom/CustomButton"
 
 const AddUserModal = () => {
+    const [open, setOpen] = useState(false)
+    const { data: session } = useSession()
     const [userData, setUserData] = useState({
         user_name: "",
         email: "",
@@ -23,22 +27,43 @@ const AddUserModal = () => {
         address: "",
         role: "User",
         avatar_url: "",
+        password: "",
     })
     const [avatar, setAvatar] = useState<File | null>(null)
+    const [isLoading, setIsLoading] = useState(false)
+    const handleAddUser = async () => {
+        setIsLoading(true)
+        try {
+            const formData = new FormData()
+            formData.append("user_name", userData.user_name)
+            formData.append("email", userData.email)
+            formData.append("phone", userData.phone)
+            formData.append("address", userData.address)
+            formData.append("role", userData.role)
+            formData.append("password", userData.password)
+            if (avatar) {
+                formData.append("avatar", avatar)
+            }
+            // console.log(formData)
+            // console.log(session?.accessToken)
+            const res = await handleCreateUserAction(formData, session?.accessToken || "");
+            if (res) {
+                console.log("res", res)
+                toast.success("Create succeed!")
+                setOpen(false)
+                setIsLoading(false)
+            }
+        } catch (error) {
+            toast.error("Create failed!")
+            setIsLoading(false)
 
-    const handleAddUser = async (values: any) => {
-        console.log('Success:', values);
-        const res = await handleCreateUserAction(values);
-        if (res?.id) {
-            toast.success("Create succeed!")
         }
-
     };
 
     return (
-        <Dialog>
+        <Dialog open={open} >
             <DialogTrigger>
-                <Button variant="default" >
+                <Button variant="default" onClick={() => setOpen(true)}>
                     <CirclePlus className="w-4 h-4" />
                     Add User
                 </Button>
@@ -52,21 +77,18 @@ const AddUserModal = () => {
                 </DialogHeader>
 
                 <div className="grid gap-4">
-                    <div className="grid gap-3 mx-auto items-center">
+                    <div className="flex flex-col gap-3 mx-auto items-center ">
                         <Label className="text-center">Avatar</Label>
 
-                        {avatar ? (
+                        <div className="w-[120px] h-[120px] bg-gray-200 rounded-md overflow-hidden">
                             <Image
-                                src={URL.createObjectURL(avatar)}
-                                alt="New Avatar Preview"
-                                width={100}
-                                height={100}
-                                className="rounded-full mx-auto"
+                                src={avatar ? URL.createObjectURL(avatar) : "https://placehold.jp/150x150.png"}
+                                alt="Avatar image"
+                                width={120}
+                                height={120}
+                                className="w-full object-cover"
                             />
-                        ) : (
-                            <div className="w-[100px] h-[100px] bg-gray-200 rounded-full mx-auto" />
-                        )}
-
+                        </div>
                         <Button
                             type="button"
                             variant="outline"
@@ -109,6 +131,19 @@ const AddUserModal = () => {
                             }
                         />
                     </div>
+
+
+                    <div className="grid gap-3">
+                        <Label>Password</Label>
+                        <Input
+                            value={userData.password}
+                            onChange={(e) =>
+                                setUserData({ ...userData, password: e.target.value })
+                            }
+                        />
+                    </div>
+
+
 
                     <div className="grid gap-3">
                         <Label>Phone</Label>
@@ -153,17 +188,10 @@ const AddUserModal = () => {
                     <DialogClose asChild>
                         <Button variant="outline">Cancel</Button>
                     </DialogClose>
-                    <Button
-                        type="submit"
-                        onClick={() => {
-                            console.log({
-                                ...userData,
-                                avatar: avatar ? URL.createObjectURL(avatar) : null,
-                            })
-                        }}
-                    >
+
+                    <CustomButton color="blue" className={`px-4! py-2! w-[100px]  text-sm ${isLoading ? "cursor-wait" : "justify-center"}`} isLoading={isLoading} onClick={handleAddUser} >
                         Add User
-                    </Button>
+                    </CustomButton>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

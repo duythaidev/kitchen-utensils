@@ -1,3 +1,4 @@
+'use client'
 import { Eye } from "lucide-react";
 
 import {
@@ -14,6 +15,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "../../ui/button";
 import Image from "next/image";
+import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue, SelectLabel, SelectGroup } from "@/components/ui/select";
 
 const ViewUserModal = ({ user }: { user: any }) => {
     return (
@@ -37,6 +39,7 @@ const ViewUserModal = ({ user }: { user: any }) => {
     );
 }
 const UserModalContent = ({ user }: { user: any }) => {
+    console.log(user)
     return (
 
         <div className="grid gap-4">
@@ -75,7 +78,19 @@ const UserModalContent = ({ user }: { user: any }) => {
             </div>
             <div className="grid gap-3">
                 <Label>Role</Label>
-                <Input disabled defaultValue="User Role" value={user.role} />
+                <Select disabled value={user.role || "None"}>
+                    <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Select a role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectGroup >
+                            <SelectLabel>Role</SelectLabel>
+                            <SelectItem value="Admin">Admin</SelectItem>
+                            <SelectItem value="User">User</SelectItem>
+                            <SelectItem value="None">None</SelectItem>
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
             </div>
 
         </div>

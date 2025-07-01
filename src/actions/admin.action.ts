@@ -1,16 +1,19 @@
 'use server'
-import { revalidateTag } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 
-export const handleCreateUserAction = async (data: any) => {
+export const handleCreateUserAction = async (data: FormData, access_token: string) => {
     console.log("data", data)
-    const res = await fetch(`${process.env.BACKEND_URL}/users`, {
+    const res = await fetch(`${process.env.BACKEND_API}/users`, {
         method: "POST",
-        body: JSON.stringify(data),
+        body: data,
         headers: {
-            "Content-Type": "application/json",
-            // 'Content-Type': 'application/x-www-form-urlencoded',
+            "Authorization": `Bearer ${access_token}`,
         },
     })
-    // revalidateTag("list-users")
+    revalidateTag("list-users")
     return await res.json()
+}
+
+export const refreshData = async () => {
+    revalidateTag("list-users")
 }

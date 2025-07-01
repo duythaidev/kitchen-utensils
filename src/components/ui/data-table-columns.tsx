@@ -327,7 +327,7 @@ export const usersColumns: ColumnDef<z.infer<typeof userSchema>>[] = [
     size: 100,
 
     cell: ({ row }) => {
-      return <div className="font-medium">{row.original.user_name?.length > 25 ? row.original.user_name?.slice(0, 25) + "..." : row.original.user_name}</div>
+      return <div className="font-medium">{row.original.user_name?.length > 25 ? row.original.user_name?.slice(0, 25) + "..." : row.original.user_name || "-"}</div>
     }
   },
   {
@@ -336,7 +336,7 @@ export const usersColumns: ColumnDef<z.infer<typeof userSchema>>[] = [
     cell: ({ row }) => (
       <div className="w-32">
         <Badge variant="outline" className="text-muted-foreground px-1.5">
-          {row.original.email.length > 30 ? row.original.email.slice(0, 30) + "..." : row.original.email}
+          {row.original.email.length > 30 ? row.original.email.slice(0, 30) + "..." : row.original.email || "-"}
         </Badge>
       </div>
     ),
@@ -348,7 +348,7 @@ export const usersColumns: ColumnDef<z.infer<typeof userSchema>>[] = [
     cell: ({ row }) => (
       <div className="w-32">
         <Badge variant="outline" className="text-muted-foreground px-1.5">
-          <Phone className="w-4 h-4" /> {row.original.phone}
+          <Phone className="w-4 h-4" /> {row.original.phone || "-"}
         </Badge>
       </div>
     ),
@@ -359,7 +359,7 @@ export const usersColumns: ColumnDef<z.infer<typeof userSchema>>[] = [
     header: "Role",
     cell: ({ row }) => (
       <Badge variant="outline" className={`${row.original.role === "Admin" ? "text-blue-700" : "text-orange-500"} px-1.5`}>
-        {row.original.role || "User"}
+        {row.original.role || "None"}
       </Badge>
     ),
   },
