@@ -17,17 +17,18 @@ import Image from "next/image";
 import { useState } from "react";
 import { Select, SelectValue, SelectTrigger, SelectContent, SelectItem } from "../../ui/select";
 import PreviewProductModal from "@/components/Shop/PreviewProductModal";
+import CustomModalBox from "../CustomModalBox";
 
 const EditProductModal = ({ product }: { product: any }) => {
     return (
         <Dialog >
-            <DialogTrigger>
+            <DialogTrigger asChild>
                 <Button variant="outline" className=" text-orange-500" >
                     <Pencil className="w-4 h-4" />
                     Edit
                 </Button>
             </DialogTrigger>
-            <DialogContent className={`lg:max-w-[1000px] overflow-y-scroll max-h-screen [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-white [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white [&::-webkit-scrollbar-track]:my-5 [&::-webkit-scrollbar-thumb]:w-2 `}>
+            <CustomModalBox>
                 <DialogHeader>
                     <DialogTitle>Edit Product Details</DialogTitle>
                     <DialogDescription>
@@ -43,7 +44,7 @@ const EditProductModal = ({ product }: { product: any }) => {
                     </DialogClose>
                     <Button type="submit">Save changes</Button>
                 </DialogFooter>
-            </DialogContent>
+            </CustomModalBox>
         </Dialog>
     );
 }

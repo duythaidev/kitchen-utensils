@@ -2,7 +2,7 @@
 
 import { validateEmail, validateLength } from "@/utils/validate";
 import { redirect } from "next/navigation";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 export async function getProfile(accessToken: string) {
     const res = await fetch(`${process.env.BACKEND_API}/users/me`, {

@@ -4,11 +4,11 @@ import { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import CustomButton from "../Custom/CustomButton";
 import { Button } from "../ui/button";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 
 const Profile = ({ profile }: { profile: any }) => {
-    
+
     const [myProfile, setMyProfile] = useState(profile)
     console.log("myProfile: component", myProfile)
 
@@ -29,7 +29,7 @@ const Profile = ({ profile }: { profile: any }) => {
             if (avatar) {
                 formData.append("avatar", avatar)
             }
-            
+
             const res = await fetch(`${process.env.BACKEND_API}/users/${myProfile?.id}`, {
                 method: "PATCH",
                 body: formData,
@@ -82,7 +82,7 @@ const Profile = ({ profile }: { profile: any }) => {
                             <div className="p-4 sm:p-7.5 xl:p-9">
                                 <div className="flex flex-wrap xl:flex-nowrap xl:flex-col gap-4">
 
-                                <button onClick={() => setActiveTab("account-details")}
+                                    <button onClick={() => setActiveTab("account-details")}
                                         className={`flex items-center rounded-md gap-2.5 py-3 px-4.5 ease-out duration-200 hover:bg-blue-700 hover:text-white ${activeTab === "account-details"
                                             ? "text-white bg-blue-700"
                                             : "text-dark-2 bg-gray-1"
@@ -132,7 +132,7 @@ const Profile = ({ profile }: { profile: any }) => {
 
 
 
-                                    
+
 
                                     <button onClick={() => signOut({ callbackUrl: '/login', redirect: true })}
 

@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "product_name": "Super Phone",
+    "price": 1000,
+    "discounted_price": 850,
+    "description": "The best phone ever",
+    "category": {
+      "name": "Phone"
+    },
+    "stock": 0,
+    "product_image_url": "https://placehold.jp/150x150.png"
+  },
+  {
+    "id": 2,
+    "product_name": "Gaming Laptop",
+    "price": 2000,
+    "discounted_price": 1750,
+    "description": "High-end laptop for gamers",
+    "category": {
+      "name": "Laptop"
+    },
+    "stock": 50,
+    "product_image_url": "https://placehold.jp/150x150.png"
+  }
+]

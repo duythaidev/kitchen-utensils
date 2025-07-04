@@ -12,6 +12,11 @@ const nextConfig: NextConfig = {
   images: {
     domains: ['www.tefal.com.au', 'upload.wikimedia.org', 'lh3.googleusercontent.com', 'placehold.jp', 'i.ibb.co'],
   },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '10mb',
+    },
+  },
 };
 
 export default nextConfig;

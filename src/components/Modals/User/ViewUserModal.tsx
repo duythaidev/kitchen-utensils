@@ -16,17 +16,18 @@ import { Label } from "@/components/ui/label"
 import { Button } from "../../ui/button";
 import Image from "next/image";
 import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue, SelectLabel, SelectGroup } from "@/components/ui/select";
+import CustomModalBox from "../CustomModalBox";
 
 const ViewUserModal = ({ user }: { user: any }) => {
     return (
         <Dialog >
-            <DialogTrigger>
+            <DialogTrigger asChild>
                 <Button variant="outline" className=" text-blue-700" >
                     <Eye className="w-4 h-4" />
                     View
                 </Button>
             </DialogTrigger>
-            <DialogContent className={`lg:max-w-1/2 overflow-y-scroll max-h-screen [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-white [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white [&::-webkit-scrollbar-track]:my-5 [&::-webkit-scrollbar-thumb]:w-2 `}>
+            <CustomModalBox>
                 <DialogHeader>
                     <DialogTitle>User Details</DialogTitle>
                     <DialogDescription>
@@ -34,7 +35,7 @@ const ViewUserModal = ({ user }: { user: any }) => {
                     </DialogDescription>
                 </DialogHeader>
                 <UserModalContent user={user}></UserModalContent>
-            </DialogContent>
+            </CustomModalBox>
         </Dialog>
     );
 }
@@ -78,16 +79,16 @@ const UserModalContent = ({ user }: { user: any }) => {
             </div>
             <div className="grid gap-3">
                 <Label>Role</Label>
-                <Select disabled value={user.role || "None"}>
+                <Select disabled value={user.role || "none"}>
                     <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Select a role" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectGroup >
                             <SelectLabel>Role</SelectLabel>
-                            <SelectItem value="Admin">Admin</SelectItem>
-                            <SelectItem value="User">User</SelectItem>
-                            <SelectItem value="None">None</SelectItem>
+                            <SelectItem value="admin">Admin</SelectItem>
+                            <SelectItem value="user">User</SelectItem>
+                            <SelectItem value="none">None</SelectItem>
                         </SelectGroup>
                     </SelectContent>
                 </Select>

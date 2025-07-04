@@ -1,25 +1,6 @@
 "use client"
 
-import * as React from "react"
-import {
-  closestCenter,
-  DndContext,
-  KeyboardSensor,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-  type DragEndEvent,
-  type UniqueIdentifier,
-} from "@dnd-kit/core"
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers"
-import {
-  arrayMove,
-  SortableContext,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable"
-import { CSS } from "@dnd-kit/utilities"
+// import * as React from "react"
 import {
   IconChevronDown,
   IconChevronLeft,
@@ -28,7 +9,6 @@ import {
   IconChevronsRight,
   IconCircleCheckFilled,
   IconDotsVertical,
-  IconGripVertical,
   IconLayoutColumns,
   IconLoader,
   IconPlus,
@@ -49,30 +29,9 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table"
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
-import { toast } from "sonner"
-import { z } from "zod"
 
-import { useIsMobile } from "@/hooks/use-mobile"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart"
-import { Checkbox } from "@/components/ui/checkbox"
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
+
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -92,7 +51,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
 import {
   Table,
   TableBody,
@@ -107,65 +65,44 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
-import { columnsMap, DataTableProps, InferData, ordersColumns, productsColumns, TableCellViewer, TableType, usersColumns } from "./data-table-columns"
+import { columnsMap, DataTableProps, InferData, TableType } from "./data-table-columns"
 import { ChevronDown, Filter } from "lucide-react"
 import AddUserModal from "../Modals/User/AddUserModal"
 import AddProductModal from "../Modals/Product/AddProductModal"
+import { useEffect, useState } from "react"
+import AddCategoryModal from "../Modals/Category/AddCategoryModal"
 
+export function DataTable<T extends TableType>({ data, type }: DataTableProps<T>) {
+  console.log("data", data)
 
-function DraggableRow<T extends TableType>({ row }: { row: Row<InferData<T>> }) {
-  const { transform, transition, setNodeRef, isDragging } = useSortable({
-    id: row.original.id,
-  })
-
-  return (
-    <TableRow
-      data-state={row.getIsSelected() && "selected"}
-      data-dragging={isDragging}
-      ref={setNodeRef}
-      className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
-      style={{
-        transform: CSS.Transform.toString(transform),
-        transition: transition,
-      }}
-    >
-      {row.getVisibleCells().map((cell) => (
-        <TableCell key={cell.id}>
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </TableCell>
-      ))}
-    </TableRow>
-  )
-}
-
-
-export function DataTable<T extends TableType>({ data: initialData, type }: DataTableProps<T>) {
-  const [data, setData] = React.useState(() => initialData)
-  const [rowSelection, setRowSelection] = React.useState({})
+  const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    useState<VisibilityState>({})
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
   )
 
-  const columns = columnsMap[type] as ColumnDef<InferData<T>>[]
+  const baseColumns: ColumnDef<InferData<T>>[] = [
+    {
+      id: "index",
+      header: "#",
+      cell: ({ row }) => {
+        const pageSize = table.getState().pagination.pageSize;
+        const pageIndex = table.getState().pagination.pageIndex;
+        return <div>{pageIndex * pageSize + row.index + 1}</div>;
+      },
+      enableSorting: false,
+      enableHiding: false,
+    }
+  ]
 
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [pagination, setPagination] = React.useState({
+  const columns = [...baseColumns, ...(columnsMap[type] as ColumnDef<InferData<T>>[])]
+
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
   })
-  const sortableId = React.useId()
-  const sensors = useSensors(
-    useSensor(MouseSensor, {}),
-    useSensor(TouchSensor, {}),
-    useSensor(KeyboardSensor, {})
-  )
-
-  const dataIds = React.useMemo<UniqueIdentifier[]>(
-    () => data?.map(({ id }) => id) || [],
-    [data]
-  )
 
   const table = useReactTable({
     data,
@@ -191,19 +128,6 @@ export function DataTable<T extends TableType>({ data: initialData, type }: Data
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   })
-
-  function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event
-    if (active && over && active.id !== over.id) {
-      setData((data) => {
-        const oldIndex = dataIds.indexOf(active.id)
-        const newIndex = dataIds.indexOf(over.id)
-        return arrayMove(data, oldIndex, newIndex)
-      })
-    }
-  }
-
-  console.log(columns)
 
   return (
     <Tabs
@@ -277,7 +201,7 @@ export function DataTable<T extends TableType>({ data: initialData, type }: Data
                     .filter((column) => column.getCanSort())
                     .map((column, index) => {
                       const col: any = columns.find((c: any) => c.accessorKey === column.id)
-                      console.log(col)
+                      // console.log(col)
                       if (col) {
                         return (
                           <DropdownMenuRadioItem key={column.id} value={column.id}>
@@ -311,7 +235,17 @@ export function DataTable<T extends TableType>({ data: initialData, type }: Data
                 />
               </div>
             }
-
+            {
+              type === "categories" &&
+              <div className="p-2  border-b last:border-b-0 flex items-center gap-2">
+                <Input
+                  placeholder={`Search by Category Name`}
+                  className="w-full"
+                  value={(table.getColumn(table.getAllColumns()[2].id)?.getFilterValue() ?? "") as string}
+                  onChange={(e) => table.getColumn(table.getAllColumns()[2].id)?.setFilterValue(e.target.value)}
+                />
+              </div>
+            }
           </div>
           {
             type === "users" &&
@@ -321,6 +255,10 @@ export function DataTable<T extends TableType>({ data: initialData, type }: Data
             type === "products" &&
             <AddProductModal />
           }
+          {
+            type === "categories" &&
+            <AddCategoryModal />
+          }
         </div>
       </div>
       {/* table */}
@@ -329,64 +267,60 @@ export function DataTable<T extends TableType>({ data: initialData, type }: Data
         className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
       >
         <div className="overflow-hidden rounded-lg border">
-          <DndContext
-            collisionDetection={closestCenter}
-            modifiers={[restrictToVerticalAxis]}
-            onDragEnd={handleDragEnd}
-            sensors={sensors}
-            id={sortableId}
-          >
-            <Table>
-              {/* Table Header */}
-              <TableHeader className=" bg-muted sticky top-0 z-10">
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                      return (
-                        <TableHead className={`${(header.id === "user_name" ) ? "w-[160px]" : ""} ${header.id === "product_image_url" ? "w-[50px]" : ""}`}  key={header.id} colSpan={header.colSpan}>
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                        </TableHead>
-                      )
-                    })}
-                  </TableRow>
-                ))}
-              </TableHeader>
-              {/* Table Body */}
-              <TableBody className="**:data-[slot=table-cell]:first:w-8 ">
-                {table.getRowModel().rows?.length ? (
-                  <SortableContext
-                    items={dataIds}
-                    strategy={verticalListSortingStrategy}
+          <Table>
+            {/* Table Header */}
+            <TableHeader className="bg-muted sticky top-0 z-10">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead className={`${(header.id === "user_name") ? "w-[160px]" : ""} ${header.id === "product_image_url" ? "w-[50px]" : ""} ${header.id === "index" ? "w-[50px]" : ""}`} key={header.id} colSpan={header.colSpan}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                      </TableHead>
+                    )
+                  })}
+                </TableRow>
+              ))}
+            </TableHeader>
+            {/* Table Body */}
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
                   >
-                    {table.getRowModel().rows.map((row) => (
-                      <DraggableRow key={row.id} row={row} />
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
                     ))}
-                  </SortableContext>
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-24 text-center"
-                    >
-                      No results.
-                    </TableCell>
                   </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </DndContext>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
         </div>
         {/* Pagination */}
-        <div className="flex items-center justify-between px-4">
-          <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
+        <div className="flex items-center justify-center px-4">
+          {/* <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
             {table.getFilteredSelectedRowModel().rows.length} of{" "}
             {table.getFilteredRowModel().rows.length} row(s) selected.
-          </div>
+          </div> */}
           <div className="flex w-full items-center gap-8 lg:w-fit">
             <div className="hidden items-center gap-2 lg:flex">
               <Label htmlFor="rows-per-page" className="text-sm font-medium">
@@ -460,21 +394,7 @@ export function DataTable<T extends TableType>({ data: initialData, type }: Data
           </div>
         </div>
       </TabsContent>
-      <TabsContent
-        value="past-performance"
-        className="flex flex-col px-4 lg:px-6"
-      >
-        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
-      </TabsContent>
-      <TabsContent value="key-personnel" className="flex flex-col px-4 lg:px-6">
-        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
-      </TabsContent>
-      <TabsContent
-        value="focus-documents"
-        className="flex flex-col px-4 lg:px-6"
-      >
-        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
-      </TabsContent>
+
     </Tabs>
   )
 }

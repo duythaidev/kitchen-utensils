@@ -39,16 +39,11 @@ import Image from "next/image"
 
 const data = {
   user: {
-    name: "shadcn",
+    user_name: "shadcn",
     email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    avatar_url: "/avatars/shadcn.jpg",
   },
   navMain: [
-    // {
-    //   title: "Lifecycle",
-    //   url: "#",
-    //   icon: IconListDetails,
-    // },
     {
       title: "Users",
       url: "/admin/users",
@@ -63,6 +58,11 @@ const data = {
       title: "Orders",
       url: "/admin/orders",
       icon: IconShoppingCart,
+    },
+    {
+      title: "Categories",
+      url: "/admin/categories",
+      icon: IconFolder,
     },
 
   ],

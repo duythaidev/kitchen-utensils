@@ -3,7 +3,8 @@ import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
-import { toast } from "react-toastify";
+// import { toast } from "sonner";
+import { toast } from "sonner";
 import Spinner from "../Custom/Spin";
 
 const Login = () => {

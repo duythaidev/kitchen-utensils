@@ -2,7 +2,7 @@
 
 import { validateEmail, validateLength } from "@/utils/validate";
 import { redirect } from "next/navigation";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 export async function createUser(prevState: any, formData: FormData) {
   const email = formData.get('email')?.toString() || '';

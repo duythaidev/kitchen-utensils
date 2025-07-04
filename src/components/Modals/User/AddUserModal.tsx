@@ -12,10 +12,11 @@ import { useState } from "react"
 import {
     Select, SelectValue, SelectTrigger, SelectContent, SelectItem
 } from "../../ui/select"
-import { handleCreateUserAction } from "@/actions/admin.action"
-import { toast } from "react-toastify"
+import { handleCreateUserAction, refreshUserList } from "@/actions/admin.user.action"
+import { toast } from "sonner"
 import { useSession } from "next-auth/react"
 import CustomButton from "@/components/Custom/CustomButton"
+import CustomModalBox from "../CustomModalBox"
 
 const AddUserModal = () => {
     const [open, setOpen] = useState(false)
@@ -46,12 +47,14 @@ const AddUserModal = () => {
             }
             // console.log(formData)
             // console.log(session?.accessToken)
-            const res = await handleCreateUserAction(formData, session?.accessToken || "");
+            const res = await handleCreateUserAction(formData, session?.accessToken || "")
             if (res) {
-                console.log("res", res)
+                // console.log("res", res)
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 toast.success("Create succeed!")
                 setOpen(false)
                 setIsLoading(false)
+                // refreshUserList()
             }
         } catch (error) {
             toast.error("Create failed!")
@@ -59,16 +62,29 @@ const AddUserModal = () => {
 
         }
     };
-
+    const handleOpenChange = (open: boolean) => {
+        setOpen(open)
+        setUserData({
+            user_name: "",
+            email: "",
+            phone: "",
+            address: "",
+            role: "User",
+            avatar_url: "",
+            password: "",
+        })
+        setAvatar(null)
+        // setIsLoading(false)
+    }
     return (
-        <Dialog open={open} >
-            <DialogTrigger>
-                <Button variant="default" onClick={() => setOpen(true)}>
+        <Dialog open={open} onOpenChange={handleOpenChange}>
+            <DialogTrigger asChild>
+                <Button variant="default" >
                     <CirclePlus className="w-4 h-4" />
                     Add User
                 </Button>
             </DialogTrigger>
-            <DialogContent className="lg:max-w-1/2 overflow-y-scroll max-h-screen [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-white [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white [&::-webkit-scrollbar-track]:my-5 [&::-webkit-scrollbar-thumb]:w-2">
+            <CustomModalBox>
                 <DialogHeader>
                     <DialogTitle>Add New User</DialogTitle>
                     <DialogDescription>
@@ -193,7 +209,7 @@ const AddUserModal = () => {
                         Add User
                     </CustomButton>
                 </DialogFooter>
-            </DialogContent>
+            </CustomModalBox>
         </Dialog>
     )
 }

@@ -12,17 +12,17 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "../../ui/button";
 import { useState } from "react";
-
+import CustomModalBox from "../CustomModalBox";
 const DeleteProductModal = ({ product }: { product: any }) => {
     return (
         <Dialog >
-            <DialogTrigger>
+            <DialogTrigger asChild>
                 <Button variant="outline" className=" text-red-500" >
                     <Ban className="w-4 h-4" />
                     Delete
                 </Button>
             </DialogTrigger>
-            <DialogContent className={`lg:max-w-1/2 overflow-y-scroll max-h-screen [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-white [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white [&::-webkit-scrollbar-track]:my-5 [&::-webkit-scrollbar-thumb]:w-2 `}>
+            <CustomModalBox>
                 <DialogHeader>
                     <DialogTitle>
                         {
@@ -46,7 +46,7 @@ const DeleteProductModal = ({ product }: { product: any }) => {
                         }
                     </Button>
                 </DialogFooter>
-            </DialogContent>
+            </CustomModalBox>
         </Dialog>
     );
 }
@@ -56,7 +56,7 @@ const DeleteProductModalContent = ({ product }: { product: any }) => {
     return (
 
         <div className="grid gap-4">
-   
+
             <div className="text-center grid gap-3">
                 {productData.product_name}
             </div>

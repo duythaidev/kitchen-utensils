@@ -2,9 +2,10 @@ import Footer from '@/components/Footer';
 import './globals.css'
 import Header from '@/components/Header';
 import NextAuthWrapper from '@/components/NextAuthWrapper';
-import { ToastContainer } from 'react-toastify';
+// import { ToastContainer } from 'react-toastify';
 // import ProgressBarProvider from '@/components/ProgressBarProvider';
 import NextTopLoader from 'nextjs-toploader';
+import { Toaster } from 'sonner';
 
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
   return (
@@ -13,9 +14,11 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
         className={``}
       >
         <NextAuthWrapper>
-          <NextTopLoader showSpinner={false} height={2}/>
+          <NextTopLoader showSpinner={false} height={2} />
           {children}
-          <ToastContainer />
+          <Toaster />
+
+          {/* <ToastContainer /> */}
         </NextAuthWrapper>
       </body>
     </html>

@@ -62,7 +62,7 @@ const ProductList = () => {
                                     <Search color="black" className="w-4 h-4" />
                                 </Button>
                                 <Dialog >
-                                    <DialogTrigger>Open</DialogTrigger>
+                                    <DialogTrigger asChild>Open</DialogTrigger>
                                     <DialogContent className={`lg:max-w-screen-lg overflow-y-scroll max-h-screen 
                                           [&::-webkit-scrollbar]:w-2
                                         [&::-webkit-scrollbar-track]:rounded-full
