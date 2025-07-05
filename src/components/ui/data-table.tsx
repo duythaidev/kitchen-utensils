@@ -71,6 +71,7 @@ import AddUserModal from "../Modals/User/AddUserModal"
 import AddProductModal from "../Modals/Product/AddProductModal"
 import { useEffect, useState } from "react"
 import AddCategoryModal from "../Modals/Category/AddCategoryModal"
+import EditCategoryModal from "../Modals/Category/EditCategoryModal"
 
 export function DataTable<T extends TableType>({ data, type }: DataTableProps<T>) {
   console.log("data", data)
@@ -82,21 +83,25 @@ export function DataTable<T extends TableType>({ data, type }: DataTableProps<T>
     []
   )
 
-  const baseColumns: ColumnDef<InferData<T>>[] = [
-    {
-      id: "index",
-      header: "#",
-      cell: ({ row }) => {
-        const pageSize = table.getState().pagination.pageSize;
-        const pageIndex = table.getState().pagination.pageIndex;
-        return <div>{pageIndex * pageSize + row.index + 1}</div>;
-      },
-      enableSorting: false,
-      enableHiding: false,
-    }
-  ]
+  const FilterInput = ({ placeholder, columnIndex }: { placeholder: string, columnIndex: number }) => (
+    <div className="p-2 border-b last:border-b-0 flex items-center gap-2 w-3xs">
+      <Input
+        placeholder={placeholder}
+        className="w-full"
+        value={(table.getColumn(table.getAllColumns()[columnIndex].id)?.getFilterValue() ?? "") as string}
+        onChange={(e) => table.getColumn(table.getAllColumns()[columnIndex].id)?.setFilterValue(e.target.value)}
+      />
+    </div>
+  )
 
-  const columns = [...baseColumns, ...(columnsMap[type] as ColumnDef<InferData<T>>[])]
+  const AddModal = {
+    users: <AddUserModal />,
+    products: <AddProductModal />,
+    categories: <AddCategoryModal />,
+  }[type]
+
+
+  const columns = [...(columnsMap[type] as ColumnDef<InferData<T>>[])]
 
   const [sorting, setSorting] = useState<SortingState>([])
   const [pagination, setPagination] = useState({
@@ -139,8 +144,8 @@ export function DataTable<T extends TableType>({ data, type }: DataTableProps<T>
         <Label htmlFor="view-selector" className="sr-only">
           View
         </Label>
-        <div className="flex items-center justify-between w-full gap-2">
-          <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between w-full gap-2 flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm">
@@ -213,68 +218,28 @@ export function DataTable<T extends TableType>({ data, type }: DataTableProps<T>
                 </DropdownMenuRadioGroup>
               </DropdownMenuContent>
             </DropdownMenu>
-            {
-              type === "users" &&
-              <div className="p-2  border-b last:border-b-0 flex items-center gap-2">
-                <Input
-                  placeholder={`Search by User Name`}
-                  className="w-full"
-                  value={(table.getColumn(table.getAllColumns()[2].id)?.getFilterValue() ?? "") as string}
-                  onChange={(e) => table.getColumn(table.getAllColumns()[2].id)?.setFilterValue(e.target.value)}
-                />
-              </div>
-            }
-            {
-              type === "products" &&
-              <div className="p-2  border-b last:border-b-0 flex items-center gap-2">
-                <Input
-                  placeholder={`Search by Product Name`}
-                  className="w-full"
-                  value={(table.getColumn(table.getAllColumns()[2].id)?.getFilterValue() ?? "") as string}
-                  onChange={(e) => table.getColumn(table.getAllColumns()[2].id)?.setFilterValue(e.target.value)}
-                />
-              </div>
-            }
-            {
-              type === "categories" &&
-              <div className="p-2  border-b last:border-b-0 flex items-center gap-2">
-                <Input
-                  placeholder={`Search by Category Name`}
-                  className="w-full"
-                  value={(table.getColumn(table.getAllColumns()[2].id)?.getFilterValue() ?? "") as string}
-                  onChange={(e) => table.getColumn(table.getAllColumns()[2].id)?.setFilterValue(e.target.value)}
-                />
-              </div>
-            }
+            <FilterInput placeholder={`Search by ${type}`}
+              columnIndex={2} // name column
+            />
           </div>
-          {
-            type === "users" &&
-            <AddUserModal />
-          }
-          {
-            type === "products" &&
-            <AddProductModal />
-          }
-          {
-            type === "categories" &&
-            <AddCategoryModal />
-          }
+          {AddModal}
         </div>
       </div>
       {/* table */}
       <TabsContent
         value="outline"
-        className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
+        className={`relative flex flex-col gap-4 overflow-auto px-4 lg:px-6 `}
       >
-        <div className="overflow-hidden rounded-lg border">
+        <div className="overflow-hidden rounded-lg border ">
           <Table>
             {/* Table Header */}
             <TableHeader className="bg-muted sticky top-0 z-10">
               {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
+                <TableRow key={headerGroup.id} >
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead className={`${(header.id === "user_name") ? "w-[160px]" : ""} ${header.id === "product_image_url" ? "w-[50px]" : ""} ${header.id === "index" ? "w-[50px]" : ""}`} key={header.id} colSpan={header.colSpan}>
+                      <TableHead style={header.id === "id" ? { width: `${header.getSize()}px`, textAlign: "center" } : {}}
+                        className={`${(header.id === "user_name") ? "w-[160px]" : ""} ${header.id === "product_image_url" ? "w-[50px]" : ""} ${header.id === "index" ? "w-[50px]" : ""}`} key={header.id} colSpan={header.colSpan}>
                         {header.isPlaceholder
                           ? null
                           : flexRender(
@@ -317,10 +282,7 @@ export function DataTable<T extends TableType>({ data, type }: DataTableProps<T>
         </div>
         {/* Pagination */}
         <div className="flex items-center justify-center px-4">
-          {/* <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
-          </div> */}
+
           <div className="flex w-full items-center gap-8 lg:w-fit">
             <div className="hidden items-center gap-2 lg:flex">
               <Label htmlFor="rows-per-page" className="text-sm font-medium">

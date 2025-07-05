@@ -79,7 +79,7 @@ const AddUserModal = () => {
     return (
         <Dialog open={open} onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>
-                <Button variant="default" >
+                <Button className="cursor-pointer" variant="default" >
                     <CirclePlus className="w-4 h-4" />
                     Add User
                 </Button>

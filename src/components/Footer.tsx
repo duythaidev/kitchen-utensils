@@ -3,7 +3,7 @@ const Footer = () => {
         <>
             <footer className=" text-center text-surface/75  lg:text-left">
                 <div className="mx-6 py-10 text-center md:text-left">
-                    <div className="px-20 grid-1 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+                    <div className="md:px-20 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
                         <div>
                             <h6 className="text-xl mb-4 flex justify-center font-semibold uppercase md:justify-start">
                                 Help & Support
@@ -142,11 +142,11 @@ const Footer = () => {
                             </p>
                         </div>
                         <div className="">
-                            <h6 className="text-xl mb-4 text-end  font-semibold uppercase ">
+                            <h6 className="text-xl mb-4 text-center md:text-end  font-semibold uppercase ">
                                 Download app
                             </h6>
-                            <p className="text-gray-500 text-end">Save $3 With App & New User only</p>
-                            <div className="flex flex-col md:ml-auto md:mr-0 mx-auto items-end flex-shrink-0 ">
+                            <p className="text-gray-500 text-center md:text-end">Save $3 With App & New User only</p>
+                            <div className="flex flex-col md:ml-auto md:mr-0 mx-auto items-center md:items-end flex-shrink-0 ">
                                 <button className="bg-blue-600 my-3 inline-flex justify-center py-3 w-2/3 rounded-md text-white items-center focus:outline-none">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-8 h-8 " viewBox="0 0 512 512">
                                         <path d="M99.617 8.057a50.191 50.191 0 00-38.815-6.713l230.932 230.933 74.846-74.846L99.617 8.057zM32.139 20.116c-6.441 8.563-10.148 19.077-10.148 30.199v411.358c0 11.123 3.708 21.636 10.148 30.199l235.877-235.877L32.139 20.116zM464.261 212.087l-67.266-37.637-81.544 81.544 81.548 81.548 67.273-37.64c16.117-9.03 25.738-25.442 25.738-43.908s-9.621-34.877-25.749-43.907zM291.733 279.711L60.815 510.629c3.786.891 7.639 1.371 11.492 1.371a50.275 50.275 0 0027.31-8.07l266.965-149.372-74.849-74.847z"></path>
@@ -171,9 +171,9 @@ const Footer = () => {
                     </div>
                 </div>
 
-                <div className=" p-6 text-center flex justify-between px-20 ">
-                    <span>© 2025. All rights reserved by Thai.</span>
-                    <a className="font-semibold" href="https://tw-elements.com/">Download App</a>
+                <div className=" p-6 text-center flex justify-between px-20 flex-wrap">
+                    <p>© 2025. All rights reserved by Thai.</p>
+                    <p className="font-semibold md:ml-auto md:mr-0 mx-auto items-center md:items-end flex-shrink-0">Download App</p>
                 </div>
             </footer>
         </>

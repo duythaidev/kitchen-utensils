@@ -119,7 +119,7 @@ const Header = () => {
         </nav>
         <MobileHeader showNav={showNav} setShowNav={setShowNav}></MobileHeader>
       </div>
-      <div className="w-full bg-white px-20">
+      <div className="w-full bg-white px-20 hidden md:block">
         <nav className={` mx-auto flex max-w-7xl items-center justify-between  transition-all px-8 ${stickyMenu ? 'py-2 ' : 'py-3'}`} aria-label="Global">
           <div >
             <Link href={'/'} className={`mr-5 relative ${hoverStyle} hover:after:w-full text-dark font-semibold`}>Home</Link>

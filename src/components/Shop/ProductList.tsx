@@ -1,7 +1,7 @@
 'use client'
 import { ArrowDownNarrowWide, ChevronDown, ChevronUp, Filter, Search, ShoppingBag, ShoppingCart } from "lucide-react";
-import { useState } from "react";
-import ModalContent from "./PreviewProductModal";
+import { useEffect, useState } from "react";
+import PreviewProductModal from "./PreviewProductModal";
 import HoverLink from "../Custom/HoverLink";
 import ProductCard from "./ProductCard";
 import { Input } from "../ui/input";
@@ -24,135 +24,153 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { DialogClose } from "@radix-ui/react-dialog";
-const ProductList = () => {
+import { useRouter } from "nextjs-toploader/app";
+import { useSearchParams } from "next/navigation";
+
+const ProductList = ({ products }: { products: any[] }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
-    const [filter, setFilter] = useState('');
-    const [sort, setSort] = useState('');
+
+    const keywordparam = useSearchParams().get('keyword');
+    const sortparam = useSearchParams().get('sort');
+    const priceSortParam = useSearchParams().get('priceSort');
+
+
+    const priceFromParam = useSearchParams().get('priceFrom');
+    const priceToParam = useSearchParams().get('priceTo');
+
+
+    const [keyword, setKeyword] = useState(keywordparam || '');
+    const [priceSort, setPriceSort] = useState(priceSortParam || '');
+    const [sort, setSort] = useState(sortparam || null);
+
+    const [priceFrom, setPriceFrom] = useState(priceFromParam || '');
+    const [priceTo, setPriceTo] = useState(priceToParam || '');
+
     const showModal = () => {
         setIsModalOpen(true);
     };
+    const router = useRouter();
 
-    const handleOk = () => {
-        setIsModalOpen(false);
-    };
-    const [hiddenCategories, setHiddenCategories] = useState(false);
+    useEffect(() => {
+        if (sort || sort === '') {
+            if (keyword) {
+                router.push(`/shop?keyword=${keyword}&sort=${sort}`);
+            } else {
+                router.push(`/shop?sort=${sort}`);
+            }
+        }
+    }, [sort]);
+
+    useEffect(() => {
+        if (priceSort) {
+            if (keyword && sort) {
+                router.push(`/shop?keyword=${keyword}&sort=${sort}&priceSort=${priceSort}`);
+            }
+            else if (keyword) {
+                router.push(`/shop?keyword=${keyword}&priceSort=${priceSort}`);
+            }
+            else if (sort) {
+                router.push(`/shop?sort=${sort}&priceSort=${priceSort}`);
+            } else {
+                router.push(`/shop?priceSort=${priceSort}`);
+            }
+        }
+    }, [priceSort]);
+
+
+    const [showCategories, setShowCategories] = useState(true);
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+    const handleSearchKeyword = () => {
+        setSort('');
+        router.push(`/shop?keyword=${keyword}`);
+    }
+
     return (
         <>
-            <div className="bg-gray-100">
+            <div className="bg-gray-100 flex justify-center">
                 <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4 border-b border-gray-200 pt-24 pb-6 ">
-                        <div className="bg-white shadow-1 rounded-lg py-4 px-5">
-                            <div className="flex items-center justify-between">
+                    <div className="grid gap-x-8 gap-y-2 lg:grid-cols-4 border-b border-gray-200  md:pt-24 pb-6 ">
+                        <div className="col-span-3 mt-5 md:mt-0 md:col-span-1 flex justify-center md:justify-between bg-white shadow-1 rounded-lg px-5 py-3 flex-wrap">
+                            <div className="flex items-center justify-between w-full">
                                 <p>Filters:</p>
-                                <button className="text-blue-600 hover:text-blue-700 cursor-pointer" onClick={() => { setHiddenCategories(false) }}>Clean All</button>
+                                <button className="block text-blue-600 hover:text-blue-700 cursor-pointer" onClick={() => { }}>Clear Filter</button>
                             </div>
                         </div>
-                        <div className='col-span-3 flex justify-between bg-white shadow-1 rounded-lg px-5'>
+                        <div className='col-span-3 flex justify-center md:justify-between bg-white shadow-1 rounded-lg px-5 py-2 flex-wrap'>
                             <div className="flex items-center gap-4">
                                 <Input
-                                    style={{ width: '200px' }}
+                                    className="rounded-sm"
                                     placeholder="Search products by name"
-                                    onChange={(e) => setFilter(e.target.value)}
+                                    value={keyword}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            handleSearchKeyword();
+                                        }
+                                    }}
+                                    onChange={(e) => setKeyword(e.target.value)}
                                 />
-                                <Button className="bg-white hover:bg-gray-100 cursor-pointer border" style={{ padding: 10 }}>
+                                <Button
+                                    className="bg-white hover:bg-gray-100 cursor-pointer border" style={{ padding: 10 }}
+                                    onClick={() => handleSearchKeyword()}
+                                >
                                     <Search color="black" className="w-4 h-4" />
                                 </Button>
-                                <Dialog >
-                                    <DialogTrigger asChild>Open</DialogTrigger>
-                                    <DialogContent className={`lg:max-w-screen-lg overflow-y-scroll max-h-screen 
-                                          [&::-webkit-scrollbar]:w-2
-                                        [&::-webkit-scrollbar-track]:rounded-full
-                                        [&::-webkit-scrollbar-track]:bg-white
-                                        [&::-webkit-scrollbar-thumb]:rounded-full
-                                        [&::-webkit-scrollbar-thumb]:bg-white
-                                        [&::-webkit-scrollbar-track]:my-5
-                                        [&::-webkit-scrollbar-thumb]:w-2
-                                        `}>
-                                        <ModalContent></ModalContent>
-                                    </DialogContent>
-                                </Dialog>
-                            </div>
-                            <div className="flex items-center" >
-                                <div className="flex items-center space-x-4">
 
-                                    <div className="my-2">
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button variant="outline" className="cursor-pointer w-[100px] flex items-center gap-2">
-                                                    <Filter className="w-4 h-4" />
-                                                    <span>{sort ? `${sort}` : "Sort"} </span>
-                                                    <ChevronDown className="inline w-4 h-4" />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent>
-                                                <DropdownMenuItem onSelect={() => setSort("1")}>1</DropdownMenuItem>
-                                                <DropdownMenuItem onSelect={() => setSort("2")}>2</DropdownMenuItem>
-                                                <DropdownMenuItem onSelect={() => setSort("3")}>3</DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </div>
-                                    <div className="my-2">
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button variant="outline" className="cursor-pointer w-[100px] flex items-center gap-2">
-                                                    <ArrowDownNarrowWide className="w-4 h-4" />
-                                                    <span>{sort ? `${sort}` : "Sort"} </span>
-                                                    <ChevronDown className="inline w-4 h-4" />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent>
-                                                <DropdownMenuItem onSelect={() => setSort("1")}>1</DropdownMenuItem>
-                                                <DropdownMenuItem onSelect={() => setSort("2")}>2</DropdownMenuItem>
-                                                <DropdownMenuItem onSelect={() => setSort("3")}>3</DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </div>
+
+                            </div>
+                            <div className="flex items-center md:mt-0 mt-2" >
+                                <div className="flex items-center space-x-2 flex-wrap justify-center">
+                                    <span className="text-gray-500 mr-2">
+                                        Order by:
+                                    </span>
+                                    <Button className=" cursor-pointer" variant={sort === 'newest' ? "secondary" : "outline"} onClick={() => setSort(sort == 'newest' ? '' : 'newest')}>
+                                        Newest
+                                    </Button>
+                                    <Button className=" cursor-pointer" variant={sort === 'bestseller' ? "secondary" : "outline"} onClick={() => setSort(sort == 'bestseller' ? '' : 'bestseller')}>
+                                        Best Seller
+                                    </Button>
+
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="outline" className="text-red-500 border-red-500 hover:bg-red-50">
+                                                Price: {priceSort === 'htl' ? 'High to Low' : priceSort === 'lth' ? 'Low to High' : 'Select'} <ChevronDown className="ml-2 w-4 h-4" />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent>
+                                            <DropdownMenuItem onSelect={() => setPriceSort('htl')}>Price: High to Low</DropdownMenuItem>
+                                            <DropdownMenuItem onSelect={() => setPriceSort('lth')}>Price: Low to High</DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
                                 </div>
 
                             </div>
                         </div>
                     </div>
+
                     <section aria-labelledby="products-heading" className="pt-6 pb-24">
                         <h2 id="products-heading" className="sr-only">
                             Products
                         </h2>
-                        <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+                        {/* <div className="bg-white shadow-1 rounded-lg py-4 px-5"> */}
+
+                        <div className="grid  grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
                             {/* Filters */}
-                            <form className="hidden lg:flex flex-col gap-4">
-                                <h3 className="sr-only">Categories</h3>
-                                <ul className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900 bg-white shadow-1 rounded-lg py-5 px-5" >
-                                    <li>
-                                        <a href="#">Totes</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Backpacks</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Travel Bags</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Hip Bags</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Laptop Sleeves</a>
-                                    </li>
-                                </ul>
+                            <div className="hidden lg:flex flex-col gap-4">
 
                                 <div className="border-b border-gray-200 py-6 bg-white shadow-1 rounded-lg px-5">
                                     <h3 className="-my-3 flow-root">
                                         <button type="button" className="border-b border-gray-200 flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500" aria-controls="filter-section-1" aria-expanded="false" >
                                             <span className="font-medium text-gray-900">Category</span>
                                             <span className="ml-6 flex items-center">
-                                                <span onClick={() => setHiddenCategories(!hiddenCategories)}><ChevronDown className={`${hiddenCategories ? '' : 'rotate-180'} transition-all duration-300`} /></span>
+                                                <span onClick={() => setShowCategories(!showCategories)}><ChevronDown className={`${showCategories ? '' : 'rotate-180'} transition-all duration-300`} /></span>
                                             </span>
                                         </button>
                                     </h3>
                                     {/* Filter section, show/hide based on section state. */}
-                                    {hiddenCategories && <div className="pt-6" id="filter-section-1">
+                                    {showCategories && <div className="pt-6" id="filter-section-1">
                                         <div className="space-y-4">
                                             <div className="flex gap-3">
                                                 <div className="flex h-5 shrink-0 items-center">
@@ -175,18 +193,35 @@ const ProductList = () => {
 
                                         </div>
                                     </div>}
+                                    {/* Price Range Filter */}
+
+                                </div>
+                                <div className="border-t border-gray-200 py-6 mt-4 bg-white shadow-1 rounded-lg px-5">
+                                    <h3 className="-my-3 flow-root">
+                                        <button type="button" className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                                            <span className="font-medium text-gray-900">Khoảng giá</span>
+                                        </button>
+                                    </h3>
+                                    <div className="pt-4">
+                                        <div className="flex items-center gap-2">
+                                            <Input type="number" placeholder="Từ" className="w-full" />
+                                            <span className="text-gray-500">-</span>
+                                            <Input type="number" placeholder="Đến" className="w-full" />
+                                        </div>
+                                        <Button className="mt-3 w-full bg-indigo-600 hover:bg-indigo-700 text-white">Áp dụng</Button>
+                                    </div>
                                 </div>
 
-                            </form>
+                            </div>
                             {/* Product grid */}
                             <div className="relative lg:col-span-3 ">
 
-                                <div className="grid grid-cols-1 gap-x-8 gap-y-8 lg:grid-cols-3">
+                                <div className="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-2 lg:grid-cols-3 justify-items-center">
 
-                                    <ProductCard showModal={showModal}></ProductCard>
-                                    <ProductCard showModal={showModal}></ProductCard>
-                                    <ProductCard showModal={showModal}></ProductCard>
-                                    <ProductCard showModal={showModal}></ProductCard>
+                                    <ProductCard product={products[0]}></ProductCard>
+                                    <ProductCard product={products[1]}></ProductCard>
+                                    <ProductCard product={products[2]}></ProductCard>
+                                    <ProductCard product={products[3]}></ProductCard>
                                 </div>
                                 {/* Your content */}
                             </div>
@@ -194,25 +229,9 @@ const ProductList = () => {
                     </section>
                 </main>
             </div>
-            {/* <Modal
-                closable={{ 'aria-label': 'Custom Close Button' }}
-                open={isModalOpen}
-                onOk={handleOk}
-                onCancel={handleCancel}
-                centered
-                width={{
 
-                    xs: '90%',
-                    sm: '80%',
-                    md: '70%',
-                    lg: '70%',
-                    xl: '70%',
-                    xxl: '70%',
-                }}
-                footer={null}
-            >
-                <ModalContent></ModalContent>
-            </Modal> */}
+ 
+
         </>
     );
 }

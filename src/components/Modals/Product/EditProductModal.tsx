@@ -1,152 +1,389 @@
-import { Eye, Pencil } from "lucide-react";
+'use client'
 
 import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+    Dialog, DialogClose, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Button } from "../../ui/button";
-import Image from "next/image";
-import { useState } from "react";
-import { Select, SelectValue, SelectTrigger, SelectContent, SelectItem } from "../../ui/select";
-import PreviewProductModal from "@/components/Shop/PreviewProductModal";
-import CustomModalBox from "../CustomModalBox";
+import { Button } from "../../ui/button"
+import Image from "next/image"
+import { useEffect, useState } from "react"
+import { Select, SelectValue, SelectTrigger, SelectContent, SelectItem } from "../../ui/select"
+import { Checkbox } from "@/components/ui/checkbox"
+import { toast } from "sonner"
+import { v4 as uuidv4 } from 'uuid'
+import CustomModalBox from "../CustomModalBox"
+import CustomButton from "@/components/Custom/CustomButton"
+import { handleUpdateProductAction, handleUpdateProductImageAction } from "@/actions/admin.product.action"
+import { useSession } from "next-auth/react"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { fetchCategories } from "@/actions/client-api"
+import { ICategory, IProduct } from "@/types/product"
+import { Pencil, Trash } from "lucide-react"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 
-const EditProductModal = ({ product }: { product: any }) => {
+async function imageUrlToFile(imageUrl: string, filename: string, mimeType: string) {
+    try {
+        const response = await fetch(imageUrl)
+        const blob = await response.blob()
+        const file = new File([blob], filename, { type: mimeType || blob.type })
+        return file
+    } catch (error) {
+        console.error("Error converting image URL to File object:", error)
+        return null
+    }
+}
+
+
+const EditProductModal = ({ product }: { product: IProduct }) => {
+    const [open, setOpen] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const { data: session } = useSession()
+
+    const [productData, setProductData] = useState({
+        product_name: product.product_name,
+        price: product.price,
+        stock: product.stock,
+        description: product.description || "",
+        category_id: product.category?.id,
+        discounted_price: product.discountedPrice,
+    })
+
+    const isMainImageIndex = product.images?.findIndex(img => img.is_main)
+
+    // console.log("isMainImageIndex", isMainImageIndex)
+
+    const [selectedImage, setSelectedImage] = useState<File | null>(null)
+    // console.log("selectedImage", selectedImage)
+    // image url to file list
+    const [imageFiles, setImageFiles] = useState<(File | null)[]>([])
+    // file list to blob url list
+    const [blobImages, setBlobImages] = useState<string[]>([])
+
+
+    useEffect(() => {
+        if (open) {
+            const fetchAll = async () => {
+           
+                if (product.images) {
+                    const parsedImages = await Promise.all(
+                        product.images.map(async (image) => {
+                            return await imageUrlToFile(image.image_url, `${image.image_url}-${uuidv4()}`, "image/png")
+                        })
+                    )
+                    if (parsedImages) {
+                        setImageFiles(parsedImages)
+                        setBlobImages(parsedImages.map(file => file ? URL.createObjectURL(file) : ""))
+                        parsedImages.forEach((image, index) => {
+                            if (image && index === isMainImageIndex) {
+                                setSelectedImage(image)
+                            }
+                        })
+                    }
+                }
+    
+                // Fetch category
+                const fetchedCategories = await fetchCategories(session?.accessToken || "")
+                if (fetchedCategories) {
+                    setCategories(fetchedCategories)
+                } else {
+                    toast.error("Failed to fetch categories")
+                }
+            }
+    
+            // Reset
+            setProductData({
+                product_name: product.product_name,
+                price: product.price,
+                stock: product.stock,
+                description: product.description || "",
+                category_id: product.category?.id,
+                discounted_price: product.discountedPrice,
+            })
+            setImageFiles([])
+            setBlobImages([])
+            setSelectedImage(null)
+            fetchAll()
+        }
+    }, [open])
+    
+
+    // const [mainImageId, setMainImageId] = useState(
+    //     product.images?.find(img => img.is_main)?.id || null
+    // )
+    const [categories, setCategories] = useState<ICategory[]>([])
+
+    useEffect(() => {
+        const getCategories = async () => {
+            const categories = await fetchCategories(session?.accessToken || "")
+            if (categories) {
+                setCategories(categories)
+            } else {
+                toast.error("Failed to fetch categories")
+            }
+        }
+        getCategories()
+    }, [])
+
+    const handleAddImages = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const totalImages = (e?.target?.files?.length || 0) + (imageFiles?.length || 0)
+        if (totalImages > 3) {
+            toast.error("You can only have up to 3 images total")
+            return
+        }
+        if (e?.target?.files?.length) {
+            const filesArray = Array.from(e.target.files)
+            setImageFiles([...(imageFiles || []), ...filesArray])
+            const blobArray = filesArray.map(file => file ? URL.createObjectURL(file) : "")
+            setBlobImages([...(blobImages || []), ...blobArray])
+            // if (!mainImageId) {
+            //     setSelectedImage(filesArray[0])
+            // }
+        }
+    }
+    // console.log("imageFiles", imageFiles)
+    // console.log("blobImages", blobImages)
+
+    const handleDeleteImage = (imageName: string | undefined) => {
+        console.log("imageName", imageName)
+        const newImages = imageFiles?.filter(image => image?.name !== imageName)
+        console.log("newImages", newImages)
+        setImageFiles(newImages)
+        const blobArray = newImages.map(file => file ? URL.createObjectURL(file) : "")
+        setBlobImages(blobArray)
+        console.log("newBlobImages", blobArray)
+        setSelectedImage(newImages[0] || null)
+    }
+
+    const handleUpdateProduct = async () => {
+        setIsLoading(true)
+        try {
+            productData.product_name = productData.product_name.trim()
+            productData.description = productData.description.trim()
+            if (productData.product_name === "" || productData.price === 0 || productData.stock === 0) {
+                toast.error("Please fill in all required fields")
+                return
+            }
+
+            const resProduct = await handleUpdateProductAction(product.id, productData, session?.accessToken || "")
+
+            if (imageFiles && imageFiles?.length > 0) {
+                const productImageFormData = new FormData()
+                imageFiles.forEach(file => {
+                    if (file) {
+                        productImageFormData.append("product-images", file)
+                    }
+                })
+
+                const isMainIndex = imageFiles.findIndex(image => image?.name === selectedImage?.name)
+                if (isMainIndex !== -1) {
+                    if (isMainIndex !== -1) {
+                        productImageFormData.append("isMain", isMainIndex.toString())
+                    }
+                    productImageFormData.append("product_id", product.id.toString())
+                    // productImageFormData.append("mainImageId", mainImageId?.toString() || "")
+
+                    const resImage = await handleUpdateProductImageAction(product.id, productImageFormData, session?.accessToken || "")
+                    if (resProduct && resImage) {
+                        await new Promise(resolve => setTimeout(resolve, 1000))
+                        toast.success("Product updated successfully!")
+                        setOpen(false)
+                    }
+                    else {
+                        toast.error("Product created successfully, but image update failed!")
+                    }
+                } else {
+                    toast.error("Please select a main image")
+                }
+            } else {
+                if (resProduct) {
+                    await new Promise(resolve => setTimeout(resolve, 1000))
+                    toast.success("Product updated successfully!")
+                    setOpen(false)
+                }
+            }
+
+        } catch (error) {
+            toast.error("Update failed!")
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    const handleOpenChange = (state: boolean) => {
+        setOpen(state)
+        if (!state) {
+            setProductData({
+                product_name: product.product_name,
+                price: product.price,
+                stock: product.stock,
+                description: product.description || "",
+                category_id: product.category?.id,
+                discounted_price: product.discountedPrice,
+            })
+            setSelectedImage(null)
+            setImageFiles([])
+            setBlobImages([])
+            // setMainImageId(product.images?.find(img => img.is_main)?.id || null)
+        }
+    }
+
     return (
-        <Dialog >
+        <Dialog open={open} onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>
-                <Button variant="outline" className=" text-orange-500" >
+                <Button variant="outline" className="text-orange-500">
                     <Pencil className="w-4 h-4" />
                     Edit
                 </Button>
             </DialogTrigger>
+            {open && (
             <CustomModalBox>
                 <DialogHeader>
-                    <DialogTitle>Edit Product Details</DialogTitle>
+                    <DialogTitle>Edit Product</DialogTitle>
                     <DialogDescription>
                         Edit product details here.
                     </DialogDescription>
                 </DialogHeader>
-                {/* <EditProductModalContent product={product}></EditProductModalContent> */}
-                <PreviewProductModal product={product}></PreviewProductModal>
+
+                <div className="flex flex-col gap-4">
+                    {/* Image Section */}
+                    <div className="flex flex-col gap-3 w-full justify-center items-center">
+                        <Label className="justify-center">Product Images</Label>
+                        <div className={`flex gap-3 flex-wrap w-full justify-center items-center ${(blobImages && blobImages?.length > 0) ? "mb-10" : ""}`}>
+                            {/* Existing Images */}
+
+                            {blobImages && blobImages?.map((blob, index) => (
+                                <div key={uuidv4()}>
+                                    <Card className="w-[200px] h-[200px]">
+                                        <CardHeader className="hover:scale-105 transition-all cursor-pointer"
+                                            onClick={() => setSelectedImage(imageFiles?.[index] || null)}
+                                        >
+                                            <img
+                                                src={blob}
+                                                alt="Preview"
+                                                width={300}
+                                                height={300}
+                                            />
+                                        </CardHeader>
+                                        <CardContent>
+                                            <div className={`flex mt-2 justify-between items-center gap-2 ${imageFiles && imageFiles?.length > 0 ? "mb-10" : ""}`}>
+                                                <div className="flex gap-2">
+                                                    <Checkbox
+                                                        checked={selectedImage?.name === imageFiles?.[index]?.name}
+                                                        onCheckedChange={() => setSelectedImage(imageFiles?.[index] || null)}
+                                                    />
+                                                    <Label>Main</Label>
+                                                </div>
+                                                <div>
+                                                    <Tooltip>
+                                                        <TooltipTrigger asChild>
+                                                            <Trash className="w-4 h-4 cursor-pointer hover:text-red-500"
+                                                                onClick={() => handleDeleteImage(imageFiles && imageFiles?.length > 0 ? imageFiles[index]?.name : "")}
+                                                            />
+                                                        </TooltipTrigger>
+                                                        <TooltipContent>
+                                                            Delete Image
+                                                        </TooltipContent>
+                                                    </Tooltip>
+                                                </div>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                </div>
+                            ))}
+                        </div>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            className="w-[200px] mx-auto"
+                            onClick={() => document.getElementById('edit-picture-input')?.click()}
+                        >
+                            Add More Images
+                        </Button>
+                        <input
+                            id="edit-picture-input"
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            className="hidden"
+                            onChange={handleAddImages}
+                        />
+                    </div>
+
+                    {/* Product Fields */}
+                    <div className="grid gap-3">
+                        <Label><span className="text-red-500">*</span>Product Name</Label>
+                        <Input
+                            value={productData.product_name}
+                            onChange={(e) => setProductData({ ...productData, product_name: e.target.value })}
+                        />
+                    </div>
+                    <div className="grid gap-3">
+                        <Label><span className="text-red-500">*</span>Price</Label>
+                        <Input
+                            type="number"
+                            min={0}
+                            value={productData.price}
+                            onChange={(e) => setProductData({ ...productData, price: parseInt(e.target.value) })}
+                        />
+                    </div>
+                    <div className="grid gap-3">
+                        <Label><span className="text-red-500">*</span>Stock</Label>
+                        <Input
+                            type="number"
+                            min={0}
+                            value={productData.stock}
+                            onChange={(e) => setProductData({ ...productData, stock: parseInt(e.target.value) })}
+                        />
+                    </div>
+                    <div className="grid gap-3">
+                        <Label>Category</Label>
+                        <Select
+                            defaultValue={productData.category_id?.toString()}
+                            onValueChange={(val) => setProductData({ ...productData, category_id: val === "0" ? undefined : parseInt(val) })}
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select category" />
+                            </SelectTrigger>
+                            {categories.length > 0 && (
+                                <SelectContent>
+                                    {categories.map((category) => (
+                                        <SelectItem key={category.id} value={category.id.toString()}>
+                                            {category.category_name}
+                                        </SelectItem>
+                                    ))}
+                                    <SelectItem value="0">None</SelectItem>
+                                </SelectContent>
+                            )}
+                        </Select>
+                    </div>
+
+                    <div className="grid gap-3">
+                        <Label>Description</Label>
+                        <Input
+                            value={productData.description}
+                            onChange={(e) => setProductData({ ...productData, description: e.target.value })}
+                        />
+                    </div>
+                </div>
 
                 <DialogFooter>
                     <DialogClose asChild>
                         <Button variant="outline">Cancel</Button>
                     </DialogClose>
-                    <Button type="submit">Save changes</Button>
+                    <CustomButton
+                        color="blue"
+                        className={`px-4! py-2! text-sm w-[150px]! ${isLoading ? "cursor-wait" : ""}`}
+                        isLoading={isLoading}
+                        onClick={handleUpdateProduct}
+                    >
+                        Save Changes
+                    </CustomButton>
                 </DialogFooter>
             </CustomModalBox>
+            )}
         </Dialog>
-    );
+    )
 }
-// const EditProductModalContent = ({ product }: { product: any }) => {
-//     const [productData, setProductData] = useState(product);
-//     const [avatar, setAvatar] = useState<any>(null);
-//     console.log(avatar)
-//     return (
 
-//         <div className="grid gap-4">
-//             <div className="grid gap-3 mx-auto items-center">
-//                 <Label className="text-center">Avatar</Label>
-
-//                 {/* Nếu có avatar mới được chọn thì preview ảnh mới */}
-//                 {avatar ? (
-//                     <Image
-//                         src={URL.createObjectURL(avatar)}
-//                         alt="New Avatar Preview"
-//                         width={100}
-//                         height={100}
-//                         className="rounded-full mx-auto"
-//                     />
-//                 ) :
-//                     userData.avatar_url ? (
-//                         <Image
-//                             src={userData.avatar_url}
-//                             alt="Current Avatar"
-//                             width={100}
-//                             height={100}
-//                             className="rounded-full mx-auto"
-//                         />
-//                     ) : (
-//                         <div className="w-[100px] h-[100px] bg-gray-200 rounded-full mx-auto" />
-//                     )}
-
-//                 {/* Nút đổi ảnh hoặc chọn ảnh */}
-//                 <Button
-//                     type="button"
-//                     variant="outline"
-//                     onClick={() => document.getElementById('picture-input')?.click()}
-//                     className="w-fit mx-auto"
-//                 >
-//                     {userData.avatar_ ? "Đổi ảnh" : "Chọn ảnh"}
-//                 </Button>
-//                 <input
-//                     id="picture-input"
-//                     type="file"
-//                     accept="image/*"
-//                     className="hidden"
-//                     onChange={(e) => {
-//                         if (e.target.files && e.target.files[0]) {
-//                             setAvatar(e.target.files[0]);
-//                         }
-//                     }}
-//                 />
-//             </div>
-
-
-//             <div className="grid gap-3">
-//                 <Label>Username</Label>
-//                 <Input defaultValue="User Name" value={userData.user_name}
-//                     onChange={(e) => setUserData({ ...userData, user_name: e.target.value })}
-//                 />
-//             </div>
-
-//             <div className="grid gap-3">
-//                 <Label>Email</Label>
-//                 <Input defaultValue="User Email" value={userData.email}
-//                     onChange={(e) => setUserData({ ...userData, email: e.target.value })}
-//                 />
-//             </div>
-//             <div className="grid gap-3">
-//                 <Label>Phone</Label>
-//                 <Input defaultValue="User Phone" value={userData.phone}
-//                     onChange={(e) => setUserData({ ...userData, phone: e.target.value })}
-//                 />
-//             </div>
-//             <div className="grid gap-3">
-//                 <Label>Address</Label>
-//                 <Input defaultValue="User Address" value={userData.address}
-//                     onChange={(e) => setUserData({ ...userData, address: e.target.value })}
-//                 />
-//             </div>
-//             <div className="grid gap-3">
-//                 <Label>Role</Label>
-
-//                 <Select defaultValue={userData.role}
-//                     onValueChange={(value) => setUserData({ ...userData, role: value })}
-//                 >
-//                     <SelectTrigger>
-//                         <SelectValue placeholder="Select a role" />
-//                     </SelectTrigger>
-//                     <SelectContent>
-//                         <SelectItem value="Admin">Admin</SelectItem>
-//                         <SelectItem value="User">User</SelectItem>
-//                     </SelectContent>
-//                 </Select>
-//             </div>
-
-//         </div >
-
-//     )
-// }
-
-export default EditProductModal;
+export default EditProductModal

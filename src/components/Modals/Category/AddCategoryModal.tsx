@@ -32,6 +32,7 @@ const AddCategoryModal = () => {
     try {
       const success = await handleCreateCategoryAction(categoryName, session?.accessToken || "")
       if (success) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
         toast.success("Category added successfully!")
         setOpen(false)
         setCategoryName("")
@@ -53,7 +54,7 @@ const AddCategoryModal = () => {
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="default" >
+        <Button className="cursor-pointer" variant="default" >
           <CirclePlus className="w-4 h-4" />
           Add Category
         </Button>
@@ -83,7 +84,7 @@ const AddCategoryModal = () => {
           </DialogClose>
           <CustomButton
             color="blue"
-            className={`px-4! py-2! text-sm ${isLoading ? "cursor-wait" : ""}`}
+            className={`px-4! py-2! text-sm text-center w-[100px]! ${isLoading ? "cursor-wait" : ""}`}
             isLoading={isLoading}
             onClick={handleAddCategory}
           >

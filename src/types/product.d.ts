@@ -1,10 +1,23 @@
 export interface IProduct {
     id: number,
-    name: string,
+    product_name: string,
     price: number,
-    discountedPrice?: number,
-    description: string,
-    quantity: number,
-    category: string,
-    image: string
+    stock: number,
+    discountedPrice?: number | null,
+    description?: string | null,
+    category?: ICategory | null,
+    images?: IProductImage[] | null,
 }
+
+
+export interface ICategory {
+    id: number,
+    category_name: string,
+}
+
+export interface IProductImage {
+    id: number,
+    image_url: string,
+    is_main: boolean,
+}
+

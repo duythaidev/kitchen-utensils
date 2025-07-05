@@ -6,7 +6,7 @@ import { toast } from "sonner"
 import { handleBanUserAction, refreshUserList } from "@/actions/admin.user.action"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog"
-import { fetchUserList } from "@/lib/client-api"
+import { fetchUserList } from "@/actions/client-api"
 
 const BanUserModal = ({ user }: { user: any }) => {
     const { data: session } = useSession()

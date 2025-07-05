@@ -24,7 +24,7 @@ const Page = async () => {
 
     return (
         <div>
-            <DataTable data={products} type="products" />
+            <DataTable data={data} type="products" />
         </div>
     );
 }

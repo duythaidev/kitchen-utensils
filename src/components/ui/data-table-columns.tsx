@@ -17,6 +17,8 @@ import BanUserModal from "../Modals/User/BanUserModal"
 import ViewProductModal from "../Modals/Product/ViewProductModal"
 import EditProductModal from "../Modals/Product/EditProductModal"
 import DeleteProductModal from "../Modals/Product/DeleteProductModal"
+import EditCategoryModal from "../Modals/Category/EditCategoryModal"
+import DeleteCategoryModal from "../Modals/Category/DeleteCategoryModal"
 
 export const userSchema = z.object({
   id: z.number(),
@@ -38,11 +40,15 @@ export const productSchema = z.object({
   id: z.number(),
   product_name: z.string(),
   price: z.number(),
-  discounted_price: z.number(),
-  description: z.string(),
-  category: categorySchema,
+  discounted_price: z.number().nullable(),
+  description: z.string().nullable(),
+  category: categorySchema.nullable(),
   stock: z.number(),
-  product_image_url: z.string(),
+  images: z.array(z.object({
+    id: z.number(),
+    image_url: z.string(),
+    is_main: z.boolean(),
+  })).nullable(),
 });
 
 export const orderSchema = z.object({
@@ -52,7 +58,14 @@ export const orderSchema = z.object({
 });
 
 export const usersColumns: ColumnDef<z.infer<typeof userSchema>>[] = [
-
+  {
+    accessorKey: "id",
+    header: "#",
+    size: 50,
+    cell: ({ row }) => (
+      <div className="text-center">{row.index + 1}</div>
+    ),
+  },
   {
     id: "avatar_url",
     header: "Avatar",
@@ -137,13 +150,20 @@ export const usersColumns: ColumnDef<z.infer<typeof userSchema>>[] = [
   },
 ]
 export const productsColumns: ColumnDef<z.infer<typeof productSchema>>[] = [
-
+  {
+    accessorKey: "id",
+    header: "#",
+    size: 50,
+    cell: ({ row }) => (
+      <div className="text-center">{row.index + 1}</div>
+    ),
+  },
   {
     id: "product_image_url",
     header: "Image",
     cell: ({ row }) => (
       <Avatar className="w-10 h-10">
-        <AvatarImage src={row.original.product_image_url} />
+        <AvatarImage src={row.original.images?.find(image => image.is_main)?.image_url} />
       </Avatar>
     ),
   },
@@ -215,9 +235,10 @@ export const productsColumns: ColumnDef<z.infer<typeof productSchema>>[] = [
 export const categoriesColumns: ColumnDef<z.infer<typeof categorySchema>>[] = [
   {
     accessorKey: "id",
-    header: "ID",
+    header: "#",
+    size: 50,
     cell: ({ row }) => (
-      <div className="font-medium">{row.original.id}</div>
+      <div className="text-center">{row.index + 1}</div>
     ),
   },
   {
@@ -236,9 +257,8 @@ export const categoriesColumns: ColumnDef<z.infer<typeof categorySchema>>[] = [
     header: "Actions",
     cell: ({ row }) => (
       <div className="flex gap-2 flex-wrap">
-        {/* <ViewCategoryModal category={row.original} />
-<EditCategoryModal category={row.original} />
-<DeleteCategoryModal category={row.original} /> */}
+        <EditCategoryModal category={row.original} />
+        <DeleteCategoryModal category={row.original} />
       </div>
     ),
   },
@@ -249,7 +269,7 @@ export const categoriesColumns: ColumnDef<z.infer<typeof categorySchema>>[] = [
 //   {
 //     id: "drag",
 //     header: () => null,
-//     cell: ({ row }) => <DragHandle id={row.original.id} />,
+//     cell: ({ row }) => <DragHandle id={row.index +1} />,
 //   },
 //   {
 //     accessorKey: "header",
@@ -298,13 +318,13 @@ export const categoriesColumns: ColumnDef<z.infer<typeof categorySchema>>[] = [
 //           })
 //         }}
 //       >
-//         <Label htmlFor={`${row.original.id}-target`} className="sr-only">
+//         <Label htmlFor={`${row.index +1}-target`} className="sr-only">
 //           Target
 //         </Label>
 //         <Input
 //           className="hover:bg-input/30 focus-visible:bg-background dark:hover:bg-input/30 dark:focus-visible:bg-input/30 h-8 w-16 border-transparent bg-transparent text-right shadow-none focus-visible:border dark:bg-transparent"
 //           defaultValue={row.original.target}
-//           id={`${row.original.id}-target`}
+//           id={`${row.index +1}-target`}
 //         />
 //       </form>
 //     ),
@@ -323,13 +343,13 @@ export const categoriesColumns: ColumnDef<z.infer<typeof categorySchema>>[] = [
 //           })
 //         }}
 //       >
-//         <Label htmlFor={`${row.original.id}-limit`} className="sr-only">
+//         <Label htmlFor={`${row.index +1}-limit`} className="sr-only">
 //           Limit
 //         </Label>
 //         <Input
 //           className="hover:bg-input/30 focus-visible:bg-background dark:hover:bg-input/30 dark:focus-visible:bg-input/30 h-8 w-16 border-transparent bg-transparent text-right shadow-none focus-visible:border dark:bg-transparent"
 //           defaultValue={row.original.limit}
-//           id={`${row.original.id}-limit`}
+//           id={`${row.index +1}-limit`}
 //         />
 //       </form>
 //     ),
@@ -346,14 +366,14 @@ export const categoriesColumns: ColumnDef<z.infer<typeof categorySchema>>[] = [
 
 //       return (
 //         <>
-//           <Label htmlFor={`${row.original.id}-reviewer`} className="sr-only">
+//           <Label htmlFor={`${row.index +1}-reviewer`} className="sr-only">
 //             Reviewer
 //           </Label>
 //           <Select>
 //             <SelectTrigger
 //               className="w-38 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate"
 //               size="sm"
-//               id={`${row.original.id}-reviewer`}
+//               id={`${row.index +1}-reviewer`}
 //             >
 //               <SelectValue placeholder="Assign reviewer" />
 //             </SelectTrigger>

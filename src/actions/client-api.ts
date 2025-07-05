@@ -1,6 +1,5 @@
-// lib/api.ts (client-side)
-export const fetchUserList = async (accessToken: string) => {
-    const res = await fetch(`${process.env.BACKEND_API}/users`, {
+export const fetchCategories = async (accessToken: string) => {
+    const res = await fetch(`${process.env.BACKEND_API}/categories`, {
         method: "GET",
         headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -10,7 +9,7 @@ export const fetchUserList = async (accessToken: string) => {
 
     if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.message || "Failed to fetch user list");
+        throw new Error(errorData.message || "Failed to fetch categories list");
     }
 
     return await res.json(); // hoặc set lại vào state nếu bạn dùng useState

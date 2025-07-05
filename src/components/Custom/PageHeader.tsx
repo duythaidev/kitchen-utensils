@@ -12,11 +12,11 @@ interface Breadcrumb {
 const PageHeader = ({ title, breadcrumbs }: PageHeaderProps) => {
     return (
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-baseline border-b border-gray-200 py-8">
+            <div className="flex justify-between items-baseline flex-wrap border-b border-gray-200 py-8">
                 <h1 className="text-4xl font-bold tracking-tight text-gray-900">{title}</h1>
                 <div className="place-items-end self-center">
-                    <nav className="flex my-auto" aria-label="Breadcrumb">
-                        <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+                    <nav className="flex my-auto flex-wrap" aria-label="Breadcrumb">
+                        <ol className="inline-flex flex-wrap items-center space-x-1 md:space-x-2 rtl:space-x-reverse mt-5 md:pt-0!">
                             {breadcrumbs.map((label, index) => {
                                 const isLast = index === breadcrumbs.length - 1;
                                 return (

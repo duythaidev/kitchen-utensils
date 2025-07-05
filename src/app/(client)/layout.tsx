@@ -6,11 +6,11 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
     return (
         <>
             {/* <ProgressBarProvider> */}
-                <Header></Header>
-                <div className='pt-[135px]'>
-                    {children}
-                </div>
-                <Footer></Footer>
+            <Header></Header>
+            <div className='pt-[50px] md:pt-[135px] '>
+                {children}
+            </div>
+            <Footer></Footer>
             {/* </ProgressBarProvider> */}
         </>
     );
