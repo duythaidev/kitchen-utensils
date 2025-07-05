@@ -1,48 +1,59 @@
 'use client'
 
-import { useFormState } from 'react-dom'
 import { useEffect, useState } from 'react'
-import { createUser } from '@/actions/auth.action'
+import { register } from '@/actions/auth.action'
 import { validateEmail, validateLength } from '@/utils/validate'
-import { toast } from 'react-toastify'
-import { redirect } from 'next/navigation'
-
-const initialState = { success: false, message: '' }
+import { toast } from 'sonner'
+import { useRouter } from 'nextjs-toploader/app'
+import { Lock } from 'lucide-react'
 
 export default function RegisterForm() {
-    const [state, formAction, pending] = useFormState(createUser, initialState)
     const [passwordVisible, setPasswordVisible] = useState(false)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [errors, setErrors] = useState<{ email?: string, password?: string, confirmPassword?: string }>({})
+    const [pending, setPending] = useState(false)
+    const router = useRouter()
 
-    useEffect(() => {
-        if (state.success) {
-            toast.success("Account created successfully!")
-            redirect('/login');
-        }
-    }, [state.success]);
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
 
-    const validateConfirmPassword = (value: string, passwordVal: string) => {
-        return value === passwordVal ? '' : 'Passwords do not match'
-    }
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         const newErrors = {
             email: validateEmail(email) ? '' : 'Invalid email address',
             password: validateLength(password, 6) ? '' : 'Password must be at least 6 characters',
-            confirmPassword: validateConfirmPassword(confirmPassword, password),
+            confirmPassword: confirmPassword === password ? '' : 'Passwords do not match',
         }
         setErrors(newErrors)
 
         if (Object.values(newErrors).some((err) => err)) {
-            e.preventDefault()
+            toast.error("Please fill in all fields correctly")
+            return
+        }
+
+        setPending(true)
+        try {
+            const userData = {
+                email,
+                password,
+                confirmPassword
+            }
+            const result = await register(userData)
+            if (result.success) {
+                toast.success("Account created successfully!");
+                router.push('/login')
+            } else {
+                toast.error(result.message)
+            }
+        } catch (err: any) {
+            toast.error(err.message || 'Unexpected error')
+        } finally {
+            setPending(false)
         }
     }
 
-
     return (
-        <form className="space-y-6" action={formAction} onSubmit={handleSubmit}>
+        <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
                 <p className="block text-sm font-medium text-gray-500">Email</p>
                 <div className="mt-1">
@@ -57,7 +68,6 @@ export default function RegisterForm() {
                             setEmail(val)
                             setErrors((prev) => ({ ...prev, email: validateEmail(val) ? '' : 'Invalid email address' }))
                         }}
-
                         className="block w-full bg-gray-50 rounded-md border border-gray-300 px-3 py-2 text-sm placeholder-gray-400 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
                     />
                     {errors.email && <p className="text-sm text-red-500 mt-1">{errors.email}</p>}
@@ -79,10 +89,9 @@ export default function RegisterForm() {
                             setErrors((prev) => ({
                                 ...prev,
                                 password: validateLength(val, 6) ? '' : 'Password must be at least 6 characters',
-                                confirmPassword: validateConfirmPassword(confirmPassword, val),
+                                confirmPassword: confirmPassword === val ? '' : 'Passwords do not match',
                             }))
                         }}
-
                         className="block w-full bg-gray-50 rounded-md border border-gray-300 px-3 py-2 text-sm placeholder-gray-400 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
                     />
                     <button
@@ -121,10 +130,9 @@ export default function RegisterForm() {
                             setConfirmPassword(val)
                             setErrors((prev) => ({
                                 ...prev,
-                                confirmPassword: validateConfirmPassword(val, password),
+                                confirmPassword: password === val ? '' : 'Passwords do not match',
                             }))
                         }}
-
                         className="block w-full bg-gray-50 rounded-md border border-gray-300 px-3 py-2 text-sm placeholder-gray-400 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
                     />
                     {errors.confirmPassword && <p className="text-sm text-red-500 mt-1">{errors.confirmPassword}</p>}
@@ -132,25 +140,15 @@ export default function RegisterForm() {
             </div>
 
             <div>
-                <button
-                    type="submit"
+                <button type="submit"
                     disabled={pending}
-                    className="relative flex w-full justify-center rounded-md bg-blue-950 px-4 py-3 text-sm font-medium text-white hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-wait"
+                    className="relative cursor-pointer flex w-full justify-center rounded-md bg-blue-950 px-4 py-3 text-sm font-medium text-white hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-wait"
                 >
                     <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                        <svg className="h-5 w-5 text-indigo-400" viewBox="0 0 20 20" fill="currentColor">
-                            <path
-                                fillRule="evenodd"
-                                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                                clipRule="evenodd"
-                            />
-                        </svg>
+                        <Lock className="size-4" />
                     </span>
                     {pending ? 'Creating...' : 'Create Account'}
                 </button>
-                {state.message && (
-                    <p className={`mt-2 text-sm ${state.success ? 'text-green-600' : 'text-red-600'}`}>{state.message}</p>
-                )}
             </div>
         </form>
     )

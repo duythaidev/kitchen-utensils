@@ -108,6 +108,8 @@ export const handleDeleteProductAction = async (productId: number, token: string
             throw new Error("Failed to delete product");
         }
 
+        revalidateTag("list-products");
+
         return true;
     } catch (error) {
         console.error("Error deleting product:", error);

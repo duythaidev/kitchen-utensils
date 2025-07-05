@@ -1,6 +1,5 @@
 'use client'
 
-import Spinner from "@/components/Custom/Spinner";
 import { Skeleton } from "@/components/ui/skeleton";
 // import { useRouter } from "next/navigation"
 import { useRouter } from 'nextjs-toploader/app';
@@ -13,8 +12,7 @@ export default function Page() {
   }, []);
   return (
     <div className="md:p-6 flex flex-wrap gap-6">
-      {/* <h1 className="text-center"><Spinner></Spinner></h1>
-       */}
+
       <div className="flex flex-col space-y-3 flex-1">
         <Skeleton className="h-[125px] w-[250px] rounded-xl" />
         <div className="space-y-2">

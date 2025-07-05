@@ -2,7 +2,6 @@ import Footer from '@/components/Footer';
 import './globals.css'
 import Header from '@/components/Header';
 import NextAuthWrapper from '@/components/NextAuthWrapper';
-// import { ToastContainer } from 'react-toastify';
 // import ProgressBarProvider from '@/components/ProgressBarProvider';
 import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'sonner';
@@ -17,8 +16,6 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
           <NextTopLoader showSpinner={false} height={2} />
           {children}
           <Toaster />
-
-          {/* <ToastContainer /> */}
         </NextAuthWrapper>
       </body>
     </html>

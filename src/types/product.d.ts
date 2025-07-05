@@ -3,7 +3,7 @@ export interface IProduct {
     product_name: string,
     price: number,
     stock: number,
-    discountedPrice?: number | null,
+    discounted_price?: number | null,
     description?: string | null,
     category?: ICategory | null,
     images?: IProductImage[] | null,

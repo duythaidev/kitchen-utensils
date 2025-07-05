@@ -52,31 +52,6 @@ const ProductList = ({ products }: { products: any[] }) => {
     };
     const router = useRouter();
 
-    useEffect(() => {
-        if (sort || sort === '') {
-            if (keyword) {
-                router.push(`/shop?keyword=${keyword}&sort=${sort}`);
-            } else {
-                router.push(`/shop?sort=${sort}`);
-            }
-        }
-    }, [sort]);
-
-    useEffect(() => {
-        if (priceSort) {
-            if (keyword && sort) {
-                router.push(`/shop?keyword=${keyword}&sort=${sort}&priceSort=${priceSort}`);
-            }
-            else if (keyword) {
-                router.push(`/shop?keyword=${keyword}&priceSort=${priceSort}`);
-            }
-            else if (sort) {
-                router.push(`/shop?sort=${sort}&priceSort=${priceSort}`);
-            } else {
-                router.push(`/shop?priceSort=${priceSort}`);
-            }
-        }
-    }, [priceSort]);
 
 
     const [showCategories, setShowCategories] = useState(true);
@@ -88,6 +63,22 @@ const ProductList = ({ products }: { products: any[] }) => {
         router.push(`/shop?keyword=${keyword}`);
     }
 
+    const [page, setPage] = useState(Number(useSearchParams().get('page')) || 1);
+    const pageSize = 6;
+
+    const paginatedProducts = products.slice((page - 1) * pageSize, page * pageSize);
+    const totalPages = Math.ceil(products.length / pageSize);
+    useEffect(() => {
+        const params = new URLSearchParams();
+        if (keyword) params.set("keyword", keyword);
+        if (sort) params.set("sort", sort);
+        if (priceSort) params.set("priceSort", priceSort);
+        if (page) params.set("page", page.toString());
+
+        router.push(`/shop?${params.toString()}`);
+    }, [sort, priceSort, page]);
+
+
     return (
         <>
             <div className="bg-gray-100 flex justify-center">
@@ -96,7 +87,18 @@ const ProductList = ({ products }: { products: any[] }) => {
                         <div className="col-span-3 mt-5 md:mt-0 md:col-span-1 flex justify-center md:justify-between bg-white shadow-1 rounded-lg px-5 py-3 flex-wrap">
                             <div className="flex items-center justify-between w-full">
                                 <p>Filters:</p>
-                                <button className="block text-blue-600 hover:text-blue-700 cursor-pointer" onClick={() => { }}>Clear Filter</button>
+                                <button className="block text-blue-600 hover:text-blue-700 cursor-pointer"
+                                    onClick={() => {
+                                        setKeyword('');
+                                        setSort('');
+                                        setPriceSort('');
+                                        setPriceFrom('');
+                                        setPriceTo('');
+                                        setPage(1);
+                                        router.push('/shop');
+                                    }}>
+                                    Clear Filter
+                                </button>
                             </div>
                         </div>
                         <div className='col-span-3 flex justify-center md:justify-between bg-white shadow-1 rounded-lg px-5 py-2 flex-wrap'>
@@ -150,7 +152,7 @@ const ProductList = ({ products }: { products: any[] }) => {
                         </div>
                     </div>
 
-                    <section aria-labelledby="products-heading" className="pt-6 pb-24">
+                    <section aria-labelledby="products-heading" className="py-6">
                         <h2 id="products-heading" className="sr-only">
                             Products
                         </h2>
@@ -217,20 +219,48 @@ const ProductList = ({ products }: { products: any[] }) => {
                             <div className="relative lg:col-span-3 ">
 
                                 <div className="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-2 lg:grid-cols-3 justify-items-center">
+                                    {paginatedProducts.map((product) => (
+                                        <ProductCard key={product.id} product={product} />
+                                    ))}
 
-                                    <ProductCard product={products[0]}></ProductCard>
-                                    <ProductCard product={products[1]}></ProductCard>
-                                    <ProductCard product={products[2]}></ProductCard>
-                                    <ProductCard product={products[3]}></ProductCard>
                                 </div>
                                 {/* Your content */}
                             </div>
+
+
+                        </div>
+                        <div className="mt-5 flex justify-end space-x-2  ">
+                            <Button
+                                disabled={page === 1}
+                                variant="outline"
+                                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                            >
+                                Previous
+                            </Button>
+
+                            {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                                <Button
+                                    key={pageNum}
+                                    variant={page === pageNum ? "secondary" : "outline"}
+                                    onClick={() => setPage(pageNum)}
+                                >
+                                    {pageNum}
+                                </Button>
+                            ))}
+
+                            <Button
+                                disabled={page === totalPages}
+                                variant="outline"
+                                onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+                            >
+                                Next
+                            </Button>
                         </div>
                     </section>
                 </main>
             </div>
 
- 
+
 
         </>
     );

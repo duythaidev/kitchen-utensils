@@ -46,7 +46,7 @@ const EditProductModal = ({ product }: { product: IProduct }) => {
         stock: product.stock,
         description: product.description || "",
         category_id: product.category?.id,
-        discounted_price: product.discountedPrice,
+        discounted_price: product.discounted_price as (number | undefined | null),
     })
 
     const isMainImageIndex = product.images?.findIndex(img => img.is_main)
@@ -64,7 +64,7 @@ const EditProductModal = ({ product }: { product: IProduct }) => {
     useEffect(() => {
         if (open) {
             const fetchAll = async () => {
-           
+
                 if (product.images) {
                     const parsedImages = await Promise.all(
                         product.images.map(async (image) => {
@@ -81,7 +81,7 @@ const EditProductModal = ({ product }: { product: IProduct }) => {
                         })
                     }
                 }
-    
+
                 // Fetch category
                 const fetchedCategories = await fetchCategories(session?.accessToken || "")
                 if (fetchedCategories) {
@@ -90,7 +90,7 @@ const EditProductModal = ({ product }: { product: IProduct }) => {
                     toast.error("Failed to fetch categories")
                 }
             }
-    
+
             // Reset
             setProductData({
                 product_name: product.product_name,
@@ -98,7 +98,7 @@ const EditProductModal = ({ product }: { product: IProduct }) => {
                 stock: product.stock,
                 description: product.description || "",
                 category_id: product.category?.id,
-                discounted_price: product.discountedPrice,
+                discounted_price: product.discounted_price as (number | undefined | null),
             })
             setImageFiles([])
             setBlobImages([])
@@ -106,7 +106,7 @@ const EditProductModal = ({ product }: { product: IProduct }) => {
             fetchAll()
         }
     }, [open])
-    
+
 
     // const [mainImageId, setMainImageId] = useState(
     //     product.images?.find(img => img.is_main)?.id || null
@@ -219,7 +219,7 @@ const EditProductModal = ({ product }: { product: IProduct }) => {
                 stock: product.stock,
                 description: product.description || "",
                 category_id: product.category?.id,
-                discounted_price: product.discountedPrice,
+                discounted_price: product.discounted_price as (number | undefined | null),
             })
             setSelectedImage(null)
             setImageFiles([])
@@ -237,153 +237,167 @@ const EditProductModal = ({ product }: { product: IProduct }) => {
                 </Button>
             </DialogTrigger>
             {open && (
-            <CustomModalBox>
-                <DialogHeader>
-                    <DialogTitle>Edit Product</DialogTitle>
-                    <DialogDescription>
-                        Edit product details here.
-                    </DialogDescription>
-                </DialogHeader>
+                <CustomModalBox>
+                    <DialogHeader>
+                        <DialogTitle>Edit Product</DialogTitle>
+                        <DialogDescription>
+                            Edit product details here.
+                        </DialogDescription>
+                    </DialogHeader>
 
-                <div className="flex flex-col gap-4">
-                    {/* Image Section */}
-                    <div className="flex flex-col gap-3 w-full justify-center items-center">
-                        <Label className="justify-center">Product Images</Label>
-                        <div className={`flex gap-3 flex-wrap w-full justify-center items-center ${(blobImages && blobImages?.length > 0) ? "mb-10" : ""}`}>
-                            {/* Existing Images */}
+                    <div className="flex flex-col gap-4">
+                        {/* Image Section */}
+                        <div className="flex flex-col gap-3 w-full justify-center items-center">
+                            <Label className="justify-center">Product Images</Label>
+                            <div className={`flex gap-3 flex-wrap w-full justify-center items-center ${(blobImages && blobImages?.length > 0) ? "mb-10" : ""}`}>
+                                {/* Existing Images */}
 
-                            {blobImages && blobImages?.map((blob, index) => (
-                                <div key={uuidv4()}>
-                                    <Card className="w-[200px] h-[200px]">
-                                        <CardHeader className="hover:scale-105 transition-all cursor-pointer"
-                                            onClick={() => setSelectedImage(imageFiles?.[index] || null)}
-                                        >
-                                            <img
-                                                src={blob}
-                                                alt="Preview"
-                                                width={300}
-                                                height={300}
-                                            />
-                                        </CardHeader>
-                                        <CardContent>
-                                            <div className={`flex mt-2 justify-between items-center gap-2 ${imageFiles && imageFiles?.length > 0 ? "mb-10" : ""}`}>
-                                                <div className="flex gap-2">
-                                                    <Checkbox
-                                                        checked={selectedImage?.name === imageFiles?.[index]?.name}
-                                                        onCheckedChange={() => setSelectedImage(imageFiles?.[index] || null)}
-                                                    />
-                                                    <Label>Main</Label>
+                                {blobImages && blobImages?.map((blob, index) => (
+                                    <div key={uuidv4()}>
+                                        <Card className="w-[200px] h-[200px]">
+                                            <CardHeader className="hover:scale-105 transition-all cursor-pointer"
+                                                onClick={() => setSelectedImage(imageFiles?.[index] || null)}
+                                            >
+                                                <img
+                                                    src={blob}
+                                                    alt="Preview"
+                                                    width={300}
+                                                    height={300}
+                                                />
+                                            </CardHeader>
+                                            <CardContent>
+                                                <div className={`flex mt-2 justify-between items-center gap-2 ${imageFiles && imageFiles?.length > 0 ? "mb-10" : ""}`}>
+                                                    <div className="flex gap-2">
+                                                        <Checkbox
+                                                            checked={selectedImage?.name === imageFiles?.[index]?.name}
+                                                            onCheckedChange={() => setSelectedImage(imageFiles?.[index] || null)}
+                                                        />
+                                                        <Label>Main</Label>
+                                                    </div>
+                                                    <div>
+                                                        <Tooltip>
+                                                            <TooltipTrigger asChild>
+                                                                <Trash className="w-4 h-4 cursor-pointer hover:text-red-500"
+                                                                    onClick={() => handleDeleteImage(imageFiles && imageFiles?.length > 0 ? imageFiles[index]?.name : "")}
+                                                                />
+                                                            </TooltipTrigger>
+                                                            <TooltipContent>
+                                                                Delete Image
+                                                            </TooltipContent>
+                                                        </Tooltip>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <Tooltip>
-                                                        <TooltipTrigger asChild>
-                                                            <Trash className="w-4 h-4 cursor-pointer hover:text-red-500"
-                                                                onClick={() => handleDeleteImage(imageFiles && imageFiles?.length > 0 ? imageFiles[index]?.name : "")}
-                                                            />
-                                                        </TooltipTrigger>
-                                                        <TooltipContent>
-                                                            Delete Image
-                                                        </TooltipContent>
-                                                    </Tooltip>
-                                                </div>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                </div>
-                            ))}
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+                                ))}
+                            </div>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                className="w-[200px] mx-auto"
+                                onClick={() => document.getElementById('edit-picture-input')?.click()}
+                            >
+                                Add More Images
+                            </Button>
+                            <input
+                                id="edit-picture-input"
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                className="hidden"
+                                onChange={handleAddImages}
+                            />
                         </div>
-                        <Button
-                            type="button"
-                            variant="outline"
-                            className="w-[200px] mx-auto"
-                            onClick={() => document.getElementById('edit-picture-input')?.click()}
+
+                        {/* Product Fields */}
+                        <div className="grid gap-3">
+                            <Label><span className="text-red-500">*</span>Product Name</Label>
+                            <Input
+                                value={productData.product_name}
+                                onChange={(e) => setProductData({ ...productData, product_name: e.target.value })}
+                            />
+                        </div>
+                        <div className="grid gap-3">
+                            <Label><span className="text-red-500">*</span>Price</Label>
+                            <Input
+                                type="number"
+                                min={0}
+                                value={productData.price}
+                                onChange={(e) => setProductData({ ...productData, price: parseInt(e.target.value) })}
+                            />
+                        </div>
+                        <div className="grid gap-3">
+                            <Label>Discounted Price</Label>
+                            <Input
+                                type="number"
+                                min={0}
+                                value={productData.discounted_price || ""}
+                                onChange={(e) =>
+                                    setProductData({
+                                        ...productData,
+                                        discounted_price: parseInt(e.target.value) || null,
+                                    })
+                                }
+                            />
+                        </div>
+
+                        <div className="grid gap-3">
+                            <Label><span className="text-red-500">*</span>Stock</Label>
+                            <Input
+                                type="number"
+                                min={0}
+                                value={productData.stock}
+                                onChange={(e) => setProductData({ ...productData, stock: parseInt(e.target.value) })}
+                            />
+                        </div>
+                        <div className="grid gap-3">
+                            <Label>Category</Label>
+                            <Select
+                                defaultValue={productData.category_id?.toString()}
+                                onValueChange={(val) => setProductData({ ...productData, category_id: val === "0" ? undefined : parseInt(val) })}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select category" />
+                                </SelectTrigger>
+                                {categories.length > 0 && (
+                                    <SelectContent>
+                                        {categories.map((category) => (
+                                            <SelectItem key={category.id} value={category.id.toString()}>
+                                                {category.category_name}
+                                            </SelectItem>
+                                        ))}
+                                        <SelectItem value="0">None</SelectItem>
+                                    </SelectContent>
+                                )}
+                            </Select>
+                        </div>
+
+                        <div className="grid gap-3">
+                            <Label>Description</Label>
+                            <Input
+                                value={productData.description}
+                                onChange={(e) => setProductData({ ...productData, description: e.target.value })}
+                            />
+                        </div>
+                    </div>
+
+                    <DialogFooter>
+                        <DialogClose asChild>
+                            <Button variant="outline">Cancel</Button>
+                        </DialogClose>
+                        <CustomButton
+                            color="blue"
+                            className={`px-4! py-2! text-sm w-[150px]! ${isLoading ? "cursor-wait" : ""}`}
+                            isLoading={isLoading}
+                            onClick={handleUpdateProduct}
                         >
-                            Add More Images
-                        </Button>
-                        <input
-                            id="edit-picture-input"
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            className="hidden"
-                            onChange={handleAddImages}
-                        />
-                    </div>
-
-                    {/* Product Fields */}
-                    <div className="grid gap-3">
-                        <Label><span className="text-red-500">*</span>Product Name</Label>
-                        <Input
-                            value={productData.product_name}
-                            onChange={(e) => setProductData({ ...productData, product_name: e.target.value })}
-                        />
-                    </div>
-                    <div className="grid gap-3">
-                        <Label><span className="text-red-500">*</span>Price</Label>
-                        <Input
-                            type="number"
-                            min={0}
-                            value={productData.price}
-                            onChange={(e) => setProductData({ ...productData, price: parseInt(e.target.value) })}
-                        />
-                    </div>
-                    <div className="grid gap-3">
-                        <Label><span className="text-red-500">*</span>Stock</Label>
-                        <Input
-                            type="number"
-                            min={0}
-                            value={productData.stock}
-                            onChange={(e) => setProductData({ ...productData, stock: parseInt(e.target.value) })}
-                        />
-                    </div>
-                    <div className="grid gap-3">
-                        <Label>Category</Label>
-                        <Select
-                            defaultValue={productData.category_id?.toString()}
-                            onValueChange={(val) => setProductData({ ...productData, category_id: val === "0" ? undefined : parseInt(val) })}
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select category" />
-                            </SelectTrigger>
-                            {categories.length > 0 && (
-                                <SelectContent>
-                                    {categories.map((category) => (
-                                        <SelectItem key={category.id} value={category.id.toString()}>
-                                            {category.category_name}
-                                        </SelectItem>
-                                    ))}
-                                    <SelectItem value="0">None</SelectItem>
-                                </SelectContent>
-                            )}
-                        </Select>
-                    </div>
-
-                    <div className="grid gap-3">
-                        <Label>Description</Label>
-                        <Input
-                            value={productData.description}
-                            onChange={(e) => setProductData({ ...productData, description: e.target.value })}
-                        />
-                    </div>
-                </div>
-
-                <DialogFooter>
-                    <DialogClose asChild>
-                        <Button variant="outline">Cancel</Button>
-                    </DialogClose>
-                    <CustomButton
-                        color="blue"
-                        className={`px-4! py-2! text-sm w-[150px]! ${isLoading ? "cursor-wait" : ""}`}
-                        isLoading={isLoading}
-                        onClick={handleUpdateProduct}
-                    >
-                        Save Changes
-                    </CustomButton>
-                </DialogFooter>
-            </CustomModalBox>
+                            Save Changes
+                        </CustomButton>
+                    </DialogFooter>
+                </CustomModalBox>
             )}
         </Dialog>
     )
 }
-
 export default EditProductModal

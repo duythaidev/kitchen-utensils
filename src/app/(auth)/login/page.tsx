@@ -1,9 +1,13 @@
 import Login from "@/components/Auth/Login";
+import PageHeader from "@/components/Custom/PageHeader";
 
 const Page = () => {
 
     return (
-        <Login></Login>
+        <>
+            <PageHeader title='Login' breadcrumbs={[{ name: 'Home', link: '/' }, { name: 'Login', link: '/login' }]}></PageHeader>
+            <Login></Login>
+        </>
     );
 }
 

@@ -17,10 +17,10 @@ const Page = async ({ searchParams, }: { searchParams: Promise<{ [key: string]: 
         },
     });
     const data = await res.json();
-    console.log("data", data)
+    // console.log("data", data)
     return (
         <div className="">
-            <PageHeader title='Explore All Products' breadcrumbs={[{ name: 'Home', link: '/' }, { name: 'Products', link: '/products' }, { name: 'Electronics', link: '/products/electronics' }]}></PageHeader>
+                <PageHeader title='Explore All Products' breadcrumbs={[{ name: 'Home', link: '/' }, { name: 'Products', link: '/products' }, { name: 'Electronics', link: '/products/electronics' }]}></PageHeader>
             <ProductList products={data}></ProductList>
         </div >
     );

@@ -34,6 +34,7 @@ const DeleteProductModal = ({ product }: { product: IProduct }) => {
         try {
             const success = await handleDeleteProductAction(product.id, session?.accessToken || "");
             if (success) {
+                await new Promise(resolve => setTimeout(resolve, 1000))
                 toast.success("Product deleted successfully!");
                 setOpen(false);
             } else {

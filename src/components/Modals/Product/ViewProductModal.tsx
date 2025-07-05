@@ -19,7 +19,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { IProduct } from "@/types/product";
 
 const ViewProductModal = ({ product }: { product: IProduct }) => {
-    
+
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -66,7 +66,7 @@ const ViewProductModalContent = ({ product }: { product: any }) => {
                                     />
                                     <Label>Main</Label>
                                 </div>
-                            </CardContent>  
+                            </CardContent>
                         </Card>
                     )) : <div className="text-center text-muted-foreground">No images available</div>}
                 </div>
@@ -81,17 +81,23 @@ const ViewProductModalContent = ({ product }: { product: any }) => {
                 <Label>Price</Label>
                 <Input disabled value={product.price} type="number" readOnly />
             </div>
+            {product.discounted_price && product.discounted_price > 0 && (
+                <div className="grid gap-3">
+                    <Label>Discounted Price</Label>
+                    <Input disabled value={product.discounted_price} type="number" readOnly />
+                </div>
+            )}
             <div className="grid gap-3">
                 <Label>Stock</Label>
                 <Input disabled value={product.stock} type="number" readOnly />
             </div>
             <div className="grid gap-3">
                 <Label>Discounted Price</Label>
-                <Input disabled value={product.discountedPrice} type="number" readOnly />
+                <Input disabled value={product.discounted_price} type="number" readOnly />
             </div>
             <div className="grid gap-3">
                 <Label>Category</Label>
-                <Select  value={product.category?.id?.toString() || "none"} disabled>
+                <Select value={product.category?.id?.toString() || "none"} disabled>
                     <SelectTrigger>
                         <SelectValue placeholder="Select a category" />
                     </SelectTrigger>

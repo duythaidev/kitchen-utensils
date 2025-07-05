@@ -2,26 +2,21 @@
 import { IProduct } from "@/types/product";
 import { Eye, ShoppingBag, Star, StarHalf } from "lucide-react";
 import Link from "next/link";
-import CustomButton from "../Custom/CustomButton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
-import { Label } from "recharts";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import { Dialog, DialogTitle } from "../ui/dialog";
 import { useState } from "react";
 import PreviewProductModal from "./PreviewProductModal";
 import CustomModalBox from "../Modals/CustomModalBox";
 
 const ProductModal = ({ open, setOpen, product }: { open: boolean, setOpen: (open: boolean) => void, product: IProduct | undefined }) => {
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <form>
+        <Dialog open={open} onOpenChange={setOpen} >
+            <CustomModalBox className="max-w-[1000px]!">
+                <DialogTitle className="sr-only">Product details</DialogTitle>
 
-                <CustomModalBox className="max-w-[1000px]!">
-                    {/* {JSON.stringify(product)} */}
-                    {product ? <PreviewProductModal product={product}></PreviewProductModal> : <div>No product</div>}
-                </CustomModalBox>
-            </form>
+                {/* {JSON.stringify(product)} */}
+                {product ? <PreviewProductModal setOpen={setOpen} product={product}></PreviewProductModal> : <div>No product</div>}
+            </CustomModalBox>
         </Dialog>
     );
 }
@@ -76,9 +71,9 @@ const ProductCard = ({ product }: { product: IProduct }) => {
                                 ))}
                             </div>
                             <div className="absolute top-0 flex gap-2">
-                                <Star fill="yellow" strokeWidth={1} color="yellow" />
-                                <Star fill="yellow" strokeWidth={1} color="yellow" />
-                                <StarHalf fill="yellow" strokeWidth={1} color="yellow" />
+                                <Star fill="#FBB040" strokeWidth={1} color="#FBB040" />
+                                <Star fill="#FBB040" strokeWidth={1} color="#FBB040" />
+                                <StarHalf fill="#FBB040" strokeWidth={1} color="#FBB040" />
                             </div>
                         </div>
                     </div>

@@ -1,37 +1,34 @@
 'use server'
 
 import { validateEmail, validateLength } from "@/utils/validate";
-import { redirect } from "next/navigation";
-import { toast } from "sonner";
 
-export async function createUser(prevState: any, formData: FormData) {
-  const email = formData.get('email')?.toString() || '';
-  const password = formData.get('password')?.toString() || '';
-  const confirmPassword = formData.get('confirmPassword')?.toString() || '';
+export async function register(userData: any) {
 
-  if (!validateEmail(email)) {
+  if (!validateEmail(userData.email)) {
     return { success: false, message: 'Email is invalid' };
   }
 
-  if (!validateLength(password, 6)) {
+  if (!validateLength(userData.password, 6)) {
     return { success: false, message: 'Password must be at least 6 characters' };
   }
 
-  if (password !== confirmPassword) {
+  if (userData.password !== userData.confirmPassword) {
     return { success: false, message: 'Passwords do not match' };
   }
 
-  // const res = await fetch('/api/auth/create-user', {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify({ email, password }),
-  // });
-  // if (res.status !== 200) {
-  //   return { success: false, message: 'Failed to create account' };
-  // }
-  // toast.success('Account created successfully! Please log in.')
-  // console.log("CREATE USER:", { email, password });
+  const res = await fetch(`${process.env.BACKEND_API}/auth/register`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email: userData.email, password: userData.password }),
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    console.log("errorData", errorData)
+    return { success: false, message: errorData.message || 'Server Error' };
+  }
+
   return { success: true, message: 'Account created successfully' };
 }
