@@ -1,83 +1,77 @@
 'use client'
-import { ArrowDownNarrowWide, ChevronDown, ChevronUp, Filter, Search, ShoppingBag, ShoppingCart } from "lucide-react";
-import { useEffect, useState } from "react";
-import PreviewProductModal from "./PreviewProductModal";
-import HoverLink from "../Custom/HoverLink";
-import ProductCard from "./ProductCard";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search } from "lucide-react"
+import { useEffect, useMemo, useState } from "react"
+import ProductCard from "./ProductCard"
+import { Input } from "../ui/input"
+import { Button } from "../ui/button"
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
-import { DialogClose } from "@radix-ui/react-dialog";
-import { useRouter } from "nextjs-toploader/app";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app"
+import { useSearchParams } from "next/navigation"
+import { ICategory, IProduct } from "@/types/product"
 
-const ProductList = ({ products }: { products: any[] }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState(null);
+const ProductList = ({ categories, products }: { categories: ICategory[], products: IProduct[] }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
-    const keywordparam = useSearchParams().get('keyword');
-    const sortparam = useSearchParams().get('sort');
-    const priceSortParam = useSearchParams().get('priceSort');
+    const keywordparam = useSearchParams().get('keyword')
+    const sortparam = useSearchParams().get('sort')
+    const priceSortParam = useSearchParams().get('priceSort')
 
 
-    const priceFromParam = useSearchParams().get('priceFrom');
-    const priceToParam = useSearchParams().get('priceTo');
+    const priceFromParam = useSearchParams().get('priceFrom')
+    const priceToParam = useSearchParams().get('priceTo')
 
 
-    const [keyword, setKeyword] = useState(keywordparam || '');
-    const [priceSort, setPriceSort] = useState(priceSortParam || '');
-    const [sort, setSort] = useState(sortparam || null);
+    const [keyword, setKeyword] = useState(keywordparam || '')
+    const [priceSort, setPriceSort] = useState(priceSortParam || '')
+    const [sort, setSort] = useState(sortparam || null)
 
-    const [priceFrom, setPriceFrom] = useState(priceFromParam || '');
-    const [priceTo, setPriceTo] = useState(priceToParam || '');
+    const [priceFrom, setPriceFrom] = useState(priceFromParam || '')
+    const [priceTo, setPriceTo] = useState(priceToParam || '')
 
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
-    const router = useRouter();
+    const router = useRouter()
+
+    const [selectedCategories, setSelectedCategories] = useState<string[]>(() => {
+        const fromParam = useSearchParams().get('category')
+        return fromParam ? fromParam.split(',') : []
+    })
 
 
+    const [showCategories, setShowCategories] = useState(true)
 
-    const [showCategories, setShowCategories] = useState(true);
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
     const handleSearchKeyword = () => {
-        setSort('');
-        router.push(`/shop?keyword=${keyword}`);
+        setSort('')
+        router.push(`/shop?keyword=${keyword}`)
     }
 
-    const [page, setPage] = useState(Number(useSearchParams().get('page')) || 1);
-    const pageSize = 6;
+    const [pageIndex, setPageIndex] = useState(Number(useSearchParams().get('page')) - 1 || 0)
 
-    const paginatedProducts = products.slice((page - 1) * pageSize, page * pageSize);
-    const totalPages = Math.ceil(products.length / pageSize);
+    const PAGE_SIZE = 6
+    const totalPages = Math.ceil(products.length / PAGE_SIZE)
+
+    const paginatedProducts = useMemo(() => {
+        const start = pageIndex * PAGE_SIZE
+        const end = start + PAGE_SIZE
+        return products.slice(start, end)
+    }, [products, pageIndex, PAGE_SIZE])
+
     useEffect(() => {
-        const params = new URLSearchParams();
-        if (keyword) params.set("keyword", keyword);
-        if (sort) params.set("sort", sort);
-        if (priceSort) params.set("priceSort", priceSort);
-        if (page) params.set("page", page.toString());
-
-        router.push(`/shop?${params.toString()}`);
-    }, [sort, priceSort, page]);
-
+        const params = new URLSearchParams()
+        if (keyword) params.set("keyword", keyword)
+        if (sort) params.set("sort", sort)
+        if (priceSort) params.set("priceSort", priceSort)
+        if (priceFrom) params.set("priceFrom", priceFrom)
+        if (priceTo) params.set("priceTo", priceTo)
+        if (selectedCategories.length > 0) params.set("category", selectedCategories.join(','))
+        params.set("page", (pageIndex + 1).toString())
+      
+        router.push(`/shop?${params.toString()}`)
+      }, [sort, priceSort, priceFrom, priceTo, selectedCategories, pageIndex])
+      
 
     return (
         <>
@@ -89,13 +83,13 @@ const ProductList = ({ products }: { products: any[] }) => {
                                 <p>Filters:</p>
                                 <button className="block text-blue-600 hover:text-blue-700 cursor-pointer"
                                     onClick={() => {
-                                        setKeyword('');
-                                        setSort('');
-                                        setPriceSort('');
-                                        setPriceFrom('');
-                                        setPriceTo('');
-                                        setPage(1);
-                                        router.push('/shop');
+                                        setKeyword('')
+                                        setSort('')
+                                        setPriceSort('')
+                                        setPriceFrom('')
+                                        setPriceTo('')
+                                        setPageIndex(0)
+                                        router.push('/shop')
                                     }}>
                                     Clear Filter
                                 </button>
@@ -109,7 +103,7 @@ const ProductList = ({ products }: { products: any[] }) => {
                                     value={keyword}
                                     onKeyDown={(e) => {
                                         if (e.key === 'Enter') {
-                                            handleSearchKeyword();
+                                            handleSearchKeyword()
                                         }
                                     }}
                                     onChange={(e) => setKeyword(e.target.value)}
@@ -172,29 +166,58 @@ const ProductList = ({ products }: { products: any[] }) => {
                                         </button>
                                     </h3>
                                     {/* Filter section, show/hide based on section state. */}
-                                    {showCategories && <div className="pt-6" id="filter-section-1">
-                                        <div className="space-y-4">
-                                            <div className="flex gap-3">
-                                                <div className="flex h-5 shrink-0 items-center">
-                                                    <div className="group grid size-4 grid-cols-1">
-                                                        <input id="filter-category-0" name="category[]" defaultValue="new-arrivals" type="checkbox" className="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto" />
-                                                        <svg className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25" viewBox="0 0 14 14" fill="none" > <path className="opacity-0 group-has-checked:opacity-100" d="M3 8L6 11L11 3.5" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /> <path className="opacity-0 group-has-indeterminate:opacity-100" d="M3 7H11" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /> </svg>
-                                                    </div>
-                                                </div>
-                                                <label htmlFor="filter-category-0" className="text-sm text-gray-600" > New Arrivals </label>
-                                            </div>
-                                            <div className="flex gap-3">
-                                                <div className="flex h-5 shrink-0 items-center">
-                                                    <div className="group grid size-4 grid-cols-1">
-                                                        <input id="filter-category-1" name="category[]" defaultValue="sale" type="checkbox" className="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto" />
-                                                        <svg className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25" viewBox="0 0 14 14" fill="none" > <path className="opacity-0 group-has-checked:opacity-100" d="M3 8L6 11L11 3.5" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /> <path className="opacity-0 group-has-indeterminate:opacity-100" d="M3 7H11" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /> </svg>
-                                                    </div>
-                                                </div>
-                                                <label htmlFor="filter-category-1" className="text-sm text-gray-600" > Sale </label>
-                                            </div>
+                                    {showCategories && (
+                                        <div className="pt-6" id="filter-section-1">
+                                            <div className="space-y-4">
+                                                {categories.map((category, index) => {
+                                                    const id = `filter-category-${index}`
+                                                    const isChecked = selectedCategories.includes(category.id.toString())
 
+                                                    return (
+                                                        <div className="flex gap-3" key={category.id}>
+                                                            <div className="flex h-5 shrink-0 items-center">
+                                                                <div className="group grid size-4 grid-cols-1">
+                                                                    <input
+                                                                        id={id}
+                                                                        name="category[]"
+                                                                        type="checkbox"
+                                                                        value={category.id}
+                                                                        checked={isChecked}
+                                                                        onChange={(e) => {
+                                                                            const value = e.target.value
+                                                                            setSelectedCategories((prev) =>
+                                                                                prev.includes(value)
+                                                                                    ? prev.filter((v) => v !== value)
+                                                                                    : [...prev, value]
+                                                                            )
+                                                                        }}
+                                                                        className="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-indigo-600"
+                                                                    />
+                                                                    <svg
+                                                                        className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white"
+                                                                        viewBox="0 0 14 14"
+                                                                        fill="none"
+                                                                    >
+                                                                        <path
+                                                                            className="opacity-0 group-has-checked:opacity-100"
+                                                                            d="M3 8L6 11L11 3.5"
+                                                                            strokeWidth={2}
+                                                                            strokeLinecap="round"
+                                                                            strokeLinejoin="round"
+                                                                        />
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                            <label htmlFor={id} className="text-sm text-gray-600">
+                                                                {category.category_name}
+                                                            </label>
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div>
                                         </div>
-                                    </div>}
+                                    )}
+
                                     {/* Price Range Filter */}
 
                                 </div>
@@ -229,33 +252,56 @@ const ProductList = ({ products }: { products: any[] }) => {
 
 
                         </div>
-                        <div className="mt-5 flex justify-end space-x-2  ">
-                            <Button
-                                disabled={page === 1}
-                                variant="outline"
-                                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-                            >
-                                Previous
-                            </Button>
-
-                            {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
-                                <Button
-                                    key={pageNum}
-                                    variant={page === pageNum ? "secondary" : "outline"}
-                                    onClick={() => setPage(pageNum)}
-                                >
-                                    {pageNum}
-                                </Button>
-                            ))}
-
-                            <Button
-                                disabled={page === totalPages}
-                                variant="outline"
-                                onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-                            >
-                                Next
-                            </Button>
+                        <div className="mt-5 flex justify-end items-center  border-t border-gray-200 pt-6">
+                            <div className="flex w-full items-center gap-8 lg:w-fit">
+                                <div className="flex w-fit items-center justify-center text-sm font-medium">
+                                    Page {pageIndex + 1} of {totalPages}
+                                </div>
+                                <div className="ml-auto flex items-center gap-2 lg:ml-0">
+                                    <Button
+                                        variant="outline"
+                                        className="size-8"
+                                        size="icon"
+                                        onClick={() => setPageIndex(0)}
+                                        disabled={pageIndex === 0}
+                                    >
+                                        <span className="sr-only">Go to first page</span>
+                                        <ChevronsLeft className="w-4 h-4" />
+                                    </Button>
+                                    <Button
+                                        variant="outline"
+                                        className="size-8"
+                                        size="icon"
+                                        onClick={() => setPageIndex(pageIndex - 1)}
+                                        disabled={pageIndex === 0}
+                                    >
+                                        <span className="sr-only">Go to previous page</span>
+                                        <ChevronLeft className="w-4 h-4" />
+                                    </Button>
+                                    <Button
+                                        variant="outline"
+                                        className="hidden size-8 lg:flex"
+                                        size="icon"
+                                        onClick={() => setPageIndex(pageIndex + 1)}
+                                        disabled={pageIndex >= totalPages - 1}
+                                    >
+                                        <span className="sr-only">Go to next page</span>
+                                        <ChevronRight className="w-4 h-4" />
+                                    </Button>
+                                    <Button
+                                        variant="outline"
+                                        className="hidden size-8 lg:flex"
+                                        size="icon"
+                                        onClick={() => setPageIndex(totalPages - 1)}
+                                        disabled={pageIndex >= totalPages - 1}
+                                    >
+                                        <span className="sr-only">Go to last page</span>
+                                        <ChevronsRight className="w-4 h-4" />
+                                    </Button>
+                                </div>
+                            </div>
                         </div>
+
                     </section>
                 </main>
             </div>
@@ -263,7 +309,7 @@ const ProductList = ({ products }: { products: any[] }) => {
 
 
         </>
-    );
+    )
 }
 
-export default ProductList;
+export default ProductList

@@ -23,16 +23,19 @@ const ProductModal = ({ open, setOpen, product }: { open: boolean, setOpen: (ope
 
 
 const ProductCard = ({ product }: { product: IProduct }) => {
-
+    console.log("product", product)
     const [open, setOpen] = useState(false);
     return (
         <div className="bg-white shadow-1 rounded-lg py-4 px-5 col group flex w-full max-w-xs flex-col overflow-hidden ">
             <div className="relative flex h-80 w-full overflow-hidden" >
                 <ProductModal open={open} setOpen={setOpen} product={product}></ProductModal>
 
-                <span className="absolute top-0 left-0 w-28 translate-y-5 -translate-x-6 -rotate-45 bg-black text-center text-sm text-white z-10">Sale</span>
+                {product?.discounted_price  && product?.discounted_price > 0 && product?.discounted_price < product?.price && (
+                    <span className="absolute top-0 left-0 w-28 translate-y-5 -translate-x-6 -rotate-45 bg-black text-center text-sm text-white z-10">Sale</span>
+                )}
+
                 <Link href={`/product/${product?.id}`} className=" flex h-full w-full items-center justify-center overflow-hidden">
-                    <img className="h-full w-full object-cover rounded-sm" src="https://images.unsplash.com/photo-1578996953841-b187dbe4bc8a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mzl8fGJsYXplcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60" alt="product image" />
+                    <img className="h-full w-full object-cover rounded-sm" src={product?.images?.find(image => image.is_main)?.image_url || product?.images?.[0]?.image_url || "https://placehold.jp/200x300.png"} alt="product image" />
                 </Link>
                 <div className="absolute flex justify-center bottom-[-100] w-full gap-x-5 mb-4 space-y-2 transition-all duration-300 group-hover:bottom-[-20]">
                     <Tooltip>
