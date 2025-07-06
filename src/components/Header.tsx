@@ -90,7 +90,7 @@ const Header = () => {
           <div className="hidden gap-2 lg:flex lg:justify-end items-center">
             {session?.user?.avatar_url ?
               <div className="w-8 h-8 flex items-center justify-center cursor-pointer hover:bg-gray-100 rounded-full overflow-hidden">
-                <Image alt="profile image" className="rounded-full " width={30} height={30} src={session?.user.avatar_url || ''}></Image>
+                <img alt="profile image" className="rounded-full " width={30} height={30} src={session?.user.avatar_url || ''}></img>
               </div>
               :
               <User className="hover:text-blue-500 cursor-pointer text-primary" size={25}></User>

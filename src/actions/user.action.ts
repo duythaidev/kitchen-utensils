@@ -1,13 +1,30 @@
 'use server'
 
-export async function getProfile(accessToken: string) {
-    const res = await fetch(`${process.env.BACKEND_API}/users/me`, {
-        headers: {
-            'Authorization': `Bearer ${accessToken}`
+import { revalidateTag } from "next/cache";
+
+export const handleUpdateProfileAction = async (userId: string, formData: FormData, accessToken: string) => {
+    try {
+        const res = await fetch(`${process.env.BACKEND_API}/users/${userId}`, {
+            method: "PATCH",
+            body: formData,
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.message || "Update failed");
         }
-    })
-    return await res.json()
-}
+        revalidateTag("profile")
+
+        return await res.json();
+    } catch (error) {
+        console.error("handleUpdateProfileAction Error:", error);
+        throw error;
+    }
+};
+
 
 export async function updateProfile(id: number, data: any, accessToken: string) {
     const res = await fetch(`${process.env.BACKEND_API}/users/${id}`, {
@@ -17,6 +34,10 @@ export async function updateProfile(id: number, data: any, accessToken: string) 
             'Authorization': `Bearer ${accessToken}`
         }
     })
+    if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Server Error');
+    }
     return await res.json()
 }
 
@@ -24,7 +45,11 @@ export async function addReview(productId: number, rating: number, comment: stri
     const res = await fetch(`${process.env.BACKEND_API}/reviews`, {
         method: "POST",
         body: JSON.stringify({ productId, rating, comment }),
+        headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }
     })
+    return await res.json()
 }
 
 export async function addToCart(productId: number, quantity: number, accessToken: string) {
@@ -38,7 +63,7 @@ export async function addToCart(productId: number, quantity: number, accessToken
             },
             body: JSON.stringify({ product_id: productId, quantity }),
         })
-        console.log(res, 'res')
+        // console.log(res, 'res')
         if (!res.ok) {
             const errorData = await res.json();
             throw new Error(errorData.message || 'Server Error');

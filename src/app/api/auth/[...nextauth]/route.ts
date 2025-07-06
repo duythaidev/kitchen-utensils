@@ -58,13 +58,13 @@ export const authOptions: NextAuthOptions = {
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID as string,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-            authorization: {
-                params: {
-                    prompt: "consent",
-                    access_type: "offline",
-                    response_type: "code"
-                }
-            }
+            // authorization: {
+            //     params: {
+            //         prompt: "consent",
+            //         access_type: "offline",
+            //         response_type: "code"
+            //     }
+            // }
         }),
     ],
     callbacks: {
@@ -95,15 +95,18 @@ export const authOptions: NextAuthOptions = {
                     body: JSON.stringify({
                         email: token.email,
                         user_name: token.name,
-                        auth_provider: account?.provider, // Google ID
+                        avatar_url: token.picture,
+                        auth_provider: account?.provider, // Google
                     }),
                 });
 
                 const data = await res.json();
+                console.log("data", data)
 
                 token.accessToken = data.access_token; // Gán JWT từ backend
+                token.user = data.user;
             }
-
+            console.log( '>>> token', token)
             return token;
         },
         // add accessToken to session

@@ -5,12 +5,12 @@ import { signOut, useSession } from "next-auth/react";
 import CustomButton from "../Custom/CustomButton";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
+import { handleUpdateProfileAction } from "@/actions/user.action";
 
 
 const Profile = ({ profile }: { profile: any }) => {
 
     const [myProfile, setMyProfile] = useState(profile)
-    console.log("myProfile: component", myProfile)
 
     const [activeTab, setActiveTab] = useState("account-details");
     const [avatar, setAvatar] = useState<File | null>(null);
@@ -22,32 +22,26 @@ const Profile = ({ profile }: { profile: any }) => {
         try {
             setIsLoading(true)
             const formData = new FormData()
-            console.log(myProfile)
-            formData.append("user_name", myProfile?.user_name)
-            formData.append("address", myProfile?.address)
-            formData.append("phone", myProfile?.phone)
+            // console.log("myProfile: ", myProfile)
+            formData.append("user_name", myProfile?.user_name.trim() || '')
+            formData.append("address", myProfile?.address.trim() || '')
+            formData.append("phone", myProfile?.phone.trim() || '')
             if (avatar) {
                 formData.append("avatar", avatar)
             }
 
-            const res = await fetch(`${process.env.BACKEND_API}/users/${myProfile?.id}`, {
-                method: "PATCH",
-                body: formData,
-                headers: {
-                    'Authorization': `Bearer ${session?.accessToken}`
-                }
-            })
-            const data = await res.json()
-            console.log("data: ", data)
-            sessionUpdate({
-                user: {
-                    ...session?.user,
-                    user_name: data.user_name,
-                    avatar_url: data.avatar_url
-                }
-            })
-            toast.success("Profile updated successfully")
-            setIsLoading(false)
+            const data = await handleUpdateProfileAction(myProfile?.id, formData, session?.user?.accessToken as string)
+            if (data) {
+                sessionUpdate({
+                    user: {
+                        ...session?.user,
+                        user_name: data.user_name,
+                        avatar_url: data.avatar_url
+                    }
+                })
+                toast.success("Profile updated successfully")
+                setIsLoading(false)
+            }
         } catch (error) {
             console.log(error)
             toast.error("Profile update failed")
@@ -63,8 +57,8 @@ const Profile = ({ profile }: { profile: any }) => {
                         <div className="flex xl:flex-col">
                             <div className="hidden lg:flex flex-wrap items-center gap-5 py-6 px-4 sm:px-7.5 xl:px-9 border-r xl:border-r-0 xl:border-b border-gray-3">
                                 <div className="max-w-[64px] w-full h-16 rounded-full overflow-hidden">
-                                    <Image
-                                        src={myProfile?.avatar_url}
+                                    <img
+                                        src={profile?.avatar_url}
                                         alt="user"
                                         width={64}
                                         height={64}
@@ -83,7 +77,7 @@ const Profile = ({ profile }: { profile: any }) => {
                                 <div className="flex flex-wrap xl:flex-nowrap xl:flex-col gap-4">
 
                                     <button onClick={() => setActiveTab("account-details")}
-                                        className={`flex items-center rounded-md gap-2.5 py-3 px-4.5 ease-out duration-200 hover:bg-blue-700 hover:text-white ${activeTab === "account-details"
+                                        className={`cursor-pointer flex items-center rounded-md gap-2.5 py-3 px-4.5 ease-out duration-200 hover:bg-blue-700 hover:text-white ${activeTab === "account-details"
                                             ? "text-white bg-blue-700"
                                             : "text-dark-2 bg-gray-1"
                                             }`}
@@ -95,7 +89,7 @@ const Profile = ({ profile }: { profile: any }) => {
                                         Account Details
                                     </button>
                                     <button onClick={() => setActiveTab("orders")}
-                                        className={`flex items-center rounded-md gap-2.5 py-3 px-4.5 ease-out duration-200 hover:bg-blue-700 hover:text-white ${activeTab === "orders"
+                                        className={`cursor-pointer flex items-center rounded-md gap-2.5 py-3 px-4.5 ease-out duration-200 hover:bg-blue-700 hover:text-white ${activeTab === "orders"
                                             ? "text-white bg-blue-700"
                                             : "text-dark-2 bg-gray-1"
                                             }`}
@@ -136,7 +130,7 @@ const Profile = ({ profile }: { profile: any }) => {
 
                                     <button onClick={() => signOut({ callbackUrl: '/login', redirect: true })}
 
-                                        className={`flex items-center rounded-md gap-2.5 py-3 px-4.5 ease-out duration-200 hover:bg-blue-700 hover:text-white ${activeTab === "logout"
+                                        className={`cursor-pointer flex items-center rounded-md gap-2.5 py-3 px-4.5 ease-out duration-200 hover:bg-blue-700 hover:text-white ${activeTab === "logout"
                                             ? "text-white bg-blue-700"
                                             : "text-dark-2 bg-gray-1"
                                             }`}
@@ -160,7 +154,7 @@ const Profile = ({ profile }: { profile: any }) => {
                                 <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
                                     <div className="w-full">
                                         <div className="max-w-[100px] mb-2 h-[100px] bg-gray-200 rounded-md overflow-hidden">
-                                            <Image
+                                            <img
                                                 src={avatar ? URL.createObjectURL(avatar) : myProfile?.avatar_url || "https://placehold.jp/150x150.png"}
                                                 alt="Avatar image"
                                                 width={100}
