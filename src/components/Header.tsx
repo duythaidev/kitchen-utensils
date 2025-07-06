@@ -121,35 +121,29 @@ const Header = () => {
       </div>
       <div className="w-full bg-white px-20 hidden md:block">
         <nav className={` mx-auto flex max-w-7xl items-center justify-between  transition-all px-8 ${stickyMenu ? 'py-2 ' : 'py-3'}`} aria-label="Global">
-          <div >
-            <Link href={'/'} className={`mr-5 relative ${hoverStyle} hover:after:w-full text-dark font-semibold`}>Home</Link>
-            <Link href={'/shop'} className={`mr-5 relative ${hoverStyle} hover:after:w-full text-dark font-light`}>Shop</Link>
-            <Link href={'/contact'} className={`mr-5 relative ${hoverStyle} hover:after:w-full text-dark font-light`}>Contact</Link>
-            {/* <Dropdown className={`mr-2 relative ${hoverStyle} hover:after:w-full`} menu={{ items }} placement="top" >
-              <a onClick={(e) => e.preventDefault()}>
-                <Space size={0} className="text-dark font-light">
-                  Admin
-                  <svg className="size-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                    <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
-                  </svg>
-                </Space>
-              </a>
-            </Dropdown> */}
-            <NavigationMenu className="inline-block" >
-              <NavigationMenuList  >
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="p-0 font-light text-[16px] text-dark bg-background hover:bg-background">Admin</NavigationMenuTrigger>
-                  <NavigationMenuContent >
-                    <NavigationMenuLink className="w-[100px]" href="/admin">Dashboard</NavigationMenuLink>
-                    <Separator />
-                    <NavigationMenuLink className="w-[100px]" href="/admin/users">Users</NavigationMenuLink>
-                    <NavigationMenuLink className="w-[100px]" href="/admin/products">Products</NavigationMenuLink>
-                    <NavigationMenuLink className="w-[100px]" href="/admin/orders">Orders</NavigationMenuLink>
-                    {/* <NavigationMenuLink className="w-[100px]" href="/admin/settings">Settings</NavigationMenuLink> */}
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
+          <div className="flex items-center gap-5">
+            <Link href={'/'} className={` inline-block h-[30px] relative ${hoverStyle} hover:after:w-full text-dark font-semibold`}>Home</Link>
+            <Link href={'/shop'} className={` inline-block   h-[30px] relative ${hoverStyle} hover:after:w-full text-dark font-light`}>Shop</Link>
+            <Link href={'/contact'} className={` inline-block h-[30px] relative ${hoverStyle} hover:after:w-full text-dark font-light`}>Contact</Link>
+            <div className="inline-block h-[30px]">
+              <NavigationMenu className={`inline-block ${hoverStyle} hover:after:w-full text-dark font-light`} >
+                <NavigationMenuList  >
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger className="cursor-pointer px-0 pb-5 font-light text-[16px] text-dark bg-background hover:bg-background">
+                      Admin
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent >
+                      <NavigationMenuLink className="w-[100px]" href="/admin">Dashboard</NavigationMenuLink>
+                      <Separator />
+                      <NavigationMenuLink className="w-[100px]" href="/admin/users">Users</NavigationMenuLink>
+                      <NavigationMenuLink className="w-[100px]" href="/admin/products">Products</NavigationMenuLink>
+                      <NavigationMenuLink className="w-[100px]" href="/admin/orders">Orders</NavigationMenuLink>
+                      {/* <NavigationMenuLink className="w-[100px]" href="/admin/settings">Settings</NavigationMenuLink> */}
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
+            </div>
           </div>
           <div className="flex gap-3">
             <div className="flex items-center gap-2 hover:text-blue-500 cursor-pointer text-dark font-light"><Clock size={20} />Recently viewed</div>

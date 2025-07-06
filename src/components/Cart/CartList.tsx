@@ -1,19 +1,19 @@
 'use client'
 import CartItem from "./CartItem";
 import CustomButton from "../Custom/CustomButton";
-import { IProduct } from "@/types/product";
+import { ICartItem, IProduct } from "@/types/product";
 import { useMemo } from "react";
 import { toast } from "sonner";
-const CartList = ({ cartItems }: { cartItems: IProduct[] }) => {
+const CartList = ({ cartItems }: { cartItems: ICartItem[] }) => {
     const totalPrice = useMemo(() => cartItems.reduce((sum, item) => {
-        return sum + (item.discounted_price || item.price) * (item.stock || 1);
-    }, 0), [cartItems]);
+            return sum + (item.product?.discounted_price || item.product.price) * (item.quantity || 1);
+        }, 0), [cartItems]);
 
     function handleCheckout(): void {
         console.log("Checkout");
         cartItems.forEach((item) => {
             console.log(item)
-            if (item.stock <= 0) {
+            if (item.product.stock <= 0) {
                 toast.error("Product is out of stock");
                 return;
             }
@@ -38,7 +38,7 @@ const CartList = ({ cartItems }: { cartItems: IProduct[] }) => {
                                 </div>
 
                                 <div className="min-w-[265px]">
-                                    <p className="text-dark">Stock Status</p>
+                                    <p className="text-dark">Stock</p>
                                 </div>
 
                                 <div className="flex-1">
@@ -47,8 +47,8 @@ const CartList = ({ cartItems }: { cartItems: IProduct[] }) => {
                             </div>
 
                             {/* table row*/}
-                            {cartItems.map((product: IProduct, key: number) => (
-                                <CartItem product={product} key={key} />
+                            {cartItems.map((item: ICartItem) => (
+                                <CartItem item={item} key={item.id} />
                             ))}
 
                             {/* total price + button */}
