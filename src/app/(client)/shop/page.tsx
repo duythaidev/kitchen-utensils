@@ -15,7 +15,7 @@ const Page = async ({ searchParams, }: { searchParams: Promise<{ [key: string]: 
         },
     });
     const products = await productRes.json();
-
+    
     const categoryRes = await fetch(`${process.env.BACKEND_API}/categories`, {
         method: "GET",
         headers: {
@@ -23,7 +23,9 @@ const Page = async ({ searchParams, }: { searchParams: Promise<{ [key: string]: 
         },
     });
     const categories = await categoryRes.json();
-
+    
+    // console.log("products", products)
+    // console.log("categories", categories)
     return (
         <div className="">
             <PageHeader title='Explore All Products' breadcrumbs={[{ name: 'Home', link: '/' }, { name: 'Products', link: '/products' }, { name: 'Electronics', link: '/products/electronics' }]}></PageHeader>

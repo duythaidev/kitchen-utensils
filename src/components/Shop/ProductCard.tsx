@@ -23,7 +23,6 @@ const ProductModal = ({ open, setOpen, product }: { open: boolean, setOpen: (ope
 
 
 const ProductCard = ({ product }: { product: IProduct }) => {
-    console.log("product", product)
     const [open, setOpen] = useState(false);
     return (
         <div className="bg-white shadow-1 rounded-lg py-4 px-5 col group flex w-full max-w-xs flex-col overflow-hidden ">

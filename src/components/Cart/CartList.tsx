@@ -5,30 +5,37 @@ import { ICartItem, IProduct } from "@/types/product"
 import { useMemo, useState } from "react"
 import { toast } from "sonner"
 import { Button } from "../ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 import { IconChevronsLeft, IconChevronLeft, IconChevronRight, IconChevronsRight } from "@tabler/icons-react"
-import { table } from "console"
-import { Label } from "recharts"
-const CartList = ({ cartItems }: { cartItems: ICartItem[] }) => {
-    const totalPrice = useMemo(() => cartItems.reduce((sum, item) => {
-        return sum + (item.product?.discounted_price || item.product.price) * (item.quantity || 1)
-    }, 0), [cartItems])
+
+const CartList = ({ cartItems = [] }: { cartItems?: ICartItem[] }) => {
+    console.log("cartItems", cartItems)
+    let totalPrice = 0
+
+    if (cartItems) {
+        totalPrice = useMemo(() => cartItems.reduce((sum, item) => {
+            return sum + (item.product?.discounted_price || item.product.price) * (item.quantity || 1)
+        }, 0), [cartItems])
+    }
 
     function handleCheckout(): void {
         console.log("Checkout")
-        cartItems.forEach((item) => {
-            console.log(item)
-            if (item.product.stock <= 0) {
-                toast.error("Product is out of stock")
-                return
-            }
-        })
+        if (cartItems.length > 0) {
+            cartItems.forEach((item) => {
+                console.log(item)
+                if (item.product.stock <= 0) {
+                    toast.error("Product is out of stock")
+                    return
+                }
+            })
+        } else {
+            toast.error("No product in cart")
+        }
     }
 
     const [pageIndex, setPageIndex] = useState(0)
     const PAGE_SIZE = 10
 
-    const totalPages = Math.ceil(cartItems.length / PAGE_SIZE)
+    const totalPages = Math.ceil(cartItems.length / PAGE_SIZE) || 1
 
 
     const paginatedItems = useMemo(() => {

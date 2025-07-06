@@ -1,6 +1,6 @@
 'use client'
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search } from "lucide-react"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import ProductCard from "./ProductCard"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
@@ -13,9 +13,9 @@ import {
 import { useRouter } from "nextjs-toploader/app"
 import { useSearchParams } from "next/navigation"
 import { ICategory, IProduct } from "@/types/product"
+import { toast } from "sonner"
 
 const ProductList = ({ categories, products }: { categories: ICategory[], products: IProduct[] }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false)
 
     const keywordparam = useSearchParams().get('keyword')
     const sortparam = useSearchParams().get('sort')
@@ -35,20 +35,30 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
 
     const router = useRouter()
 
+    const categoryParam = useSearchParams().get('category')
+
     const [selectedCategories, setSelectedCategories] = useState<string[]>(() => {
-        const fromParam = useSearchParams().get('category')
-        return fromParam ? fromParam.split(',') : []
+        return categoryParam ? categoryParam.split(',') : []
     })
 
 
     const [showCategories, setShowCategories] = useState(true)
 
-    const handleSearchKeyword = () => {
-        setSort('')
-        router.push(`/shop?keyword=${keyword}`)
-    }
+    const searchInputRef = useRef<HTMLInputElement>(null)
+    const priceFromRef = useRef<HTMLInputElement>(null)
+    const priceToRef = useRef<HTMLInputElement>(null)
 
-    const [pageIndex, setPageIndex] = useState(Number(useSearchParams().get('page')) - 1 || 0)
+
+    const handleSearchKeyword = () => {
+        if (searchInputRef.current) {
+            const searchKeyword = searchInputRef.current.value
+            setKeyword(searchKeyword)
+            router.push(`/shop?keyword=${searchKeyword}`)
+        }
+    }
+    const page = useSearchParams().get('page')
+
+    const [pageIndex, setPageIndex] = useState((page !== null && page !== undefined) ? Number(page) - 1 : 0)
 
     const PAGE_SIZE = 6
     const totalPages = Math.ceil(products.length / PAGE_SIZE)
@@ -61,17 +71,49 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
 
     useEffect(() => {
         const params = new URLSearchParams()
-        if (keyword) params.set("keyword", keyword)
-        if (sort) params.set("sort", sort)
-        if (priceSort) params.set("priceSort", priceSort)
-        if (priceFrom) params.set("priceFrom", priceFrom)
-        if (priceTo) params.set("priceTo", priceTo)
-        if (selectedCategories.length > 0) params.set("category", selectedCategories.join(','))
-        params.set("page", (pageIndex + 1).toString())
-      
-        router.push(`/shop?${params.toString()}`)
-      }, [sort, priceSort, priceFrom, priceTo, selectedCategories, pageIndex])
-      
+        keyword && params.set("keyword", keyword)
+        sort && params.set("sort", sort)
+        priceSort && params.set("priceSort", priceSort)
+        priceFrom && params.set("priceFrom", priceFrom)
+        priceTo && params.set("priceTo", priceTo)
+        selectedCategories.length > 0 && params.set("category", selectedCategories.join(','));
+
+        searchInputRef.current && (searchInputRef.current.value = keyword);
+        // 
+        (pageIndex !== null && pageIndex !== undefined && page !== null && page !== undefined) && params.set("page", (pageIndex + 1).toString())
+
+        params.size > 0 && router.push(`/shop?${params.toString()}`)
+    }, [sort, priceSort, priceFrom, priceTo, selectedCategories, pageIndex])
+
+
+
+    const handleClearFilter = () => {
+        setKeyword('')
+        setSort('')
+        setPriceSort('')
+        setPriceFrom('')
+        setPriceTo('')
+        setSelectedCategories([])
+        setPageIndex(0)
+        if (searchInputRef.current) {
+            searchInputRef.current.value = ''
+        }
+        router.push('/shop')
+    }
+
+    const handleApplyPriceRange = () => {
+        if (priceFromRef.current && priceToRef.current) {
+            const priceFrom = priceFromRef.current.value ? +priceFromRef.current.value : ""
+            const priceTo = priceToRef.current.value ? +priceToRef.current.value : ""
+            // console.log("priceFrom , priceTo", priceFrom, priceTo)
+            if (priceFrom && priceTo !== "" && (priceFrom > priceTo)) {
+                toast.error('Price from must be less than price to')
+                return
+            }
+            setPriceFrom(priceFrom.toString())
+            setPriceTo(priceTo.toString())
+        }
+    }
 
     return (
         <>
@@ -82,15 +124,8 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
                             <div className="flex items-center justify-between w-full">
                                 <p>Filters:</p>
                                 <button className="block text-blue-600 hover:text-blue-700 cursor-pointer"
-                                    onClick={() => {
-                                        setKeyword('')
-                                        setSort('')
-                                        setPriceSort('')
-                                        setPriceFrom('')
-                                        setPriceTo('')
-                                        setPageIndex(0)
-                                        router.push('/shop')
-                                    }}>
+                                    onClick={handleClearFilter}
+                                >
                                     Clear Filter
                                 </button>
                             </div>
@@ -100,13 +135,14 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
                                 <Input
                                     className="rounded-sm"
                                     placeholder="Search products by name"
-                                    value={keyword}
+                                    // value={keyword}
                                     onKeyDown={(e) => {
                                         if (e.key === 'Enter') {
                                             handleSearchKeyword()
                                         }
                                     }}
-                                    onChange={(e) => setKeyword(e.target.value)}
+                                    ref={searchInputRef}
+                                // onChange={(e) => setKeyword(e.target.value)}
                                 />
                                 <Button
                                     className="bg-white hover:bg-gray-100 cursor-pointer border" style={{ padding: 10 }}
@@ -179,7 +215,7 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
                                                                 <div className="group grid size-4 grid-cols-1">
                                                                     <input
                                                                         id={id}
-                                                                        name="category[]"
+                                                                        name="categories"
                                                                         type="checkbox"
                                                                         value={category.id}
                                                                         checked={isChecked}
@@ -224,16 +260,20 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
                                 <div className="border-t border-gray-200 py-6 mt-4 bg-white shadow-1 rounded-lg px-5">
                                     <h3 className="-my-3 flow-root">
                                         <button type="button" className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
-                                            <span className="font-medium text-gray-900">Khoảng giá</span>
+                                            <span className="font-medium text-gray-900">Price Range</span>
                                         </button>
                                     </h3>
                                     <div className="pt-4">
                                         <div className="flex items-center gap-2">
-                                            <Input type="number" placeholder="Từ" className="w-full" />
+                                            <Input ref={priceFromRef} type="number" placeholder="From" className="w-full" />
                                             <span className="text-gray-500">-</span>
-                                            <Input type="number" placeholder="Đến" className="w-full" />
+                                            <Input ref={priceToRef} type="number" placeholder="To" className="w-full" />
                                         </div>
-                                        <Button className="mt-3 w-full bg-indigo-600 hover:bg-indigo-700 text-white">Áp dụng</Button>
+                                        <Button onClick={handleApplyPriceRange}
+                                            className="mt-3 w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+                                        >
+                                            Apply
+                                        </Button>
                                     </div>
                                 </div>
 
@@ -305,9 +345,6 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
                     </section>
                 </main>
             </div>
-
-
-
         </>
     )
 }

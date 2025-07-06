@@ -3,25 +3,6 @@ import CartList from "@/components/Cart/CartList";
 import PageHeader from "@/components/Custom/PageHeader";
 import { getServerSession } from "next-auth";
 const page = async () => {
-    const cartItems = [
-        {
-            id: 1,
-            name: "Product 1",
-            image: "https://via.placeholder.com/150",
-            price: 39.99,
-            quantity: 1,
-            discountedPrice: 29.99,
-        },
-        {
-            id: 2,
-            name: "Product 2",
-            image: "https://via.placeholder.com/150",
-            price: 49.99,
-            quantity: 1,
-            discountedPrice: 39.99,
-        },
-        // Add more items as needed
-    ];
 
     const session = await getServerSession(authOptions);
     const accessToken = session?.accessToken;
@@ -38,7 +19,7 @@ const page = async () => {
     });
     const data = await res.json()
 
-    console.log("true data ", data)
+    // console.log("true data ", data)
 
     return (
         <>
