@@ -6,7 +6,15 @@ const page = async () => {
 
     const session = await getServerSession(authOptions);
     const accessToken = session?.accessToken;
-
+    const resprofile = await fetch(`${process.env.BACKEND_API}/users/me`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`, // 
+        },
+    })
+    const profile = await resprofile.json()
+    console.log("profile", profile)
     const res = await fetch(`${process.env.BACKEND_API}/carts/me`, {
         method: "GET",
         headers: {
@@ -17,6 +25,7 @@ const page = async () => {
 
         next: { tags: ['list-cartitems'] }
     });
+    
     const data = await res.json()
 
     // console.log("true data ", data)
@@ -24,7 +33,7 @@ const page = async () => {
     return (
         <>
             <PageHeader title='Your Cart' breadcrumbs={[{ name: 'Home', link: '/' }, { name: 'Cart', link: '/cart' }]}></PageHeader>
-            <CartList cartItems={data} />
+            <CartList cartItems={data} profile={profile} />
         </>
     );
 }

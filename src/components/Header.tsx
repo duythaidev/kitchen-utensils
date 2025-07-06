@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link";
-import { ChevronDown, Clock, Heart, PhoneCall, Search, ShoppingCart, User } from "lucide-react";
+import { ChevronDown, Clock, Heart, PhoneCall, Search, ShoppingBag, ShoppingCart, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import HoverLink from "./Custom/HoverLink";
 import { redirect } from "next/navigation";
@@ -146,8 +146,8 @@ const Header = () => {
             </div>
           </div>
           <div className="flex gap-3">
-            <div className="flex items-center gap-2 hover:text-blue-500 cursor-pointer text-dark font-light"><Clock size={20} />Recently viewed</div>
-            <div className="flex items-center gap-2 hover:text-blue-500 cursor-pointer text-dark font-light"><Heart size={20} />Wishlist</div>
+            <div onClick={() => { redirect('/cart') }} className="flex items-center gap-2 hover:text-blue-500 cursor-pointer text-dark font-light"><ShoppingCart size={20} />Cart</div>
+            <div className="flex items-center gap-2 hover:text-blue-500 cursor-pointer text-dark font-light"><ShoppingBag size={20} />Orders</div>
           </div>
         </nav>
       </div>

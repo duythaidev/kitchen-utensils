@@ -4,20 +4,35 @@ import { CircleAlert, CircleX, Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { Input } from "../ui/input";
+import Link from "next/link";
+import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
+import { Button } from "../ui/button";
+import { TooltipContent } from "../ui/tooltip";
+import { TooltipTrigger } from "../ui/tooltip";
+import { TooltipProvider } from "../ui/tooltip";
+import { Tooltip } from "../ui/tooltip";
 
 
 
 const CartItem = ({ item }: { item: ICartItem }) => {
     const [quantity, setQuantity] = useState(item.quantity);
+    const [open, setOpen] = useState(false);
+    function handleRemoveFromCart(id: number) {
+        console.log("remove from cart", id)
+        setOpen(false)
+    }
+
+
+
     return (
         <div className="flex items-center border-t border-gray-300 py-5 px-10">
 
             <div className="min-w-[387px]">
                 <div className="flex items-center justify-between gap-5">
                     <div className="w-full flex items-center gap-5.5">
-                        <div className="flex items-center justify-center rounded-[5px] bg-gray-2 max-w-[80px] w-full h-17.5">
-                            <Image
-                                src={'https://www.tefal.com.au/cdn/shop/files/BL477BlenderforcePianoWhite.png?v=1746168855&width=800'}
+                        <div className="flex items-center justify-center rounded-[5px] bg-gray-2 overflow-hidden max-w-[80px] w-full h-17.5">
+                            <img
+                                src={item.product.images?.find(image => image.is_main)?.image_url || 'https://placehold.jp/80x17.5'}
                                 alt="product"
                                 width={200}
                                 height={200}
@@ -26,7 +41,7 @@ const CartItem = ({ item }: { item: ICartItem }) => {
 
                         <div>
                             <h3 className="text-dark ease-out duration-200 hover:text-blue-500">
-                                <a href="#"> {item.product.product_name} </a>
+                                <Link href={`/product/${item.product.id}`}> {item.product.product_name} </Link>
                             </h3>
                         </div>
                     </div>
@@ -76,13 +91,60 @@ const CartItem = ({ item }: { item: ICartItem }) => {
                     )}
                 </div>
 
-                <button
-                    // onClick={() => handleRemoveFromWishlist()}
+                {/* <button
+                    onClick={() => handleRemoveFromCart(item.product.id)}
                     aria-label="button for remove product from wishlist"
                     className="flex items-center  justify-center rounded-md w-[40px] h-[40px] bg-gray-100 border border-gray-300 ease-out duration-200 hover:bg-red-200 hover:border-red-400 hover:text-red-600"
                 >
                     <CircleX className="w-6 h-6" />
-                </button>
+
+                </button> */}
+
+                <Popover open={open} onOpenChange={setOpen}>
+                    <TooltipProvider>
+                        <Tooltip>
+                            <PopoverTrigger asChild>
+                                <TooltipTrigger asChild>
+                                    <button
+                                        onClick={() => setOpen(true)}
+                                        aria-label="button for remove product from wishlist"
+                                        className="flex cursor-pointer items-center  justify-center rounded-md w-[40px] h-[40px] bg-gray-100 border border-gray-300 ease-out duration-200 hover:bg-red-200 hover:border-red-400 hover:text-red-600"
+                                    >
+                                        <CircleX className="w-6 h-6" />
+
+                                    </button>
+                                </TooltipTrigger>
+                            </PopoverTrigger>
+                            <TooltipContent>
+                                Remove from cart
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                    <PopoverContent className="w-[150px]">
+                        <p className="text-sm mb-2">
+                            Are you sure?
+                        </p>
+                        <div className="flex items-center justify-end gap-1">
+                            <Button
+                                onClick={() => handleRemoveFromCart(item.product.id)}
+                                aria-label="button for remove product from wishlist"
+                                className="cursor-pointer"
+                                variant="destructive"
+                                size={"sm"}
+                            >
+                                Yes
+                            </Button>
+                            <Button onClick={() => setOpen(false)}
+                                aria-label="button for remove product from wishlist"
+                                variant="outline"
+                                className="cursor-pointer"
+                                size={"sm"}
+                            >
+                                No
+                            </Button>
+                        </div>
+                    </PopoverContent>
+                </Popover>
             </div>
         </div>
     );

@@ -7,7 +7,9 @@ import { Dialog, DialogTitle } from "../ui/dialog";
 import { useState } from "react";
 import PreviewProductModal from "./PreviewProductModal";
 import CustomModalBox from "../Modals/CustomModalBox";
-
+import { toast } from "sonner";
+import { addToCart } from "@/actions/user.action";
+import { useSession } from "next-auth/react";
 const ProductModal = ({ open, setOpen, product }: { open: boolean, setOpen: (open: boolean) => void, product: IProduct | undefined }) => {
     return (
         <Dialog open={open} onOpenChange={setOpen} >
@@ -23,13 +25,26 @@ const ProductModal = ({ open, setOpen, product }: { open: boolean, setOpen: (ope
 
 
 const ProductCard = ({ product }: { product: IProduct }) => {
+    const session = useSession();
+
+    const handleAddToCart = (quantity: number) => {
+        console.log('Add to cart');
+        const accessToken = session?.data?.user?.accessToken;
+        if (product?.id && accessToken) {
+            addToCart(product?.id, quantity, accessToken);
+            toast.success('Added to cart');
+        } else {
+            toast.error('Cannot add to cart');
+            // console.log('No product id or access token');
+        }
+    }
     const [open, setOpen] = useState(false);
     return (
         <div className="bg-white shadow-1 rounded-lg py-4 px-5 col group flex w-full max-w-xs flex-col overflow-hidden ">
             <div className="relative flex h-80 w-full overflow-hidden" >
                 <ProductModal open={open} setOpen={setOpen} product={product}></ProductModal>
 
-                {product?.discounted_price  && product?.discounted_price > 0 && product?.discounted_price < product?.price && (
+                {product?.discounted_price && product?.discounted_price > 0 && product?.discounted_price < product?.price && (
                     <span className="absolute top-0 left-0 w-28 translate-y-5 -translate-x-6 -rotate-45 bg-black text-center text-sm text-white z-10">Sale</span>
                 )}
 
@@ -50,7 +65,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
 
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <button onClick={() => setOpen(true)} className="flex h-10 w-10 items-center justify-center bg-white rounded-lg cursor-pointer transition hover:text-blue-500">
+                            <button onClick={() => handleAddToCart(1)} className="flex h-10 w-10 items-center justify-center bg-white rounded-lg cursor-pointer transition hover:text-blue-500">
                                 <ShoppingBag className="h-5 w-5"></ShoppingBag>
                             </button>
                         </TooltipTrigger>
@@ -62,7 +77,9 @@ const ProductCard = ({ product }: { product: IProduct }) => {
             </div>
 
             <div className="mt-4 pb-5">
-                <a href="#" className="text-lg font-semibold leading-tight text-gray-900 hover:underline ">Apple iMac 27", 1TB HDD, Retina 5K Display, M3 Max</a>
+                <a href="#" className="text-lg font-semibold leading-tight text-gray-900 hover:underline ">
+                    {product?.product_name}
+                </a>
 
                 <div className="mt-2 flex items-center gap-2">
                     <div className="flex items-center">
@@ -102,17 +119,19 @@ const ProductCard = ({ product }: { product: IProduct }) => {
 
                 <div className=" mt-4 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-2">
-                        <p className="text-2xl font-extrabold leading-tight text-dark ">$1,699</p>
-                        <p className="text-xl line-through font-extrabold leading-tight text-gray-500 ">$1,699</p>
+                        
+                        <p className="text-2xl font-extrabold leading-tight text-dark ">${product?.discounted_price || product?.price}</p>
+                        
+                        {product?.discounted_price && product?.discounted_price > 0 && product?.discounted_price < product?.price && (
+                            <p className="text-xl line-through font-extrabold leading-tight text-gray-500 ">
+                                ${product?.price}
+                            </p>
+                        )}
                     </div>
 
-                    {/* <button type="button" className="inline-flex items-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-black  hover:bg-primary-800 focus:outline-none focus:ring-2 mr-2 focus:ring-blue-500">
-                        <ShoppingBag className="h-5 w-5"></ShoppingBag>
-                        Add to cart
-                    </button> */}
                     <Tooltip>
                         <TooltipTrigger>
-                            <ShoppingBag className="h-6 w-6 cursor-pointer"></ShoppingBag>
+                            <ShoppingBag onClick={() => handleAddToCart(1)} className="h-6 w-6 cursor-pointer"></ShoppingBag>
                         </TooltipTrigger>
                         <TooltipContent>
                             Add to cart

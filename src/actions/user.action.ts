@@ -74,6 +74,52 @@ export async function addToCart(productId: number, quantity: number, accessToken
         throw error;
     }
 }
+export async function checkout(address: string, accessToken: string) {
+    console.log(accessToken, 'accessToken')
+    try {
+        const res = await fetch(`${process.env.BACKEND_API}/carts/checkout`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({ address }),
+        })
+        // console.log(res, 'res')
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.message || 'Server Error');
+        }
+        revalidateTag("list-cartitems")
+        return await res.json()
+    } catch (error) {
+        console.error("addToCart Error:", error);
+        throw error;
+    }
+}
+export async function removeProductFromCart(productId: number, accessToken: string) {
+    console.log(accessToken, 'accessToken')
+    try {
+        const res = await fetch(`${process.env.BACKEND_API}/carts`, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({ product_id: productId }),
+        })
+        // console.log(res, 'res')
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.message || 'Server Error');
+        }
+        revalidateTag("list-cartitems")
+        return await res.json()
+    } catch (error) {
+        console.error("addToCart Error:", error);
+        throw error;
+    }
+}
 
 
 

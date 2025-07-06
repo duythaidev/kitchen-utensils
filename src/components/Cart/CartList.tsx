@@ -6,18 +6,25 @@ import { useMemo, useState } from "react"
 import { toast } from "sonner"
 import { Button } from "../ui/button"
 import { IconChevronsLeft, IconChevronLeft, IconChevronRight, IconChevronsRight } from "@tabler/icons-react"
+import { Input } from "../ui/input"
+import { checkout } from "@/actions/user.action"
+import { useSession } from "next-auth/react"
 
-const CartList = ({ cartItems = [] }: { cartItems?: ICartItem[] }) => {
+const CartList = ({ cartItems = [], profile }: { cartItems?: ICartItem[], profile?: any }) => {
     console.log("cartItems", cartItems)
     let totalPrice = 0
+    const [address, setAddress] = useState(profile?.address || "")
+    const [loading, setLoading] = useState(false)
 
     if (cartItems) {
         totalPrice = useMemo(() => cartItems.reduce((sum, item) => {
             return sum + (item.product?.discounted_price || item.product.price) * (item.quantity || 1)
         }, 0), [cartItems])
     }
-
-    function handleCheckout(): void {
+    const session = useSession()
+    const accessToken = session?.data?.user?.accessToken
+    const handleCheckout = async () => {
+        setLoading(true)
         console.log("Checkout")
         if (cartItems.length > 0) {
             cartItems.forEach((item) => {
@@ -27,6 +34,20 @@ const CartList = ({ cartItems = [] }: { cartItems?: ICartItem[] }) => {
                     return
                 }
             })
+            if (accessToken) {
+                try {
+                    await checkout(address, accessToken)
+                    // console.log("res", res)
+                    await new Promise(resolve => setTimeout(resolve, 1000))
+                    toast.success("Checkout successfully")
+                } catch (error) {
+                    toast.error("Checkout failed")
+                }
+            } else {
+                toast.error("Please login to checkout")
+            }
+
+            setLoading(false)
         } else {
             toast.error("No product in cart")
         }
@@ -81,7 +102,7 @@ const CartList = ({ cartItems = [] }: { cartItems?: ICartItem[] }) => {
                                 <div className="flex items-center justify-center px-4">
 
                                     <div className="flex w-full items-center gap-8 lg:w-fit">
-                                      
+
                                         <div className="flex w-fit items-center justify-center text-sm font-medium">
                                             Page {pageIndex + 1} of {totalPages}
                                         </div>
@@ -130,12 +151,19 @@ const CartList = ({ cartItems = [] }: { cartItems?: ICartItem[] }) => {
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-4">
-                                <p className="text-lg font-semibold text-gray-800">
-                                    Total: ${totalPrice.toFixed(2)}
-                                </p>
-                                <CustomButton className="" onClick={() => handleCheckout()} color="blue" >
-                                    Checkout
-                                </CustomButton>
+                                    <Input
+                                        type="text"
+                                        placeholder="Address"
+                                        className="w-[300px]"
+                                        value={address}
+                                        onChange={(e) => setAddress(e.target.value)}
+                                    />
+                                    <p className="text-lg font-semibold text-gray-800">
+                                        Total: ${totalPrice.toFixed(2)}
+                                    </p>
+                                    <CustomButton isLoading={loading} className="" onClick={() => handleCheckout()} color="blue" >
+                                        Checkout
+                                    </CustomButton>
 
                                 </div>
                             </div>
