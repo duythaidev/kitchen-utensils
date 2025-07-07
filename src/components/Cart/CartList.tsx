@@ -11,7 +11,6 @@ import { checkout } from "@/actions/user.action"
 import { useSession } from "next-auth/react"
 
 const CartList = ({ cartItems = [], profile }: { cartItems?: ICartItem[], profile?: any }) => {
-    console.log("cartItems", cartItems)
     let totalPrice = 0
     const [address, setAddress] = useState(profile?.address || "")
     const [loading, setLoading] = useState(false)
@@ -25,32 +24,35 @@ const CartList = ({ cartItems = [], profile }: { cartItems?: ICartItem[], profil
     const accessToken = session?.data?.user?.accessToken
     const handleCheckout = async () => {
         setLoading(true)
-        console.log("Checkout")
+
+        if (!address) {
+            toast.error("Please enter your address")
+            setLoading(false)
+            return
+        }
+
         if (cartItems.length > 0) {
             cartItems.forEach((item) => {
-                console.log(item)
+                // console.log(item)
                 if (item.product.stock <= 0) {
                     toast.error("Product is out of stock")
                     return
                 }
             })
             if (accessToken) {
-                try {
-                    await checkout(address, accessToken)
-                    // console.log("res", res)
-                    await new Promise(resolve => setTimeout(resolve, 1000))
+                const res = await checkout(address, accessToken)
+                if (res.success) {
                     toast.success("Checkout successfully")
-                } catch (error) {
-                    toast.error("Checkout failed")
+                } else {
+                    toast.error(res.message)
                 }
             } else {
                 toast.error("Please login to checkout")
             }
-
-            setLoading(false)
         } else {
             toast.error("No product in cart")
         }
+        setLoading(false)
     }
 
     const [pageIndex, setPageIndex] = useState(0)
@@ -151,6 +153,9 @@ const CartList = ({ cartItems = [], profile }: { cartItems?: ICartItem[], profil
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-4">
+                                    <p className="text-sm">
+                                        Address:
+                                    </p>
                                     <Input
                                         type="text"
                                         placeholder="Address"

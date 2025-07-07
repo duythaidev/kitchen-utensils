@@ -28,7 +28,7 @@ const Header = () => {
   const { data: session } = useSession()
   const [showNav, setShowNav] = useState<boolean>(false)
   const [stickyMenu, setStickyMenu] = useState<boolean>(false);
-  console.log("header session", session)
+  // console.log("header session", session)
   const handleStickyMenu = () => {
     if (window.scrollY >= 80) {
       setStickyMenu(true);
@@ -107,10 +107,12 @@ const Header = () => {
                 </HoverLink>
               }
             </div>
-            <div onClick={() => { redirect('/cart') }} className="relative">
+            <Link href="/cart" className="relative">
               <ShoppingCart size={25} className="hover:text-blue-500 cursor-pointer text-primary ml-2"></ShoppingCart>
-              <div className="absolute top-[-5] w-3.5 h-3.5 text-[10px] text-center right-[-5] bg-blue-600 text-white rounded-full">1</div>
-            </div>
+              <div className="absolute top-[-5] w-3.5 h-3.5 text-[10px] text-center right-[-5] bg-blue-600 text-white rounded-full">
+                1
+              </div>
+            </Link>
             <div >
               <p className="text-gray-500 text-xs text-end uppercase">Cart</p>
               <p className="font-bold text-end">$100</p>

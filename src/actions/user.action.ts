@@ -14,46 +14,45 @@ export const handleUpdateProfileAction = async (userId: string, formData: FormDa
 
         if (!res.ok) {
             const errorData = await res.json();
-            throw new Error(errorData.message || "Update failed");
+            return { success: false, message: errorData.message || "Update failed" };
         }
-        revalidateTag("profile")
 
-        return await res.json();
-    } catch (error) {
+        revalidateTag("profile");
+        const data = await res.json();
+        return { success: true, message: "Profile updated", data };
+    } catch (error: any) {
         console.error("handleUpdateProfileAction Error:", error);
-        throw error;
+        return { success: false, message: error.message || "Network error" };
     }
 };
 
 
-export async function updateProfile(id: number, data: any, accessToken: string) {
-    const res = await fetch(`${process.env.BACKEND_API}/users/${id}`, {
-        method: "PUT",
-        body: JSON.stringify(data),
-        headers: {
-            'Authorization': `Bearer ${accessToken}`
-        }
-    })
-    if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || 'Server Error');
-    }
-    return await res.json()
-}
-
 export async function addReview(productId: number, rating: number, comment: string, accessToken: string) {
-    const res = await fetch(`${process.env.BACKEND_API}/reviews`, {
-        method: "POST",
-        body: JSON.stringify({ productId, rating, comment }),
-        headers: {
-            'Authorization': `Bearer ${accessToken}`
+    try {
+        const res = await fetch(`${process.env.BACKEND_API}/reviews`, {
+            method: "POST",
+            body: JSON.stringify({ productId, rating, comment }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+
+        if (!res.ok) {
+            const errorData = await res.json();
+            return { success: false, message: errorData.message || 'Server error' };
         }
-    })
-    return await res.json()
+
+        revalidateTag("list-reviews");
+        const data = await res.json();
+        return { success: true, message: "Review added", data };
+    } catch (error: any) {
+        console.error("addReview Error:", error);
+        return { success: false, message: error.message || "Network error" };
+    }
 }
 
 export async function addToCart(productId: number, quantity: number, accessToken: string) {
-    console.log(productId, quantity, accessToken, 'productId, quantity, accessToken')
     try {
         const res = await fetch(`${process.env.BACKEND_API}/carts`, {
             method: "POST",
@@ -62,20 +61,22 @@ export async function addToCart(productId: number, quantity: number, accessToken
                 'Authorization': `Bearer ${accessToken}`
             },
             body: JSON.stringify({ product_id: productId, quantity }),
-        })
-        // console.log(res, 'res')
+        });
+
         if (!res.ok) {
             const errorData = await res.json();
-            throw new Error(errorData.message || 'Server Error');
+            return { success: false, message: errorData.message || 'Server error' };
         }
-        return await res.json()
-    } catch (error) {
+
+        const data = await res.json();
+        return { success: true, message: "Added to cart", data };
+    } catch (error: any) {
         console.error("addToCart Error:", error);
-        throw error;
+        return { success: false, message: error.message || "Network error" };
     }
 }
+
 export async function checkout(address: string, accessToken: string) {
-    console.log(accessToken, 'accessToken')
     try {
         const res = await fetch(`${process.env.BACKEND_API}/carts/checkout`, {
             method: "POST",
@@ -84,21 +85,23 @@ export async function checkout(address: string, accessToken: string) {
                 'Authorization': `Bearer ${accessToken}`
             },
             body: JSON.stringify({ address }),
-        })
-        // console.log(res, 'res')
+        });
+
         if (!res.ok) {
             const errorData = await res.json();
-            throw new Error(errorData.message || 'Server Error');
+            return { success: false, message: errorData.message || 'Checkout failed' };
         }
-        revalidateTag("list-cartitems")
-        return await res.json()
-    } catch (error) {
-        console.error("addToCart Error:", error);
-        throw error;
+
+        revalidateTag("list-cartitems");
+        const data = await res.json();
+        return { success: true, message: "Checkout successful", data };
+    } catch (error: any) {
+        console.error("checkout Error:", error);
+        return { success: false, message: error.message || "Network error" };
     }
 }
+
 export async function removeProductFromCart(productId: number, accessToken: string) {
-    console.log(accessToken, 'accessToken')
     try {
         const res = await fetch(`${process.env.BACKEND_API}/carts`, {
             method: "DELETE",
@@ -107,19 +110,43 @@ export async function removeProductFromCart(productId: number, accessToken: stri
                 'Authorization': `Bearer ${accessToken}`
             },
             body: JSON.stringify({ product_id: productId }),
-        })
-        // console.log(res, 'res')
+        });
+
         if (!res.ok) {
             const errorData = await res.json();
-            throw new Error(errorData.message || 'Server Error');
+            return { success: false, message: errorData.message || 'Remove failed' };
         }
-        revalidateTag("list-cartitems")
-        return await res.json()
-    } catch (error) {
-        console.error("addToCart Error:", error);
-        throw error;
+
+        revalidateTag("list-cartitems");
+        const data = await res.json();
+        return { success: true, message: "Removed from cart", data };
+    } catch (error: any) {
+        console.error("removeProductFromCart Error:", error);
+        return { success: false, message: error.message || "Network error" };
     }
 }
 
+export async function updateCartQuantity(productId: number, quantity: number, accessToken: string) {
+    try {
+        const res = await fetch(`${process.env.BACKEND_API}/carts`, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({ product_id: productId, quantity }),
+        });
 
+        if (!res.ok) {
+            const errorData = await res.json();
+            return { success: false, message: errorData.message || 'Update failed' };
+        }
 
+        revalidateTag("list-cartitems");
+        const data = await res.json();
+        return { success: true, message: "Quantity updated", data };
+    } catch (error: any) {
+        console.error("updateCartQuantity Error:", error);
+        return { success: false, message: error.message || "Network error" };
+    }
+}

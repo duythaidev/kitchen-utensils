@@ -11,17 +11,24 @@ import { toast } from "sonner";
 const PreviewProductModal = ({ product, setOpen }: { product?: IProduct, setOpen: (open: boolean) => void }) => {
     const [quantity, setQuantity] = useState(1);
     const session = useSession();
-    const handleAddToCart = () => {
-        console.log('Add to cart');
+    const handleAddToCart = async () => {
+        
         const accessToken = session?.data?.user?.accessToken;
-        if (product?.id && accessToken) {
-            addToCart(product?.id, quantity, accessToken);
-            setOpen(false);
-        } else {
+
+        if (!product?.id || !accessToken) {
             toast.error('Cannot add to cart');
-            // console.log('No product id or access token');
+            return;
         }
+        const res = await addToCart(product?.id, quantity, accessToken);
+        if (res.success) {
+            toast.success('Added to cart');
+        } else {
+            toast.error('Failed to add to cart');
+        }
+        setOpen(false);
+
     }
+
     return (
         <div >
 

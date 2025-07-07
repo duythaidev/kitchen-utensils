@@ -9,6 +9,13 @@ export interface IProduct {
     images?: IProductImage[] | null,
 }
 
+export interface IReview {
+    id: number,
+    rating: number,
+    comment: string,
+    user: IUser,
+}
+
 export interface ICartItem {
     id: number,
     product_id: number,

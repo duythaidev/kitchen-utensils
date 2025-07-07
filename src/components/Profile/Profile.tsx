@@ -17,37 +17,43 @@ const Profile = ({ profile }: { profile: any }) => {
     const [isLoading, setIsLoading] = useState(false);
     const { data: session, update: sessionUpdate } = useSession()
 
-    const handleUpdateProfile = async (e: any) => {
-        e.preventDefault()
-        try {
-            setIsLoading(true)
-            const formData = new FormData()
-            // console.log("myProfile: ", myProfile)
-            formData.append("user_name", myProfile?.user_name.trim() || '')
-            formData.append("address", myProfile?.address.trim() || '')
-            formData.append("phone", myProfile?.phone.trim() || '')
-            if (avatar) {
-                formData.append("avatar", avatar)
-            }
-
-            const data = await handleUpdateProfileAction(myProfile?.id, formData, session?.user?.accessToken as string)
-            if (data) {
-                sessionUpdate({
-                    user: {
-                        ...session?.user,
-                        user_name: data.user_name,
-                        avatar_url: data.avatar_url
-                    }
-                })
-                toast.success("Profile updated successfully")
-                setIsLoading(false)
-            }
-        } catch (error) {
-            console.log(error)
-            toast.error("Profile update failed")
-            setIsLoading(false)
+    const handleUpdateProfile = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsLoading(true);
+    
+        const formData = new FormData();
+        formData.append("user_name", myProfile?.user_name.trim() || '');
+        formData.append("address", myProfile?.address.trim() || '');
+        formData.append("phone", myProfile?.phone.trim() || '');
+        if (avatar) {
+            formData.append("avatar", avatar);
         }
-    }
+    
+        const res = await handleUpdateProfileAction(
+            myProfile?.id,
+            formData,
+            session?.user?.accessToken as string
+        );
+    
+        if (!res.success) {
+            toast.error(res.message);
+            setIsLoading(false);
+            return;
+        }
+    
+        // Cập nhật session nếu thành công
+        sessionUpdate({
+            user: {
+                ...session?.user,
+                user_name: res.data.user_name,
+                avatar_url: res.data.avatar_url,
+            },
+        });
+    
+        toast.success("Profile updated successfully");
+        setIsLoading(false);
+    };
+    
     return (
         <section className="overflow-hidden py-20 bg-gray-100">
             <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">

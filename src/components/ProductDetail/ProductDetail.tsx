@@ -1,59 +1,80 @@
 'use client'
 
-import { IProduct } from "@/types/product"
-import { LoaderCircle, Minus, Plus, ShoppingCart, Star, StarHalf } from "lucide-react"
+import { IProduct, IReview } from "@/types/product"
+import { LoaderCircle, Minus, Plus, ShoppingCart, Star, StarHalf, UserRoundIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Input } from "../ui/input"
 import Image from "next/image"
 import { useSession } from "next-auth/react"
 import { toast } from "sonner"
-import { addToCart } from "@/actions/user.action"
+import { addReview, addToCart } from "@/actions/user.action"
+import CustomButton from "../Custom/CustomButton"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 const tabs = [
     {
         id: "tabOne",
-        title: "Description",
+        title: "Reviews",
     },
-
     {
         id: "tabTwo",
-        title: "Reviews",
+        title: "Description",
     },
 ]
 
 
-const ProductDetailPage = ({ product }: { product: IProduct }) => {
+const ProductDetailPage = ({ product, reviews }: { product: IProduct, reviews?: IReview[] }) => {
     const [quantity, setQuantity] = useState(1)
     const [activeTab, setActiveTab] = useState(tabs[0].id)
     const [selectedImage, setSelectedImage] = useState(product?.images?.find((image) => image.is_main) || product?.images?.[0])
     const [rating, setRating] = useState(5)
     const [isLoading, setIsLoading] = useState(false)
     const session = useSession()
-    const handleAddToCart = async () => {
-        try {
-            setIsLoading(true)
-            if (!session.data?.user?.accessToken) {
-                toast.error("Please login to add to cart")
-                setIsLoading(false)
-                return
-            }
-            const res = await addToCart(product.id, quantity, session.data?.user?.accessToken)
-            if (res) {
-                toast.success("Added to cart")
-            } else {
-                toast.error("Failed to add to cart")
-            }
 
-        } catch (error) {
-            toast.error("Failed to add to cart")
-        } finally {
+    const [comment, setComment] = useState("")
+
+    const handleAddToCart = async () => {
+        setIsLoading(true)
+        if (!session.data?.user?.accessToken) {
+            toast.error("Please login to add to cart")
             setIsLoading(false)
+            return
         }
+        const res = await addToCart(product.id, quantity, session.data?.user?.accessToken)
+        if (res) {
+            toast.success("Added to cart")
+        } else {
+            toast.error("Failed to add to cart")
+        }
+
+        setIsLoading(false)
     }
-    // useEffect(() => {
-    //     if (session.data?.user?.email) {
-    //         setRating(product.rating)
-    //     }
-    // }, [session.data?.user?.email])
+    const handleAddReview = async () => {
+        setIsLoading(true)
+
+        if (!session.data?.user?.accessToken) {
+            toast.error("Please login to add review")
+            setIsLoading(false)
+            return
+        }
+        if (comment.length < 10 || comment.length > 250) {
+            toast.error("Comment must be between 10 and 250 characters")
+            setIsLoading(false)
+            return
+        }
+        if (rating < 1 || rating > 5) {
+            toast.error("You must rate the product")
+            setIsLoading(false)
+            return
+        }
+
+        const res = await addReview(product.id, rating, comment, session.data?.user?.accessToken)
+        if (res.success) {
+            toast.success("Review added")
+        } else {
+            toast.error(res.message)
+        }
+        setIsLoading(false)
+    }
 
     return (
         <>
@@ -73,7 +94,7 @@ const ProductDetailPage = ({ product }: { product: IProduct }) => {
                                 <div className="flex items-center gap-2">
                                     {
                                         product?.images?.map((image) => (
-                                            <div key={image.id} onClick={() => setSelectedImage(image)} className={`w-20 h-20 bg-white border cursor-pointer ${selectedImage?.id === image.id ? "border-primary" : ""}`}>
+                                            <div key={image.id} onClick={() => setSelectedImage(image)} className={`w-20 h-20 bg-white border cursor-pointer hover:border-primary transition-all duration-300 rounded-md overflow-hidden ${selectedImage?.id === image.id ? "border-primary" : ""}`}>
                                                 <img src={image.image_url} alt={product?.product_name} className="w-full h-full object-cover" />
                                             </div>
                                         ))
@@ -193,7 +214,7 @@ const ProductDetailPage = ({ product }: { product: IProduct }) => {
                             </button>
                         ))}
                     </div>
-                    {activeTab === "tabOne" && (
+                    {activeTab === "tabTwo" && (
                         <div className="rounded-xl bg-white shadow-1 p-4 sm:p-6 mt-10 block">
                             {/* <h2 className="text-2xl font-bold text-gray-900">Description</h2> */}
                             <h2 className="font-medium text-2xl text-primary mb-7">Specifications:</h2>
@@ -202,10 +223,10 @@ const ProductDetailPage = ({ product }: { product: IProduct }) => {
                             </p>
                         </div>
                     )}
-                    {activeTab === "tabTwo" && (
+                    {activeTab === "tabOne" && (
                         <div>
                             <div
-                                className={`flex-col sm:flex-row gap-7.5 xl:gap-12.5 mt-12.5 ${activeTab === "tabTwo" ? "flex" : "hidden"
+                                className={`flex-col sm:flex-row gap-7.5 xl:gap-12.5 mt-12.5 ${activeTab === "tabOne" ? "flex" : "hidden"
                                     }`}
                             >
                                 <div className="max-w-[570px] w-full">
@@ -218,23 +239,20 @@ const ProductDetailPage = ({ product }: { product: IProduct }) => {
                                         <div className="rounded-xl bg-white shadow-1 p-4 sm:p-6">
                                             <div className="flex items-center justify-between">
                                                 <a href="#" className="flex items-center gap-4">
-                                                    <div className="w-12.5 h-12.5 rounded-full overflow-hidden">
-                                                        <Image
-                                                            src="/images/users/user-01.jpg"
-                                                            alt="author"
-                                                            className="w-12.5 h-12.5 rounded-full overflow-hidden"
-                                                            width={50}
-                                                            height={50}
-                                                        />
+                                                    <div className="rounded-full overflow-hidden">
+                                                        <Avatar>
+                                                            <AvatarImage src={session.data?.user?.avatar_url || ""} />
+                                                            <AvatarFallback>
+                                                                <UserRoundIcon className="w-4 h-4" />
+                                                            </AvatarFallback>
+                                                        </Avatar>
                                                     </div>
 
                                                     <div>
                                                         <h3 className="font-medium text-dark">
-                                                            Davis Dorwart
+                                                            {session.data?.user?.user_name}
                                                         </h3>
-                                                        <p className="text-custom-sm">
-                                                            Serial Entrepreneur
-                                                        </p>
+
                                                     </div>
                                                 </a>
 
@@ -559,94 +577,66 @@ const ProductDetailPage = ({ product }: { product: IProduct }) => {
                                 </div>
 
                                 <div className="max-w-[550px] w-full">
-                                    <form>
-                                        <h2 className="font-medium text-2xl text-dark mb-3.5">
-                                            Add a Review
-                                        </h2>
+                                    <h2 className="font-medium text-2xl text-dark mb-3.5">
+                                        Add a Review
+                                    </h2>
 
-                                        <p className="mb-6">
-                                            Your email address will not be published. Required fields are marked *
-                                        </p>
+                                    <p className="mb-6">
+                                        Your email address will not be published. Required fields are marked *
+                                    </p>
 
-                                        <div className="flex items-center gap-3 mb-7.5">
-                                            <span>Your Rating*</span>
-                                            <StarRating rating={rating} onChange={setRating} />
-                                            {/* <div className="relative">
-                                                <div className="flex gap-2">
-                                                    {Array.from({ length: 5 }, (_, index) => (
-                                                        <Star key={index} fill="gray" strokeWidth={0} color="gray" />
-                                                    ))}
-                                                </div>
-                                                <div className="absolute top-0 flex gap-2 ">
-                                                    <Star fill="#FBB040" strokeWidth={2} color="#FBB040" />
-                                                    <Star fill="#FBB040" strokeWidth={2} color="#FBB040" />
-                                                    <StarHalf fill="#FBB040" strokeWidth={2} color="#FBB040" />
-                                                </div>
-                                            </div> */}
+                                    <div className="flex items-center gap-3 mb-7.5">
+                                        <span>Your Rating*</span>
+                                        <StarRating rating={rating} onChange={setRating} />
+                                    </div>
+
+                                    <div className="rounded-xl bg-white shadow-1 p-4 sm:p-6">
+                                        <div className="mb-5">
+                                            <label htmlFor="comments" className="block mb-2.5">
+                                                Comments
+                                            </label>
+
+                                            <textarea
+                                                name="comments"
+                                                id="comments"
+                                                rows={5}
+                                                value={comment}
+                                                onChange={(e) => setComment(e.target.value)}
+                                                maxLength={250}
+                                                placeholder="Your comments"
+                                                className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full p-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                                            ></textarea>
+
+                                            <span className="flex items-center justify-end mt-2.5">
+                                                <span className="text-custom-sm text-dark-4">
+
+                                                    {comment.length < 10 ?
+                                                        <span className="text-red-500">
+                                                            {comment.length}
+                                                        </span>
+                                                        :
+                                                        <span>
+                                                            {comment.length}
+                                                        </span>
+                                                    }
+
+                                                    /250
+                                                </span>
+                                            </span>
                                         </div>
 
-                                        <div className="rounded-xl bg-white shadow-1 p-4 sm:p-6">
-                                            <div className="mb-5">
-                                                <label htmlFor="comments" className="block mb-2.5">
-                                                    Comments
-                                                </label>
+                                        <div className="flex flex-col lg:flex-row lg:justify-end lg:items-end gap-5 sm:gap-7.5">
 
-                                                <textarea
-                                                    name="comments"
-                                                    id="comments"
-                                                    rows={5}
-                                                    placeholder="Your comments"
-                                                    className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full p-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                                                ></textarea>
-
-                                                <span className="flex items-center justify-between mt-2.5">
-                                                    <span className="text-custom-sm text-dark-4">
-                                                        Maximum
-                                                    </span>
-                                                    <span className="text-custom-sm text-dark-4">
-                                                        0/250
-                                                    </span>
-                                                </span>
-                                            </div>
-
-                                            <div className="flex flex-col lg:flex-row gap-5 sm:gap-7.5 mb-5.5">
-                                                <div>
-                                                    <label htmlFor="name" className="block mb-2.5">
-                                                        Name
-                                                    </label>
-
-                                                    <input
-                                                        type="text"
-                                                        name="name"
-                                                        id="name"
-                                                        placeholder="Your name"
-                                                        className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                                                    />
-                                                </div>
-
-                                                <div>
-                                                    <label htmlFor="email" className="block mb-2.5">
-                                                        Email
-                                                    </label>
-
-                                                    <input
-                                                        type="email"
-                                                        name="email"
-                                                        id="email"
-                                                        placeholder="Your email"
-                                                        className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            <button
-                                                type="submit"
-                                                className="inline-flex font-medium text-white bg-blue py-3 px-7 rounded-md ease-out duration-200 hover:bg-blue-dark"
+                                            <CustomButton
+                                                color="blue"
+                                                onClick={handleAddReview}
+                                                isLoading={isLoading}
                                             >
                                                 Submit Reviews
-                                            </button>
+                                            </CustomButton>
                                         </div>
-                                    </form>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>

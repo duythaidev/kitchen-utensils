@@ -1,6 +1,6 @@
 'use client';
 import { ICartItem, IProduct } from "@/types/product";
-import { CircleAlert, CircleX, Minus, Plus } from "lucide-react";
+import { Check, CircleAlert, CircleX, Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { Input } from "../ui/input";
@@ -11,18 +11,36 @@ import { TooltipContent } from "../ui/tooltip";
 import { TooltipTrigger } from "../ui/tooltip";
 import { TooltipProvider } from "../ui/tooltip";
 import { Tooltip } from "../ui/tooltip";
-
+import { removeProductFromCart, updateCartQuantity } from "@/actions/user.action";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 
 const CartItem = ({ item }: { item: ICartItem }) => {
     const [quantity, setQuantity] = useState(item.quantity);
     const [open, setOpen] = useState(false);
-    function handleRemoveFromCart(id: number) {
-        console.log("remove from cart", id)
-        setOpen(false)
+    const { data: session } = useSession();
+    const handleRemoveFromCart = async (id: number) => {
+        const res = await removeProductFromCart(id, session?.user?.accessToken || '')
+        if (res.success) {
+            setOpen(false)
+            toast.success("Product removed from cart")
+        } else {
+            toast.error(res.message)
+        }
     }
+    const [isQuantityChanged, setIsQuantityChanged] = useState(false);
 
 
+    const handleUpdateQuantity = async () => {
+        const res = await updateCartQuantity(item.product.id, quantity, session?.user?.accessToken || '')
+        if (res.success) {
+            setIsQuantityChanged(false);
+            toast.success("Quantity updated successfully")
+        } else {
+            toast.error(res.message)
+        }
+    }
 
     return (
         <div className="flex items-center border-t border-gray-300 py-5 px-10">
@@ -66,7 +84,12 @@ const CartItem = ({ item }: { item: ICartItem }) => {
                 <div className="min-w-[150px] flex justify-end">
                     {item.product.stock && item.product.stock > 0 && (
                         <div className="flex items-center gap-3">
-                            <button onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
+                            <button
+                                onClick={() => {
+                                    const newValue = Math.max(1, quantity - 1)
+                                    setQuantity(newValue)
+                                    setIsQuantityChanged(newValue !== item.quantity)
+                                }}
                                 className="w-10 h-10 flex items-center justify-center bg-gray-100 rounded hover:bg-gray-200"
                             >
                                 <Minus className="w-4 h-4" />
@@ -79,26 +102,42 @@ const CartItem = ({ item }: { item: ICartItem }) => {
                                 onChange={(e) => {
                                     const value = Math.min(item.product.stock!, Math.max(1, Number(e.target.value)))
                                     setQuantity(value)
+                                    setIsQuantityChanged(value !== item.quantity)
                                 }}
+
                                 className="w-16 h-10 text-center"
                             />
-                            <button onClick={() => setQuantity((prev) => (prev < item.product.stock! ? prev + 1 : prev))}
+                            <button
+                                onClick={() => {
+                                    const newValue = Math.min(item.product.stock, quantity + 1)
+                                    setQuantity(newValue)
+                                    setIsQuantityChanged(newValue !== item.quantity)
+                                }}
                                 className="w-10 h-10 flex items-center justify-center bg-gray-100 rounded hover:bg-gray-200"
                             >
                                 <Plus className="w-4 h-4" />
                             </button>
+
+                            {isQuantityChanged && (
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <button
+                                                onClick={handleUpdateQuantity}
+                                                aria-label="confirm quantity change"
+                                                className="w-10 h-10 cursor-pointer flex items-center justify-center bg-green-100 border border-green-400 rounded hover:bg-green-200 text-green-700"
+                                            >
+                                                <Check className="w-4 h-4" />
+                                            </button>
+                                        </TooltipTrigger>
+                                        <TooltipContent>Change quantity</TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                            )}
+
                         </div>
                     )}
                 </div>
-
-                {/* <button
-                    onClick={() => handleRemoveFromCart(item.product.id)}
-                    aria-label="button for remove product from wishlist"
-                    className="flex items-center  justify-center rounded-md w-[40px] h-[40px] bg-gray-100 border border-gray-300 ease-out duration-200 hover:bg-red-200 hover:border-red-400 hover:text-red-600"
-                >
-                    <CircleX className="w-6 h-6" />
-
-                </button> */}
 
                 <Popover open={open} onOpenChange={setOpen}>
                     <TooltipProvider>

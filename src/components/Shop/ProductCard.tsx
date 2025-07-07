@@ -40,7 +40,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
     }
     const [open, setOpen] = useState(false);
     return (
-        <div className="bg-white shadow-1 rounded-lg py-4 px-5 col group flex w-full max-w-xs flex-col overflow-hidden ">
+        <>
             <div className="relative flex h-80 w-full overflow-hidden" >
                 <ProductModal open={open} setOpen={setOpen} product={product}></ProductModal>
 
@@ -139,7 +139,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
                     </Tooltip>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 

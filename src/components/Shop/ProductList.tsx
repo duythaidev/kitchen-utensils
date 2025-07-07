@@ -205,8 +205,7 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
                                     {showCategories && (
                                         <div className="pt-6" id="filter-section-1">
                                             <div className="space-y-4">
-                                                {categories.map((category, index) => {
-                                                    const id = `filter-category-${index}`
+                                                {categories.map((category) => {
                                                     const isChecked = selectedCategories.includes(category.id.toString())
 
                                                     return (
@@ -214,7 +213,6 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
                                                             <div className="flex h-5 shrink-0 items-center">
                                                                 <div className="group grid size-4 grid-cols-1">
                                                                     <input
-                                                                        id={id}
                                                                         name="categories"
                                                                         type="checkbox"
                                                                         value={category.id}
@@ -244,7 +242,7 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
                                                                     </svg>
                                                                 </div>
                                                             </div>
-                                                            <label htmlFor={id} className="text-sm text-gray-600">
+                                                            <label htmlFor={category.id.toString()} className="text-sm text-gray-600">
                                                                 {category.category_name}
                                                             </label>
                                                         </div>
@@ -282,9 +280,13 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
                             <div className="relative lg:col-span-3 ">
 
                                 <div className="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-2 lg:grid-cols-3 justify-items-center">
-                                    {paginatedProducts.map((product) => (
-                                        <ProductCard key={product.id} product={product} />
-                                    ))}
+                                    {paginatedProducts.map((product) => {
+                                        return (
+                                            <div key={product.id} className="bg-white shadow-1 rounded-lg py-4 px-5 col group flex w-full max-w-xs flex-col overflow-hidden ">
+                                                <ProductCard product={product} />
+                                            </div>
+                                        )
+                                    })}
 
                                 </div>
                                 {/* Your content */}
