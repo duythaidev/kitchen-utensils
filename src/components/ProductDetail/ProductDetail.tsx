@@ -1,6 +1,6 @@
 'use client'
 
-import { IProduct, IReview } from "@/types/product"
+import { IProduct, IReview } from "@/types"
 import { Circle, CircleX, LoaderCircle, Minus, Plus, ShoppingCart, Star, StarHalf, UserRoundIcon } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { Input } from "../ui/input"

@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useRouter } from "nextjs-toploader/app"
 import { useSearchParams } from "next/navigation"
-import { ICategory, IProduct } from "@/types/product"
+import { ICategory, IProduct } from "@/types"
 import { toast } from "sonner"
 
 const ProductList = ({ categories, products }: { categories: ICategory[], products: IProduct[] }) => {

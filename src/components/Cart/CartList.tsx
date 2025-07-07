@@ -1,7 +1,7 @@
 'use client'
 import CartItem from "./CartItem"
 import CustomButton from "../Custom/CustomButton"
-import { ICartItem, IProduct } from "@/types/product"
+import { ICartItem, IProduct } from "@/types"
 import { useMemo, useState } from "react"
 import { toast } from "sonner"
 import { Button } from "../ui/button"

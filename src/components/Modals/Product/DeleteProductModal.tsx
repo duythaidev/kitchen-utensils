@@ -17,7 +17,7 @@ import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import CustomModalBox from "../CustomModalBox";
 import { handleDeleteProductAction } from "@/actions/admin.product.action";
-import { IProduct } from "@/types/product";
+import { IProduct } from "@/types";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 const DeleteProductModal = ({ product }: { product: IProduct }) => {

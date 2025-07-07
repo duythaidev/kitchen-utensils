@@ -18,7 +18,7 @@ import { handleUpdateProductAction, handleUpdateProductImageAction } from "@/act
 import { useSession } from "next-auth/react"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { fetchCategories } from "@/actions/client-api"
-import { ICategory, IProduct } from "@/types/product"
+import { ICategory, IProduct } from "@/types"
 import { Pencil, Trash } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 

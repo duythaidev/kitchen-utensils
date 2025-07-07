@@ -9,7 +9,7 @@ import { z } from "zod"
 
 import { Badge } from "@/components/ui/badge"
 
-import { CircleCheck, CircleX, Eye, Pencil, Phone, Trash } from "lucide-react"
+import { CircleCheck, CircleX, Eye, Pencil, Phone, Trash, User } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar"
 import ViewUserModal from "../Modals/User/ViewUserModal"
 import EditUserModal from "../Modals/User/EditUserModal"
@@ -19,6 +19,7 @@ import EditProductModal from "../Modals/Product/EditProductModal"
 import DeleteProductModal from "../Modals/Product/DeleteProductModal"
 import EditCategoryModal from "../Modals/Category/EditCategoryModal"
 import DeleteCategoryModal from "../Modals/Category/DeleteCategoryModal"
+import ViewOrderModal from "../Modals/Order/ViewOrderModal"
 
 export const userSchema = z.object({
   id: z.number(),
@@ -51,10 +52,29 @@ export const productSchema = z.object({
   })).nullable(),
 });
 
+
+export const orderDetailSchema = z.object({
+  id: z.number(),
+  order_id: z.number(),
+  product_id: z.number(),
+  quantity: z.number(),
+  price: z.number(),
+  product: productSchema,
+});
+
 export const orderSchema = z.object({
   id: z.number(),
-  order_code: z.string(),
-  total: z.number(),
+  user_id: z.number(),
+  address: z.string(),
+  total_price: z.number(),
+  status: z.enum(['pending', 'confirmed', 'delivered', 'cancelled']),
+  order_date: z.date(),
+  user: z.object({
+    id: z.number(),
+    user_name: z.string(),
+    phone: z.string(),
+  }),
+  orderDetails: z.array(orderDetailSchema),
 });
 
 export const usersColumns: ColumnDef<z.infer<typeof userSchema>>[] = [
@@ -68,21 +88,23 @@ export const usersColumns: ColumnDef<z.infer<typeof userSchema>>[] = [
   },
   {
     id: "avatar_url",
+    size: 50,
     header: "Avatar",
-    cell: ({ row }) => row.original.avatar_url ? <Avatar className="w-10 h-10 ">
-      <AvatarImage src={row.original.avatar_url} />
-      <AvatarFallback>CN</AvatarFallback>
-    </Avatar>
-      : <Avatar>
-        <AvatarImage src="https://github.com/shadcn.png" />
-        <AvatarFallback>CN</AvatarFallback>
-      </Avatar>
+    cell: ({ row }) =>
+      row.original.avatar_url ?
+        <Avatar className="w-10 h-10 ">
+          <AvatarImage src={row.original.avatar_url} />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+        :
+        <Avatar>
+          <User className="w-10 h-10" />
+        </Avatar>
   },
   {
     accessorKey: "user_name",
     header: "Name",
-    size: 100,
-
+    size: 150,
     cell: ({ row }) => {
       return <div className="font-medium">{row.original.user_name?.length > 25 ? row.original.user_name?.slice(0, 25) + "..." : row.original.user_name || "-"}</div>
     }
@@ -90,6 +112,7 @@ export const usersColumns: ColumnDef<z.infer<typeof userSchema>>[] = [
   {
     accessorKey: "email",
     header: "Email",
+    size: 150,
     cell: ({ row }) => (
       <div className="w-32">
         <Badge variant="outline" className="text-muted-foreground px-1.5">
@@ -102,6 +125,7 @@ export const usersColumns: ColumnDef<z.infer<typeof userSchema>>[] = [
   {
     id: "phone",
     header: "Phone",
+    size: 75,
     cell: ({ row }) => (
       <div className="w-32">
         <Badge variant="outline" className="text-muted-foreground px-1.5">
@@ -114,6 +138,7 @@ export const usersColumns: ColumnDef<z.infer<typeof userSchema>>[] = [
   {
     accessorKey: "role",
     header: "Role",
+    size: 50,
     cell: ({ row }) => (
       <Badge variant="outline" className={`${row.original.role === "Admin" ? "text-blue-700" : "text-orange-500"} px-1.5`}>
         {row.original.role === "Admin" ? "Admin" : "User"}
@@ -123,6 +148,7 @@ export const usersColumns: ColumnDef<z.infer<typeof userSchema>>[] = [
   {
     accessorKey: "is_active",
     header: "Status",
+    size: 50,
     cell: ({ row }) => (
       <Badge variant="outline" className="text-muted-foreground px-1.5">
         {row.original.is_active === true ? (
@@ -138,6 +164,7 @@ export const usersColumns: ColumnDef<z.infer<typeof userSchema>>[] = [
   {
     id: "actions",
     header: "Actions",
+    size: 300,
     cell: ({ row }) => (
 
       <div className="flex gap-2 flex-wrap" >
@@ -161,6 +188,7 @@ export const productsColumns: ColumnDef<z.infer<typeof productSchema>>[] = [
   {
     id: "product_image_url",
     header: "Image",
+    size: 50,
     cell: ({ row }) => (
       <Avatar className="w-10 h-10">
         <AvatarImage src={row.original.images?.find(image => image.is_main)?.image_url} />
@@ -170,6 +198,7 @@ export const productsColumns: ColumnDef<z.infer<typeof productSchema>>[] = [
   {
     accessorKey: "product_name",
     header: "Name",
+    size: 150,
     cell: ({ row }) => (
       <div className="font-medium">
         {row.original.product_name.length > 30
@@ -181,6 +210,7 @@ export const productsColumns: ColumnDef<z.infer<typeof productSchema>>[] = [
   {
     accessorKey: "price",
     header: "Price",
+    size: 100,
     cell: ({ row }) => (
       <div className=" font-medium text-primary">
         ${row.original.price.toFixed(2)}
@@ -190,6 +220,7 @@ export const productsColumns: ColumnDef<z.infer<typeof productSchema>>[] = [
   {
     accessorKey: "discounted_price",
     header: "Discount",
+    size: 100,
     cell: ({ row }) =>
       row.original.discounted_price ? (
         <div className=" text-green-600 font-medium">
@@ -203,6 +234,7 @@ export const productsColumns: ColumnDef<z.infer<typeof productSchema>>[] = [
   {
     id: "category.category_name",
     header: "Category",
+    size: 100,
     cell: ({ row }) => (
       <Badge variant="outline" className="text-muted-foreground px-1.5">
         {row.original.category?.category_name ?? "Uncategorized"}
@@ -212,6 +244,7 @@ export const productsColumns: ColumnDef<z.infer<typeof productSchema>>[] = [
   {
     accessorKey: "stock",
     header: "Stock",
+    size: 100,
     cell: ({ row }) => (
       <Badge variant="outline" className="text-muted-foreground px-1.5">
         {row.original.stock > 0 ? row.original.stock : <>
@@ -222,6 +255,7 @@ export const productsColumns: ColumnDef<z.infer<typeof productSchema>>[] = [
   {
     id: "actions",
     header: "Actions",
+    size: 250,
     cell: ({ row }) => (
       <div className="flex gap-2">
         <ViewProductModal product={row.original}></ViewProductModal>
@@ -265,154 +299,90 @@ export const categoriesColumns: ColumnDef<z.infer<typeof categorySchema>>[] = [
 ]
 
 
-// export const ordersColumns: ColumnDef<z.infer<typeof orderSchema>>[] = [
-//   {
-//     id: "drag",
-//     header: () => null,
-//     cell: ({ row }) => <DragHandle id={row.index +1} />,
-//   },
-//   {
-//     accessorKey: "header",
-//     header: "Header",
-//     cell: ({ row }) => {
-//       return <TableCellViewer item={row.original} />
-//     },
-//     enableHiding: false,
-//   },
-//   {
-//     accessorKey: "type",
-//     header: "Section Type",
-//     cell: ({ row }) => (
-//       <div className="w-32">
-//         <Badge variant="outline" className="text-muted-foreground px-1.5">
-//           {row.original.type}
-//         </Badge>
-//       </div>
-//     ),
-//   },
-//   {
-//     accessorKey: "status",
-//     header: "Status",
-//     cell: ({ row }) => (
-//       <Badge variant="outline" className="text-muted-foreground px-1.5">
-//         {row.original.status === "Done" ? (
-//           <IconCircleCheckFilled className="fill-green-500 dark:fill-green-400" />
-//         ) : (
-//           <IconLoader />
-//         )}
-//         {row.original.status}
-//       </Badge>
-//     ),
-//   },
-//   {
-//     accessorKey: "target",
-//     header: () => <div className="w-full text-right">Target</div>,
-//     cell: ({ row }) => (
-//       <form
-//         onSubmit={(e) => {
-//           e.preventDefault()
-//           toast.promise(new Promise((resolve) => setTimeout(resolve, 1000)), {
-//             loading: `Saving ${row.original.header}`,
-//             success: "Done",
-//             error: "Error",
-//           })
-//         }}
-//       >
-//         <Label htmlFor={`${row.index +1}-target`} className="sr-only">
-//           Target
-//         </Label>
-//         <Input
-//           className="hover:bg-input/30 focus-visible:bg-background dark:hover:bg-input/30 dark:focus-visible:bg-input/30 h-8 w-16 border-transparent bg-transparent text-right shadow-none focus-visible:border dark:bg-transparent"
-//           defaultValue={row.original.target}
-//           id={`${row.index +1}-target`}
-//         />
-//       </form>
-//     ),
-//   },
-//   {
-//     accessorKey: "limit",
-//     header: () => <div className="w-full text-right">Limit</div>,
-//     cell: ({ row }) => (
-//       <form
-//         onSubmit={(e) => {
-//           e.preventDefault()
-//           toast.promise(new Promise((resolve) => setTimeout(resolve, 1000)), {
-//             loading: `Saving ${row.original.header}`,
-//             success: "Done",
-//             error: "Error",
-//           })
-//         }}
-//       >
-//         <Label htmlFor={`${row.index +1}-limit`} className="sr-only">
-//           Limit
-//         </Label>
-//         <Input
-//           className="hover:bg-input/30 focus-visible:bg-background dark:hover:bg-input/30 dark:focus-visible:bg-input/30 h-8 w-16 border-transparent bg-transparent text-right shadow-none focus-visible:border dark:bg-transparent"
-//           defaultValue={row.original.limit}
-//           id={`${row.index +1}-limit`}
-//         />
-//       </form>
-//     ),
-//   },
-//   {
-//     accessorKey: "reviewer",
-//     header: "Reviewer",
-//     cell: ({ row }) => {
-//       const isAssigned = row.original.reviewer !== "Assign reviewer"
+export const ordersColumns: ColumnDef<z.infer<typeof orderSchema>>[] = [
+  {
+    accessorKey: "id",
+    header: "#",
+    size: 50,
+    cell: ({ row }) => (
+      <div className="text-center">{row.index + 1}</div>
+    ),
+  },
+  {
+    id: "user_name",
+    header: "User Name",
+    size: 100,
+    cell: ({ row }) => <div className="font-medium">{row.original.user?.user_name?.length > 25 ? row.original.user?.user_name?.slice(0, 25) + "..." : row.original.user?.user_name || "-"}</div>,
+  },
+  {
+    accessorKey: "address",
+    header: "Shipping Address",
+    size: 300,
+    cell: ({ row }) => (
+      <div className="max-w-[150px] truncate">{row.original.address.length > 50 ? row.original.address.slice(0, 50) + "..." : row.original.address || "-"}</div>
+    ),
+  },
 
-//       if (isAssigned) {
-//         return row.original.reviewer
-//       }
+  {
+    id: "phone",
+    header: "Phone",
+    size: 100,
+    cell: ({ row }) => (
+      <Badge variant="outline" className="text-muted-foreground px-1.5">
+        <Phone className="w-4 h-4" /> {row.original.user?.phone || "-"}
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: "total_price",
+    header: "Total Price",
+    size: 50,
+    cell: ({ row }) => <div>${row.original.total_price}</div>,
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    size: 50,
+    cell: ({ row }) => (
+      <Badge
+        variant="outline"
+        className={`px-1.5 ${row.original.status === "pending"
+          ? "text-yellow-600"
+          : row.original.status === "delivered"
+            ? "text-green-600"
+            : row.original.status === "cancelled"
+              ? "text-red-500"
+              : "text-blue-600"
+          }`}
+      >
+        {row.original.status}
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: "created_at",
+    header: "Order At",
+    size: 50,
+    cell: ({ row }) => {
+      const date = new Date(row.original.order_date);
+      return <div>{date.toLocaleDateString()}</div>;
+    },
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    size: 250,
+    cell: ({ row }) => (
+      <div className="flex gap-2">
+        <ViewOrderModal order={row.original}></ViewOrderModal>
+        {/* <ViewOrderModal order={row.original}></ViewOrderModal>
+        <EditOrderModal order={row.original}></EditOrderModal>
+        <DeleteOrderModal order={row.original}></DeleteOrderModal> */}
+      </div>
+    ),
+  },
+];
 
-//       return (
-//         <>
-//           <Label htmlFor={`${row.index +1}-reviewer`} className="sr-only">
-//             Reviewer
-//           </Label>
-//           <Select>
-//             <SelectTrigger
-//               className="w-38 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate"
-//               size="sm"
-//               id={`${row.index +1}-reviewer`}
-//             >
-//               <SelectValue placeholder="Assign reviewer" />
-//             </SelectTrigger>
-//             <SelectContent align="end">
-//               <SelectItem value="Eddie Lake">Eddie Lake</SelectItem>
-//               <SelectItem value="Jamik Tashpulatov">
-//                 Jamik Tashpulatov
-//               </SelectItem>
-//             </SelectContent>
-//           </Select>
-//         </>
-//       )
-//     },
-//   },
-//   {
-//     id: "actions",
-//     cell: () => (
-//       <DropdownMenu>
-//         <DropdownMenuTrigger asChild>
-//           <Button
-//             variant="ghost"
-//             className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-//             size="icon"
-//           >
-//             <IconDotsVertical />
-//             <span className="sr-only">Open menu</span>
-//           </Button>
-//         </DropdownMenuTrigger>
-//         <DropdownMenuContent align="end" className="w-32">
-//           <DropdownMenuItem>Edit</DropdownMenuItem>
-//           <DropdownMenuItem>Make a copy</DropdownMenuItem>
-//           <DropdownMenuItem>Favorite</DropdownMenuItem>
-//           <DropdownMenuSeparator />
-//           <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
-//         </DropdownMenuContent>
-//       </DropdownMenu>
-//     ),
-//   },
-// ]
 
 
 export type TableType = keyof typeof schemaMap
@@ -429,12 +399,12 @@ export const schemaMap = {
   users: userSchema,
   products: productSchema,
   categories: categorySchema,
-  // orders: orderSchema,
+  orders: orderSchema,
 }
 
 export const columnsMap = {
   users: usersColumns,
   products: productsColumns,
   categories: categoriesColumns,
-  // orders: ordersColumns,
+  orders: ordersColumns,
 }

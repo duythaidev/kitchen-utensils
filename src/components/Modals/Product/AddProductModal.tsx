@@ -14,12 +14,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from 'uuid';
 import CustomModalBox from "../CustomModalBox";
-import CustomButton from "@/components/Custom/CustomButton"; 
-import { handleCreateProductAction, handleCreateProductImageAction } from "@/actions/admin.product.action"; 
+import CustomButton from "@/components/Custom/CustomButton";
+import { handleCreateProductAction, handleCreateProductImageAction } from "@/actions/admin.product.action";
 import { useSession } from "next-auth/react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { fetchCategories } from "@/actions/client-api";
-import { ICategory, IProduct } from "@/types/product";
+import { ICategory, IProduct } from "@/types";
 
 const AddProductModal = () => {
     const [open, setOpen] = useState(false);
@@ -218,7 +218,7 @@ const AddProductModal = () => {
                     </div>
                     <div className="grid gap-3">
                         <Label>Category</Label>
-                        <Select 
+                        <Select
 
                             onValueChange={(val) => setProductData({ ...productData, category_id: val === "0" ? null : parseInt(val) })}
                         >
@@ -237,7 +237,7 @@ const AddProductModal = () => {
                             )}
                         </Select>
                     </div>
-                    
+
                     <div className="grid gap-3">
                         <Label>Description</Label>
                         <Input

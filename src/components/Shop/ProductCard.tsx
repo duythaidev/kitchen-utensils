@@ -1,5 +1,5 @@
 'use client';
-import { IProduct } from "@/types/product";
+import { IProduct } from "@/types";
 import { Eye, ShoppingBag, Star, StarHalf } from "lucide-react";
 import Link from "next/link";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
@@ -119,9 +119,9 @@ const ProductCard = ({ product }: { product: IProduct }) => {
 
                 <div className=" mt-4 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-2">
-                        
+
                         <p className="text-2xl font-extrabold leading-tight text-dark ">${product?.discounted_price || product?.price}</p>
-                        
+
                         {product?.discounted_price && product?.discounted_price > 0 && product?.discounted_price < product?.price && (
                             <p className="text-xl line-through font-extrabold leading-tight text-gray-500 ">
                                 ${product?.price}

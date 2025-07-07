@@ -98,6 +98,7 @@ export function DataTable<T extends TableType>({ data, type }: DataTableProps<T>
     users: <AddUserModal />,
     products: <AddProductModal />,
     categories: <AddCategoryModal />,
+    // orders: <AddOrderModal />,
   }[type]
 
 
@@ -238,7 +239,7 @@ export function DataTable<T extends TableType>({ data, type }: DataTableProps<T>
                 <TableRow key={headerGroup.id} >
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead style={header.id === "id" ? { width: `${header.getSize()}px`, textAlign: "center" } : {}}
+                      <TableHead style={header.id === "id" ? { width: `${header.getSize()}px`, textAlign: "center" } : {width: `${header.getSize()}px`,}}
                         className={`${(header.id === "user_name") ? "w-[160px]" : ""} ${header.id === "product_image_url" ? "w-[50px]" : ""} ${header.id === "index" ? "w-[50px]" : ""}`} key={header.id} colSpan={header.colSpan}>
                         {header.isPlaceholder
                           ? null

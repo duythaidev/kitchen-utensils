@@ -1,5 +1,5 @@
 'use client'
-import { IProduct } from "@/types/product";
+import { IProduct } from "@/types";
 import { Minus, Plus, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import { Input } from "../ui/input";
@@ -12,7 +12,7 @@ const PreviewProductModal = ({ product, setOpen }: { product?: IProduct, setOpen
     const [quantity, setQuantity] = useState(1);
     const session = useSession();
     const handleAddToCart = async () => {
-        
+
         const accessToken = session?.data?.user?.accessToken;
 
         if (!product?.id || !accessToken) {

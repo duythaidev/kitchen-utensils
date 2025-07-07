@@ -16,7 +16,7 @@ import CustomModalBox from "../CustomModalBox";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { IProduct } from "@/types/product";
+import { IProduct } from "@/types";
 
 const ViewProductModal = ({ product }: { product: IProduct }) => {
 

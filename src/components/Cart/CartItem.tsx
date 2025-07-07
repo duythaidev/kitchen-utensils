@@ -1,5 +1,5 @@
 'use client';
-import { ICartItem, IProduct } from "@/types/product";
+import { ICartItem, IProduct } from "@/types";
 import { Check, CircleAlert, CircleX, Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
