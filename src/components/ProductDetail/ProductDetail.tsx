@@ -1,15 +1,18 @@
 'use client'
 
 import { IProduct, IReview } from "@/types/product"
-import { LoaderCircle, Minus, Plus, ShoppingCart, Star, StarHalf, UserRoundIcon } from "lucide-react"
-import { useEffect, useState } from "react"
+import { Circle, CircleX, LoaderCircle, Minus, Plus, ShoppingCart, Star, StarHalf, UserRoundIcon } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
 import { Input } from "../ui/input"
 import Image from "next/image"
 import { useSession } from "next-auth/react"
 import { toast } from "sonner"
-import { addReview, addToCart } from "@/actions/user.action"
+import { addReview, addToCart, deleteReview } from "@/actions/user.action"
 import CustomButton from "../Custom/CustomButton"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import { Button } from "../ui/button"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 const tabs = [
     {
         id: "tabOne",
@@ -21,6 +24,41 @@ const tabs = [
     },
 ]
 
+//     {
+//         "id": 2,
+//         "user_id": 6,
+//         "user": {
+//             "id": 6,
+//             "email": "trolleverythig@gmail.com",
+//             "password": "",
+//             "user_name": "Jj Greatas",
+//             "is_active": true,
+//             "address": "ajsdhgad",
+//             "phone": "",
+//             "role": "user",
+//             "auth_provider": "google",
+//             "avatar_url": "https://i.ibb.co/z34TP8h/36f16d4a365e.jpg",
+//             "created_at": "2025-07-05T21:21:01.338Z",
+//             "updated_at": "2025-07-05T21:59:27.000Z"
+//         },
+//         "product_id": 1,
+//         "product": {
+//             "id": 1,
+//             "product_name": "asdasda",
+//             "price": 1001,
+//             "stock": 100,
+//             "discounted_price": 6,
+//             "description": "asjdasdhjad",
+//             "category_id": 3,
+//             "created_at": "2025-07-04T02:23:54.596Z",
+//             "updated_at": "2025-07-05T06:47:22.000Z"
+//         },
+//         "rating": "5.0",
+//         "comment": "asdjashdasd",
+//         "created_at": "2025-07-07T01:34:08.918Z",
+//         "updated_at": "2025-07-07T01:34:08.918Z"
+//     }
+// ]
 
 const ProductDetailPage = ({ product, reviews }: { product: IProduct, reviews?: IReview[] }) => {
     const [quantity, setQuantity] = useState(1)
@@ -29,6 +67,7 @@ const ProductDetailPage = ({ product, reviews }: { product: IProduct, reviews?: 
     const [rating, setRating] = useState(5)
     const [isLoading, setIsLoading] = useState(false)
     const session = useSession()
+    const reviewRef = useRef<HTMLDivElement>(null)
 
     const [comment, setComment] = useState("")
 
@@ -74,6 +113,21 @@ const ProductDetailPage = ({ product, reviews }: { product: IProduct, reviews?: 
             toast.error(res.message)
         }
         setIsLoading(false)
+    }
+    const [open, setOpen] = useState(false)
+
+    const handleDeleteReview = async () => {
+
+        if (!session.data?.user?.accessToken) {
+            toast.error("Please login to add review")
+            return
+        }
+        const res = await deleteReview(product.id, session.data?.user?.accessToken)
+        if (res.success) {
+            toast.success("Review deleted")
+        } else {
+            toast.error(res.message)
+        }
     }
 
     return (
@@ -121,23 +175,11 @@ const ProductDetailPage = ({ product, reviews }: { product: IProduct, reviews?: 
 
                         {/* Reviews */}
                         <div className="mt-6 flex items-center">
-                            <div className="relative">
-                                <div className="flex gap-2">
-                                    {Array.from({ length: 5 }, (_, index) => (
-                                        <Star key={index} fill="gray" strokeWidth={0} color="gray" />
-                                    ))}
-                                </div>
-                                <div className="absolute top-0 flex gap-2 ">
-                                    <Star fill="#FBB040" strokeWidth={2} color="#FBB040" />
-                                    <Star fill="#FBB040" strokeWidth={2} color="#FBB040" />
-                                    <StarHalf fill="#FBB040" strokeWidth={2} color="#FBB040" />
-                                </div>
-                            </div>
-                            <svg className="w-5 h-5 text-gray-200" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M10.868 2.884c..." />
-                            </svg>
-                            <a href="#" className="ml-3 text-sm text-indigo-600 hover:underline">
-                                117 reviews
+                            <StarRating rating={Number(4.5)} />
+
+                            <a onClick={() => reviewRef.current?.scrollIntoView({ behavior: "smooth" })}
+                                className="ml-3 text-sm text-indigo-600 hover:underline">
+                                {reviews?.length} reviews
                             </a>
                         </div>
 
@@ -187,6 +229,8 @@ const ProductDetailPage = ({ product, reviews }: { product: IProduct, reviews?: 
                             </div>
                         </div>
 
+
+
                         {/* Add to Cart */}
                         <button
                             onClick={handleAddToCart}
@@ -225,129 +269,102 @@ const ProductDetailPage = ({ product, reviews }: { product: IProduct, reviews?: 
                     )}
                     {activeTab === "tabOne" && (
                         <div>
-                            <div
-                                className={`flex-col sm:flex-row gap-7.5 xl:gap-12.5 mt-12.5 ${activeTab === "tabOne" ? "flex" : "hidden"
-                                    }`}
-                            >
+                            <div ref={reviewRef} className={`flex-col sm:flex-row gap-7.5 xl:gap-12.5 mt-12.5 ${activeTab === "tabOne" ? "flex" : "hidden"}`} >
                                 <div className="max-w-[570px] w-full">
                                     <h2 className="font-medium text-2xl text-dark mb-9">
-                                        03 Review for this product
+                                        {reviews?.length} Review for this product
                                     </h2>
 
                                     <div className="flex flex-col gap-6">
                                         {/* <!-- review item --> */}
-                                        <div className="rounded-xl bg-white shadow-1 p-4 sm:p-6">
-                                            <div className="flex items-center justify-between">
-                                                <a href="#" className="flex items-center gap-4">
-                                                    <div className="rounded-full overflow-hidden">
-                                                        <Avatar>
-                                                            <AvatarImage src={session.data?.user?.avatar_url || ""} />
-                                                            <AvatarFallback>
-                                                                <UserRoundIcon className="w-4 h-4" />
-                                                            </AvatarFallback>
-                                                        </Avatar>
+                                        {
+                                            reviews?.map((review) => (
+                                                <div className="rounded-xl bg-white shadow-1 p-4 sm:p-6">
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex items-center gap-4">
+                                                            <div className="rounded-full overflow-hidden">
+                                                                <Avatar>
+                                                                    <AvatarImage src={review.user.avatar_url || ""} />
+                                                                    <AvatarFallback>
+                                                                        <UserRoundIcon className="w-4 h-4" />
+                                                                    </AvatarFallback>
+                                                                </Avatar>
+                                                            </div>
+
+                                                            <div>
+                                                                <h3 className="font-medium text-dark">
+                                                                    {review.user.user_name}
+                                                                </h3>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="flex items-center gap-1">
+                                                            <StarRating rating={Number(4.5)} />
+                                                        </div>
                                                     </div>
 
-                                                    <div>
-                                                        <h3 className="font-medium text-dark">
-                                                            {session.data?.user?.user_name}
-                                                        </h3>
+                                                    <p className="text-dark mt-6">
+                                                        {review.comment}
+                                                    </p>
 
-                                                    </div>
-                                                </a>
-
-                                                <div className="flex items-center gap-1">
-                                                    <span className="cursor-pointer text-[#FBB040]">
-                                                        <svg
-                                                            className="fill-current"
-                                                            width="15"
-                                                            height="16"
-                                                            viewBox="0 0 15 16"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                        >
-                                                            <path
-                                                                d="M14.6604 5.90785L9.97461 5.18335L7.85178 0.732874C7.69645 0.422375 7.28224 0.422375 7.12691 0.732874L5.00407 5.20923L0.344191 5.90785C0.0076444 5.9596 -0.121797 6.39947 0.137085 6.63235L3.52844 10.1255L2.72591 15.0158C2.67413 15.3522 3.01068 15.6368 3.32134 15.4298L7.54112 13.1269L11.735 15.4298C12.0198 15.5851 12.3822 15.3263 12.3046 15.0158L11.502 10.1255L14.8934 6.63235C15.1005 6.39947 14.9969 5.9596 14.6604 5.90785Z"
-                                                                fill=""
-                                                            />
-                                                        </svg>
-                                                    </span>
-
-                                                    <span className="cursor-pointer text-[#FBB040]">
-                                                        <svg
-                                                            className="fill-current"
-                                                            width="15"
-                                                            height="16"
-                                                            viewBox="0 0 15 16"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                        >
-                                                            <path
-                                                                d="M14.6604 5.90785L9.97461 5.18335L7.85178 0.732874C7.69645 0.422375 7.28224 0.422375 7.12691 0.732874L5.00407 5.20923L0.344191 5.90785C0.0076444 5.9596 -0.121797 6.39947 0.137085 6.63235L3.52844 10.1255L2.72591 15.0158C2.67413 15.3522 3.01068 15.6368 3.32134 15.4298L7.54112 13.1269L11.735 15.4298C12.0198 15.5851 12.3822 15.3263 12.3046 15.0158L11.502 10.1255L14.8934 6.63235C15.1005 6.39947 14.9969 5.9596 14.6604 5.90785Z"
-                                                                fill=""
-                                                            />
-                                                        </svg>
-                                                    </span>
-
-                                                    <span className="cursor-pointer text-[#FBB040]">
-                                                        <svg
-                                                            className="fill-current"
-                                                            width="15"
-                                                            height="16"
-                                                            viewBox="0 0 15 16"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                        >
-                                                            <path
-                                                                d="M14.6604 5.90785L9.97461 5.18335L7.85178 0.732874C7.69645 0.422375 7.28224 0.422375 7.12691 0.732874L5.00407 5.20923L0.344191 5.90785C0.0076444 5.9596 -0.121797 6.39947 0.137085 6.63235L3.52844 10.1255L2.72591 15.0158C2.67413 15.3522 3.01068 15.6368 3.32134 15.4298L7.54112 13.1269L11.735 15.4298C12.0198 15.5851 12.3822 15.3263 12.3046 15.0158L11.502 10.1255L14.8934 6.63235C15.1005 6.39947 14.9969 5.9596 14.6604 5.90785Z"
-                                                                fill=""
-                                                            />
-                                                        </svg>
-                                                    </span>
-
-                                                    <span className="cursor-pointer text-[#FBB040]">
-                                                        <svg
-                                                            className="fill-current"
-                                                            width="15"
-                                                            height="16"
-                                                            viewBox="0 0 15 16"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                        >
-                                                            <path
-                                                                d="M14.6604 5.90785L9.97461 5.18335L7.85178 0.732874C7.69645 0.422375 7.28224 0.422375 7.12691 0.732874L5.00407 5.20923L0.344191 5.90785C0.0076444 5.9596 -0.121797 6.39947 0.137085 6.63235L3.52844 10.1255L2.72591 15.0158C2.67413 15.3522 3.01068 15.6368 3.32134 15.4298L7.54112 13.1269L11.735 15.4298C12.0198 15.5851 12.3822 15.3263 12.3046 15.0158L11.502 10.1255L14.8934 6.63235C15.1005 6.39947 14.9969 5.9596 14.6604 5.90785Z"
-                                                                fill=""
-                                                            />
-                                                        </svg>
-                                                    </span>
-
-                                                    <span className="cursor-pointer text-[#FBB040]">
-                                                        <svg
-                                                            className="fill-current"
-                                                            width="15"
-                                                            height="16"
-                                                            viewBox="0 0 15 16"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                        >
-                                                            <path
-                                                                d="M14.6604 5.90785L9.97461 5.18335L7.85178 0.732874C7.69645 0.422375 7.28224 0.422375 7.12691 0.732874L5.00407 5.20923L0.344191 5.90785C0.0076444 5.9596 -0.121797 6.39947 0.137085 6.63235L3.52844 10.1255L2.72591 15.0158C2.67413 15.3522 3.01068 15.6368 3.32134 15.4298L7.54112 13.1269L11.735 15.4298C12.0198 15.5851 12.3822 15.3263 12.3046 15.0158L11.502 10.1255L14.8934 6.63235C15.1005 6.39947 14.9969 5.9596 14.6604 5.90785Z"
-                                                                fill=""
-                                                            />
-                                                        </svg>
-                                                    </span>
+                                                    {/* Delete Review */}
+                                                    {
+                                                        review.user.email === session.data?.user?.email && (
+                                                            <div className="flex justify-end">
+                                                                <Popover open={open} onOpenChange={setOpen}>
+                                                                    <TooltipProvider>
+                                                                        <Tooltip>
+                                                                            <PopoverTrigger asChild>
+                                                                                <TooltipTrigger asChild>
+                                                                                    <button
+                                                                                        onClick={() => setOpen(true)}
+                                                                                        aria-label="button for remove product from wishlist"
+                                                                                        className="flex cursor-pointer items-center  justify-center rounded-md w-[40px] h-[40px] bg-gray-100 border border-gray-300 ease-out duration-200 hover:bg-red-200 hover:border-red-400 hover:text-red-600"
+                                                                                    >
+                                                                                        <CircleX className="w-5 h-5" />
+                                                                                    </button>
+                                                                                </TooltipTrigger>
+                                                                            </PopoverTrigger>
+                                                                            <TooltipContent>
+                                                                                Delete Review
+                                                                            </TooltipContent>
+                                                                        </Tooltip>
+                                                                    </TooltipProvider>
+                                                                    <PopoverContent className="w-[120px]">
+                                                                        <p className="text-sm mb-2">
+                                                                            Are you sure?
+                                                                        </p>
+                                                                        <div className="flex items-center justify-center gap-1">
+                                                                            <Button
+                                                                                onClick={handleDeleteReview}
+                                                                                aria-label="button for remove product from wishlist"
+                                                                                className="cursor-pointer"
+                                                                                variant="destructive"
+                                                                                size={"sm"}
+                                                                            >
+                                                                                Yes
+                                                                            </Button>
+                                                                            <Button onClick={() => setOpen(false)}
+                                                                                aria-label="button for remove product from wishlist"
+                                                                                variant="outline"
+                                                                                className="cursor-pointer"
+                                                                                size={"sm"}
+                                                                            >
+                                                                                No
+                                                                            </Button>
+                                                                        </div>
+                                                                    </PopoverContent>
+                                                                </Popover>
+                                                            </div>
+                                                        )
+                                                    }
                                                 </div>
-                                            </div>
-
-                                            <p className="text-dark mt-6">
-                                                “Lorem ipsum dolor sit amet, adipiscing elit. Donec
-                                                malesuada justo vitaeaugue suscipit beautiful
-                                                vehicula’’
-                                            </p>
-                                        </div>
+                                            ))
+                                        }
 
                                         {/* <!-- review item --> */}
-                                        <div className="rounded-xl bg-white shadow-1 p-4 sm:p-6">
+                                        {/* <div className="rounded-xl bg-white shadow-1 p-4 sm:p-6">
                                             <div className="flex items-center justify-between">
                                                 <a href="#" className="flex items-center gap-4">
                                                     <div className="w-12.5 h-12.5 rounded-full overflow-hidden">
@@ -458,124 +475,12 @@ const ProductDetailPage = ({ product, reviews }: { product: IProduct, reviews?: 
                                                 malesuada justo vitaeaugue suscipit beautiful
                                                 vehicula’’
                                             </p>
-                                        </div>
+                                        </div> */}
 
-                                        {/* <!-- review item --> */}
-                                        <div className="rounded-xl bg-white shadow-1 p-4 sm:p-6">
-                                            <div className="flex items-center justify-between">
-                                                <a href="#" className="flex items-center gap-4">
-                                                    <div className="w-12.5 h-12.5 rounded-full overflow-hidden">
-                                                        <Image
-                                                            src="https://placehold.jp/250x500.png"
-                                                            alt="author"
-                                                            className="w-12.5 h-12.5 rounded-full overflow-hidden"
-                                                            width={50}
-                                                            height={50}
-                                                        />
-                                                    </div>
-
-                                                    <div>
-                                                        <h3 className="font-medium text-dark">
-                                                            Davis Dorwart
-                                                        </h3>
-                                                        <p className="text-custom-sm">
-                                                            Serial Entrepreneur
-                                                        </p>
-                                                    </div>
-                                                </a>
-
-                                                <div className="flex items-center gap-1">
-                                                    <span className="cursor-pointer text-[#FBB040]">
-                                                        <svg
-                                                            className="fill-current"
-                                                            width="15"
-                                                            height="16"
-                                                            viewBox="0 0 15 16"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                        >
-                                                            <path
-                                                                d="M14.6604 5.90785L9.97461 5.18335L7.85178 0.732874C7.69645 0.422375 7.28224 0.422375 7.12691 0.732874L5.00407 5.20923L0.344191 5.90785C0.0076444 5.9596 -0.121797 6.39947 0.137085 6.63235L3.52844 10.1255L2.72591 15.0158C2.67413 15.3522 3.01068 15.6368 3.32134 15.4298L7.54112 13.1269L11.735 15.4298C12.0198 15.5851 12.3822 15.3263 12.3046 15.0158L11.502 10.1255L14.8934 6.63235C15.1005 6.39947 14.9969 5.9596 14.6604 5.90785Z"
-                                                                fill=""
-                                                            />
-                                                        </svg>
-                                                    </span>
-
-                                                    <span className="cursor-pointer text-[#FBB040]">
-                                                        <svg
-                                                            className="fill-current"
-                                                            width="15"
-                                                            height="16"
-                                                            viewBox="0 0 15 16"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                        >
-                                                            <path
-                                                                d="M14.6604 5.90785L9.97461 5.18335L7.85178 0.732874C7.69645 0.422375 7.28224 0.422375 7.12691 0.732874L5.00407 5.20923L0.344191 5.90785C0.0076444 5.9596 -0.121797 6.39947 0.137085 6.63235L3.52844 10.1255L2.72591 15.0158C2.67413 15.3522 3.01068 15.6368 3.32134 15.4298L7.54112 13.1269L11.735 15.4298C12.0198 15.5851 12.3822 15.3263 12.3046 15.0158L11.502 10.1255L14.8934 6.63235C15.1005 6.39947 14.9969 5.9596 14.6604 5.90785Z"
-                                                                fill=""
-                                                            />
-                                                        </svg>
-                                                    </span>
-
-                                                    <span className="cursor-pointer text-[#FBB040]">
-                                                        <svg
-                                                            className="fill-current"
-                                                            width="15"
-                                                            height="16"
-                                                            viewBox="0 0 15 16"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                        >
-                                                            <path
-                                                                d="M14.6604 5.90785L9.97461 5.18335L7.85178 0.732874C7.69645 0.422375 7.28224 0.422375 7.12691 0.732874L5.00407 5.20923L0.344191 5.90785C0.0076444 5.9596 -0.121797 6.39947 0.137085 6.63235L3.52844 10.1255L2.72591 15.0158C2.67413 15.3522 3.01068 15.6368 3.32134 15.4298L7.54112 13.1269L11.735 15.4298C12.0198 15.5851 12.3822 15.3263 12.3046 15.0158L11.502 10.1255L14.8934 6.63235C15.1005 6.39947 14.9969 5.9596 14.6604 5.90785Z"
-                                                                fill=""
-                                                            />
-                                                        </svg>
-                                                    </span>
-
-                                                    <span className="cursor-pointer text-[#FBB040]">
-                                                        <svg
-                                                            className="fill-current"
-                                                            width="15"
-                                                            height="16"
-                                                            viewBox="0 0 15 16"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                        >
-                                                            <path
-                                                                d="M14.6604 5.90785L9.97461 5.18335L7.85178 0.732874C7.69645 0.422375 7.28224 0.422375 7.12691 0.732874L5.00407 5.20923L0.344191 5.90785C0.0076444 5.9596 -0.121797 6.39947 0.137085 6.63235L3.52844 10.1255L2.72591 15.0158C2.67413 15.3522 3.01068 15.6368 3.32134 15.4298L7.54112 13.1269L11.735 15.4298C12.0198 15.5851 12.3822 15.3263 12.3046 15.0158L11.502 10.1255L14.8934 6.63235C15.1005 6.39947 14.9969 5.9596 14.6604 5.90785Z"
-                                                                fill=""
-                                                            />
-                                                        </svg>
-                                                    </span>
-
-                                                    <span className="cursor-pointer text-[#FBB040]">
-                                                        <svg
-                                                            className="fill-current"
-                                                            width="15"
-                                                            height="16"
-                                                            viewBox="0 0 15 16"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                        >
-                                                            <path
-                                                                d="M14.6604 5.90785L9.97461 5.18335L7.85178 0.732874C7.69645 0.422375 7.28224 0.422375 7.12691 0.732874L5.00407 5.20923L0.344191 5.90785C0.0076444 5.9596 -0.121797 6.39947 0.137085 6.63235L3.52844 10.1255L2.72591 15.0158C2.67413 15.3522 3.01068 15.6368 3.32134 15.4298L7.54112 13.1269L11.735 15.4298C12.0198 15.5851 12.3822 15.3263 12.3046 15.0158L11.502 10.1255L14.8934 6.63235C15.1005 6.39947 14.9969 5.9596 14.6604 5.90785Z"
-                                                                fill=""
-                                                            />
-                                                        </svg>
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            <p className="text-dark mt-6">
-                                                “Lorem ipsum dolor sit amet, adipiscing elit. Donec
-                                                malesuada justo vitaeaugue suscipit beautiful
-                                                vehicula’’
-                                            </p>
-                                        </div>
                                     </div>
                                 </div>
 
+                                {/* Add a Review */}
                                 <div className="max-w-[550px] w-full">
                                     <h2 className="font-medium text-2xl text-dark mb-3.5">
                                         Add a Review
@@ -587,7 +492,7 @@ const ProductDetailPage = ({ product, reviews }: { product: IProduct, reviews?: 
 
                                     <div className="flex items-center gap-3 mb-7.5">
                                         <span>Your Rating*</span>
-                                        <StarRating rating={rating} onChange={setRating} />
+                                        <StarRatingSelect rating={rating} onChange={setRating} />
                                     </div>
 
                                     <div className="rounded-xl bg-white shadow-1 p-4 sm:p-6">
@@ -647,7 +552,7 @@ const ProductDetailPage = ({ product, reviews }: { product: IProduct, reviews?: 
     )
 }
 
-const StarRating = ({ rating, onChange, }: { rating: number, onChange: (value: number) => void }) => {
+const StarRatingSelect = ({ rating, onChange, }: { rating: number, onChange: (value: number) => void }) => {
     const [hover, setHover] = useState<number | null>(null)
 
     const handleMouseMove = (index: number, e: React.MouseEvent) => {
@@ -708,5 +613,42 @@ const StarRating = ({ rating, onChange, }: { rating: number, onChange: (value: n
         </div>
     )
 }
+const StarRating = ({ rating, }: { rating: number }) => {
+    const displayRating = rating
+
+    return (
+        <div className="relative flex gap-1">
+            {Array.from({ length: 5 }, (_, index) => {
+                return (
+                    <Star key={index} fill="gray" color="gray" strokeWidth={2} />
+                )
+            })}
+            <div className="flex gap-1 absolute">
+
+                {Array.from({ length: 5 }, (_, index) => {
+                    const full = index + 1 <= displayRating
+                    const half = !full && index + 0.5 <= displayRating
+
+                    return (
+                        <div
+                            key={index}
+                            className="cursor-pointer top-0 left-0"
+                        >
+                            {full ? (
+                                <Star fill="#FBB040" color="#FBB040" strokeWidth={2} />
+                            ) : half ? (
+                                <StarHalf fill="#FBB040" color="#FBB040" strokeWidth={2} />
+                            ) : (
+                                <Star fill="gray" color="gray" strokeWidth={2} />
+                            )}
+                        </div>
+                    )
+                })}
+            </div>
+        </div>
+    )
+}
+
+
 
 export default ProductDetailPage

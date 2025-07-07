@@ -98,11 +98,11 @@ const Header = () => {
             <div>
               <p className="text-gray-500  text-xs uppercase">Account</p>
               {session?.user ?
-                <HoverLink link="profile" className="text-dark font-medium hover:text-blue-500">
+                <HoverLink link="/profile" className="text-dark font-medium hover:text-blue-500">
                   {session?.user.user_name ? ((session?.user.user_name.length > 10) ? session?.user.user_name.slice(0, 10) + '...' : session?.user.user_name) : 'No name'}
                 </HoverLink>
                 :
-                <HoverLink link="login" className="text-dark font-medium hover:text-blue-500">
+                <HoverLink link="/login" className="text-dark font-medium hover:text-blue-500">
                   Log in
                 </HoverLink>
               }

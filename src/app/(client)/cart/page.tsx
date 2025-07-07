@@ -14,7 +14,6 @@ const page = async () => {
         },
     })
     const profile = await resprofile.json()
-    console.log("profile", profile)
     const res = await fetch(`${process.env.BACKEND_API}/carts/me`, {
         method: "GET",
         headers: {

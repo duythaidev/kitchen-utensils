@@ -25,9 +25,9 @@ export default async function Page({ params, }: { params: Promise<{ productId: s
     },
   })
 
-  console.log("productid", productId)
   const productData = await productRes.json()
   const reviewsData = await reviewsRes.json()
+  console.log("reviewsData", reviewsData)
   return (
     <>
       <ProductDetailPage product={productData} reviews={reviewsData}></ProductDetailPage>

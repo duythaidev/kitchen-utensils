@@ -31,12 +31,40 @@ export async function addReview(productId: number, rating: number, comment: stri
     try {
         const res = await fetch(`${process.env.BACKEND_API}/reviews`, {
             method: "POST",
-            body: JSON.stringify({ productId, rating, comment }),
+            body: JSON.stringify({ product_id: productId, rating, comment }),
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
             }
         });
+
+        // console.log(res)
+
+        if (!res.ok) {
+            const errorData = await res.json();
+            return { success: false, message: errorData.message || 'Server error' };
+        }
+
+        revalidateTag("list-reviews");
+        const data = await res.json();
+        return { success: true, message: "Review added", data };
+    } catch (error: any) {
+        console.error("addReview Error:", error);
+        return { success: false, message: error.message || "Network error" };
+    }
+}
+export async function deleteReview(productId: number, accessToken: string) {
+    try {
+        const res = await fetch(`${process.env.BACKEND_API}/reviews`, {
+            method: "DELETE",
+            body: JSON.stringify({ product_id: productId }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+
+        // console.log(res)
 
         if (!res.ok) {
             const errorData = await res.json();
