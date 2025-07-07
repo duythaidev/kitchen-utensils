@@ -10,37 +10,36 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import CustomModalBox from "../CustomModalBox";
-// import { , OrderDetail } from "@/types/index"; // tự định nghĩa type
-
-import { IProduct, IOrder, IOrderDetail } from "@/types";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { IOrder, IOrderDetail } from "@/types";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-const ViewOrderModal = ({ order }: { order: IOrder }) => {
+const ViewOrderModal = ({ order, isAdmin, title }: { order: IOrder, isAdmin: boolean, title: string }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="text-blue-700">
+        <Button variant="outline" className="cursor-pointer text-blue-700">
           <Eye className="w-4 h-4 mr-1" />
-          View
+          {title}
         </Button>
       </DialogTrigger>
       <CustomModalBox>
-        <DialogHeader>
+        <DialogHeader className="sr-only">
           <DialogTitle>Order Details</DialogTitle>
           <DialogDescription>
             View order details and ordered products below.
           </DialogDescription>
         </DialogHeader>
-        <ViewOrderModalContent order={order} />
+        <ViewOrderModalContent order={order} isAdmin={isAdmin} />
       </CustomModalBox>
     </Dialog>
   );
 };
 
-const ViewOrderModalContent = ({ order }: { order: IOrder }) => {
+const ViewOrderModalContent = ({ order, isAdmin }: { order: IOrder, isAdmin: boolean }) => {
+  // console.log(order)
   return (
     <div className="grid gap-6">
       {/* Thông tin cơ bản */}
@@ -49,47 +48,76 @@ const ViewOrderModalContent = ({ order }: { order: IOrder }) => {
         <Input disabled value={order.address} />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="grid gap-3">
-          <Label>Total Price</Label>
-          <Input disabled value={"$" + order.total_price} />
+      {
+        isAdmin &&
+        <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-3">
+            <Label>Total Price</Label>
+            <Input disabled value={"$" + order.total_price} />
+          </div>
+          <div className="grid gap-3">
+            <Label>Status</Label>
+            <Badge
+              variant="outline"
+              className={`px-1.5 ${order.status === "pending"
+                ? "text-yellow-600"
+                : order.status === "delivered"
+                  ? "text-green-600"
+                  : order.status === "cancelled"
+                    ? "text-red-500"
+                    : "text-blue-600"
+                }`}
+            >
+              {order.status}
+            </Badge>
+          </div>
+          <div className="grid gap-3 col-span-2">
+            <Label>Order At</Label>
+            <Input disabled value={new Date(order.created_at).toLocaleDateString()} />
+          </div>
         </div>
-        <div className="grid gap-3">
-          <Label>Status</Label>
-          <Badge variant="outline" className="px-2 py-1 w-fit">
-            {order.status}
-          </Badge>
-        </div>
-        <div className="grid gap-3 col-span-2">
-          <Label>Order At</Label>
-          <Input disabled value={new Date(order.order_date).toLocaleString()} />
-        </div>
-      </div>
+      }
 
       {/* Danh sách sản phẩm */}
-      <div className="grid gap-3">
+      <div className="grid gap-4">
         <Label>Ordered Products</Label>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid gap-3">
           {order.orderDetails?.map((item: IOrderDetail) => (
-            <Card key={item.id} className="w-full">
-              <CardHeader>
-                <img
-                  src={item.product?.images?.[0]?.image_url}
-                  alt={item.product?.product_name}
-                  className="w-full h-[160px] object-cover rounded"
-                />
-              </CardHeader>
-              <CardContent className="grid gap-1 text-sm">
-                <div className="font-semibold">
-                  {item.product?.product_name || "Unnamed product"}
+            <div key={item.id}
+              className="flex items-center flex-wrap justify-between gap-4 border p-3 rounded-md"
+            >
+              {/* Avatar ảnh sản phẩm */}
+              <div className="flex items-center gap-3">
+                <Avatar className="w-12 h-12 rounded-md">
+                  <AvatarImage
+                    src={
+                      item.product?.images?.find((img) => img.image_url)?.image_url ||
+                      "https://via.placeholder.com/40"
+                    }
+                    alt={item.product?.product_name || "Product"}
+                  />
+                  <AvatarFallback>IMG</AvatarFallback>
+                </Avatar>
+
+                {/* Thông tin sản phẩm */}
+                <div className="flex flex-col">
+                  <span className="font-medium">
+                    {item.product?.product_name || "Unnamed product"}
+                  </span>
+
                 </div>
-                <div>Price: ${item.quantity}</div>
-                <div>Quantity: {item.quantity}</div>
-                {item.product?.discounted_price && item.product.discounted_price > 0 && (
-                  <div className="text-green-600">Discounted: ${item.product.discounted_price}</div>
-                )}
-              </CardContent>
-            </Card>
+              </div>
+
+              {/* Số lượng */}
+              <div className="text-sm text-muted-foreground">
+                <div>
+                  Quantity: {item.quantity}
+                </div>
+                <div>
+                  Price: ${item.price}
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       </div>

@@ -28,10 +28,10 @@ export interface IOrder {
     id: number,
     user_id: number,
     user: IUser,
-    order_date: Date,
+    created_at: Date,
     address: string,
     total_price: number,
-    status: 'pending' | 'confirmed' | 'delivered' | 'cancelled',
+    status: 'pending' | 'processing' | 'delivered' | 'cancelled',
     orderDetails: IOrderDetail[],
 }
 

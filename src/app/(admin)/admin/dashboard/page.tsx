@@ -1,13 +1,30 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { ChartAreaInteractive } from "@/components/ui/chart-area-interactive"
 import { SectionCards } from "@/components/ui/section-cards"
+import { getServerSession } from "next-auth"
 
+export default async function Page() {
+  // const data = await getDashboardData();
+  const session = await getServerSession(authOptions);
+  const accessToken = session?.accessToken;
 
-export default function Page() {
+  const res = await fetch(`${process.env.BACKEND_API}/statistics`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`, // 
+    },
+    cache: 'no-store', //  test
+
+    next: { tags: ['list-users'] }
+  });
+  const data = await res.json()
+  console.log("true data ", data)
   return (
     <div className="flex flex-1 flex-col">
       <div className="@container/main flex flex-1 flex-col gap-2">
         <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-          <SectionCards />
+          <SectionCards data={data} />
           <div className="px-4 lg:px-6">
             <ChartAreaInteractive />
           </div>

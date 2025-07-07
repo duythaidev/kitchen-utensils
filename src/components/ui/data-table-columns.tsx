@@ -1,6 +1,5 @@
 "use client"
 
-
 import {
   ColumnDef,
 
@@ -9,7 +8,7 @@ import { z } from "zod"
 
 import { Badge } from "@/components/ui/badge"
 
-import { CircleCheck, CircleX, Eye, Pencil, Phone, Trash, User } from "lucide-react"
+import { CircleCheck, CircleX, Phone, User } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar"
 import ViewUserModal from "../Modals/User/ViewUserModal"
 import EditUserModal from "../Modals/User/EditUserModal"
@@ -20,6 +19,7 @@ import DeleteProductModal from "../Modals/Product/DeleteProductModal"
 import EditCategoryModal from "../Modals/Category/EditCategoryModal"
 import DeleteCategoryModal from "../Modals/Category/DeleteCategoryModal"
 import ViewOrderModal from "../Modals/Order/ViewOrderModal"
+import ButtonStatus from "../Modals/Order/ButtonStatus"
 
 export const userSchema = z.object({
   id: z.number(),
@@ -67,8 +67,8 @@ export const orderSchema = z.object({
   user_id: z.number(),
   address: z.string(),
   total_price: z.number(),
-  status: z.enum(['pending', 'confirmed', 'delivered', 'cancelled']),
-  order_date: z.date(),
+  status: z.enum(['pending', 'processing', 'delivered', 'cancelled']),
+  created_at: z.date(),
   user: z.object({
     id: z.number(),
     user_name: z.string(),
@@ -310,6 +310,7 @@ export const ordersColumns: ColumnDef<z.infer<typeof orderSchema>>[] = [
   },
   {
     id: "user_name",
+    accessorKey: "user.user_name",
     header: "User Name",
     size: 100,
     cell: ({ row }) => <div className="font-medium">{row.original.user?.user_name?.length > 25 ? row.original.user?.user_name?.slice(0, 25) + "..." : row.original.user?.user_name || "-"}</div>,
@@ -364,7 +365,7 @@ export const ordersColumns: ColumnDef<z.infer<typeof orderSchema>>[] = [
     header: "Order At",
     size: 50,
     cell: ({ row }) => {
-      const date = new Date(row.original.order_date);
+      const date = new Date(row.original.created_at);
       return <div>{date.toLocaleDateString()}</div>;
     },
   },
@@ -374,15 +375,24 @@ export const ordersColumns: ColumnDef<z.infer<typeof orderSchema>>[] = [
     size: 250,
     cell: ({ row }) => (
       <div className="flex gap-2">
-        <ViewOrderModal order={row.original}></ViewOrderModal>
-        {/* <ViewOrderModal order={row.original}></ViewOrderModal>
-        <EditOrderModal order={row.original}></EditOrderModal>
-        <DeleteOrderModal order={row.original}></DeleteOrderModal> */}
+        <ViewOrderModal order={row.original} isAdmin={true} title="View details"></ViewOrderModal>
+        {row.original.status === "pending" && (
+          <>
+            <ButtonStatus order={row.original} status="processing" />
+            <ButtonStatus order={row.original} status="cancelled" />
+          </>
+        )}
+
+        {row.original.status === "processing" && (
+          <>
+            <ButtonStatus order={row.original} status="delivered" />
+            <ButtonStatus order={row.original} status="cancelled" />
+          </>
+        )}
       </div>
     ),
   },
 ];
-
 
 
 export type TableType = keyof typeof schemaMap

@@ -73,32 +73,19 @@ import { useEffect, useState } from "react"
 import AddCategoryModal from "../Modals/Category/AddCategoryModal"
 import EditCategoryModal from "../Modals/Category/EditCategoryModal"
 
+
 export function DataTable<T extends TableType>({ data, type }: DataTableProps<T>) {
-  console.log("data", data)
 
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] =
     useState<VisibilityState>({})
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-    []
-  )
-
-  const FilterInput = ({ placeholder, columnIndex }: { placeholder: string, columnIndex: number }) => (
-    <div className="p-2 border-b last:border-b-0 flex items-center gap-2 w-3xs">
-      <Input
-        placeholder={placeholder}
-        className="w-full"
-        value={(table.getColumn(table.getAllColumns()[columnIndex].id)?.getFilterValue() ?? "") as string}
-        onChange={(e) => table.getColumn(table.getAllColumns()[columnIndex].id)?.setFilterValue(e.target.value)}
-      />
-    </div>
-  )
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
   const AddModal = {
     users: <AddUserModal />,
     products: <AddProductModal />,
     categories: <AddCategoryModal />,
-    // orders: <AddOrderModal />,
+    orders: null,
   }[type]
 
 
@@ -219,9 +206,17 @@ export function DataTable<T extends TableType>({ data, type }: DataTableProps<T>
                 </DropdownMenuRadioGroup>
               </DropdownMenuContent>
             </DropdownMenu>
-            <FilterInput placeholder={`Search by ${type}`}
-              columnIndex={2} // name column
-            />
+            {type !== "orders" ? (
+              <FilterInput placeholder={`Search by ${type}`}
+                columnIndex={2} // name column
+                table={table}
+              />
+            ) : (
+              <FilterInput placeholder={`Search by user name`}
+                columnIndex={1} // name column
+                table={table}
+              />
+            )}
           </div>
           {AddModal}
         </div>
@@ -239,7 +234,7 @@ export function DataTable<T extends TableType>({ data, type }: DataTableProps<T>
                 <TableRow key={headerGroup.id} >
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead style={header.id === "id" ? { width: `${header.getSize()}px`, textAlign: "center" } : {width: `${header.getSize()}px`,}}
+                      <TableHead style={header.id === "id" ? { width: `${header.getSize()}px`, textAlign: "center" } : { width: `${header.getSize()}px`, }}
                         className={`${(header.id === "user_name") ? "w-[160px]" : ""} ${header.id === "product_image_url" ? "w-[50px]" : ""} ${header.id === "index" ? "w-[50px]" : ""}`} key={header.id} colSpan={header.colSpan}>
                         {header.isPlaceholder
                           ? null
@@ -362,3 +357,15 @@ export function DataTable<T extends TableType>({ data, type }: DataTableProps<T>
   )
 }
 
+const FilterInput = ({ placeholder, columnIndex, table }: { placeholder: string, columnIndex: number, table: any }) => {
+  return (
+    <div className="p-2 border-b last:border-b-0 flex items-center gap-2 w-3xs">
+      <Input
+        placeholder={placeholder}
+        className="w-full"
+        value={(table.getColumn(table.getAllColumns()[columnIndex].id)?.getFilterValue() ?? "") as string}
+        onChange={(e) => table.getColumn(table.getAllColumns()[columnIndex].id)?.setFilterValue(e.target.value)}
+      />
+    </div>
+  )
+}

@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/navigation-menu"
 import { Input } from "./ui/input";
 import { Separator } from "./ui/separator";
+import { useRouter } from "nextjs-toploader/app";
 
 
 const hoverStyle = `after:content-[''] after:w-0 after:absolute after:left-0 after:top-[-10] after:h-0.5  after:bg-blue-500 after:duration-500`
@@ -36,6 +37,7 @@ const Header = () => {
       setStickyMenu(false);
     }
   };
+  const router = useRouter()
 
   useEffect(() => {
     window.addEventListener("scroll", handleStickyMenu);
@@ -46,7 +48,7 @@ const Header = () => {
         <nav className={`mx-auto flex max-w-7xl items-center justify-between transition-all ${stickyMenu ? "p-4" : "p-6"} lg:px-8`} aria-label="Global">
           <div className="flex items-center">
             <Link href="/" className="-m-1.5 p-1.5">
-              <img className=" w-[35px]" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Tailwind_CSS_Logo.svg/2560px-Tailwind_CSS_Logo.svg.png" alt="" />
+              <img className=" w-[35px]" src="/favicon.ico" alt="" />
             </Link>
             <Link href="/" className="ml-2 font-bold font-mono">ThaiDevShop</Link>
           </div>
@@ -148,8 +150,14 @@ const Header = () => {
             </div>
           </div>
           <div className="flex gap-3">
-            <div onClick={() => { redirect('/cart') }} className="flex items-center gap-2 hover:text-blue-500 cursor-pointer text-dark font-light"><ShoppingCart size={20} />Cart</div>
-            <div className="flex items-center gap-2 hover:text-blue-500 cursor-pointer text-dark font-light"><ShoppingBag size={20} />Orders</div>
+            <Link href={'/cart'} className={`  flex items-center gap-2  h-[30px] relative ${hoverStyle} hover:after:w-full text-dark font-light`}>
+              <ShoppingCart className="w-5 h-5" />
+              <span className="">Cart</span>
+            </Link>
+            <Link href={'/order'} className={`  flex items-center gap-2  h-[30px] relative ${hoverStyle} hover:after:w-full text-dark font-light`}>
+              <ShoppingBag className="w-5 h-5" />
+              <span className="">Orders</span>
+            </Link>
           </div>
         </nav>
       </div>

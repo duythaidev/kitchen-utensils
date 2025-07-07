@@ -36,6 +36,7 @@ import {
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import Image from "next/image"
+import { useSession } from "next-auth/react"
 
 const data = {
   user: {
@@ -151,6 +152,9 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const session = useSession()
+  const user = session.data?.user
+  // console.log(accessToken)
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -161,12 +165,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <Link href="/admin/dashboard">
-                <div className="max-w-[35px] max-h-[35px] overflow-hidden">
-                <Image width={35} height={35} src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Tailwind_CSS_Logo.svg/2560px-Tailwind_CSS_Logo.svg.png" alt="" />
-
+                <div className="max-w-[30px] max-h-[30px] overflow-hidden">
+                  <Image width={30} height={30} src="/favicon.ico" alt="" />
                 </div>
-                
-                <p className="ml-2 font-bold font-mono">Admin</p>
+
+                <p className=" font-bold font-mono">DuyThaiDev</p>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -178,7 +181,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   )
