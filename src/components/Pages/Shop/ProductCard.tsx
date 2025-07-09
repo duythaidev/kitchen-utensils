@@ -2,11 +2,11 @@
 import { IProduct } from "@/types";
 import { Eye, ShoppingBag, Star, StarHalf } from "lucide-react";
 import Link from "next/link";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { Dialog, DialogTitle } from "../ui/dialog";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/shadcn/tooltip";
+import { Dialog, DialogTitle } from "@/components/shadcn/dialog";
 import { useState } from "react";
 import PreviewProductModal from "./PreviewProductModal";
-import CustomModalBox from "../Modals/CustomModalBox";
+import CustomModalBox from "@/components/Modals//CustomModalBox";
 import { toast } from "sonner";
 import { addToCart } from "@/actions/user.action";
 import { useSession } from "next-auth/react";

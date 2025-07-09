@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
-import Profile from "@/components/Profile/Profile"
+import Profile from "@/components/Pages/Profile/Profile"
 export default async function Page() {
   const session = await getServerSession(authOptions)
   const res = await fetch(`${process.env.BACKEND_API}/users/me`, {

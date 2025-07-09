@@ -1,7 +1,7 @@
 'use client'
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { SidebarTrigger } from "@/components/ui/sidebar"
+import { Button } from "@/components/shadcn/button"
+import { Separator } from "@/components/shadcn/separator"
+import { SidebarTrigger } from "@/components/shadcn/sidebar"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 

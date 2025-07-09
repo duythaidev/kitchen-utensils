@@ -1,7 +1,7 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import CartList from "@/components/Cart/CartList";
+import CartList from "@/components/Pages/Cart/CartList";
 import PageHeader from "@/components/Custom/PageHeader";
-import OrderList from "@/components/Order/OrderList";
+import OrderList from "@/components/Pages/Order/OrderList";
 import { getServerSession } from "next-auth";
 const page = async () => {
 

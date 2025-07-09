@@ -10,24 +10,24 @@ import {
   CardDescription,
   CardAction,
   CardContent,
-} from "@/components/ui/card"
+} from "@/components/shadcn/card"
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
+} from "@/components/shadcn/chart"
 import {
   ToggleGroup,
   ToggleGroupItem,
-} from "@/components/ui/toggle-group"
+} from "@/components/shadcn/toggle-group"
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select"
+} from "@/components/shadcn/select"
 import { useState, useEffect } from "react"
 
 const chartData = [

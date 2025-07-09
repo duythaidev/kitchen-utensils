@@ -2,14 +2,14 @@
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search } from "lucide-react"
 import { useEffect, useMemo, useRef, useState } from "react"
 import ProductCard from "./ProductCard"
-import { Input } from "../ui/input"
-import { Button } from "../ui/button"
+import { Input } from "@/components/shadcn/input"
+import { Button } from "@/components/shadcn/button"
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/shadcn/dropdown-menu"
 import { useRouter } from "nextjs-toploader/app"
 import { useSearchParams } from "next/navigation"
 import { ICategory, IProduct } from "@/types"

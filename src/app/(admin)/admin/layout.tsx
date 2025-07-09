@@ -1,9 +1,9 @@
-import { AppSidebar } from "@/components/ui/app-sidebar"
-import { SiteHeader } from "@/components/ui/site-header"
+import { AppSidebar } from "@/components/shadcn/app-sidebar"
+import { SiteHeader } from "@/components/shadcn/site-header"
 import {
     SidebarInset,
     SidebarProvider,
-} from "@/components/ui/sidebar"
+} from "@/components/shadcn/sidebar"
 
 export default function Layout({ children, }: Readonly<{ children: React.ReactNode; }>) {
     return (

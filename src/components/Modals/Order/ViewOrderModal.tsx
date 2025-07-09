@@ -7,14 +7,14 @@ import {
   DialogTitle,
   DialogDescription,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+} from "@/components/shadcn/dialog";
+import { Button } from "@/components/shadcn/button";
 import CustomModalBox from "../CustomModalBox";
 import { IOrder, IOrderDetail } from "@/types";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Label } from "@/components/shadcn/label";
+import { Input } from "@/components/shadcn/input";
+import { Badge } from "@/components/shadcn/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/shadcn/avatar";
 
 const ViewOrderModal = ({ order, isAdmin, title }: { order: IOrder, isAdmin: boolean, title: string }) => {
   return (

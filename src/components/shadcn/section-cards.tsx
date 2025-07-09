@@ -8,8 +8,8 @@ import {
   CardDescription,
   CardAction,
   CardFooter,
-} from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+} from "@/components/shadcn/card"
+import { Badge } from "@/components/shadcn/badge"
 const fakeData = {
   revenue: {
     totalRevenue: 0,

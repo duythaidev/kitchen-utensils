@@ -3,16 +3,16 @@
 import { IProduct, IReview } from "@/types"
 import { Circle, CircleX, LoaderCircle, Minus, Plus, ShoppingCart, Star, StarHalf, UserRoundIcon } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
-import { Input } from "../ui/input"
 import Image from "next/image"
 import { useSession } from "next-auth/react"
 import { toast } from "sonner"
 import { addReview, addToCart, deleteReview } from "@/actions/user.action"
-import CustomButton from "../Custom/CustomButton"
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
-import { Button } from "../ui/button"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/shadcn/avatar"
+import { Button } from "@/components/shadcn/button"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/shadcn/tooltip"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/shadcn/popover"
+import CustomButton from "@/components/Custom/CustomButton"
+import { Input } from "@/components/shadcn/input"
 const tabs = [
     {
         id: "tabOne",

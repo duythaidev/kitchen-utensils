@@ -9,13 +9,13 @@ import {
     DialogDescription,
     DialogFooter,
     DialogClose,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Button } from "../../ui/button"
+} from "@/components/shadcn/dialog"
+import { Input } from "@/components/shadcn/input"
+import { Label } from "@/components/shadcn/label"
+import { Button } from "@/components/shadcn/button"
 import Image from "next/image"
 import { useState } from "react"
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/shadcn/select"
 import { Pencil } from "lucide-react"
 import CustomButton from "@/components/Custom/CustomButton"
 import { toast } from "sonner"

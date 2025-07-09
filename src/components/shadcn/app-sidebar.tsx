@@ -21,10 +21,10 @@ import {
   IconUsers,
 } from "@tabler/icons-react"
 
-import { NavDocuments } from "@/components/ui/nav-documents"
-import { NavMain } from "@/components/ui/nav-main"
-import { NavSecondary } from "@/components/ui/nav-secondary"
-import { NavUser } from "@/components/ui/nav-user"
+import { NavDocuments } from "@/components/shadcn/nav-documents"
+import { NavMain } from "@/components/shadcn/nav-main"
+import { NavSecondary } from "@/components/shadcn/nav-secondary"
+import { NavUser } from "@/components/shadcn/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -33,7 +33,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/shadcn/sidebar"
 import Link from "next/link"
 import Image from "next/image"
 import { useSession } from "next-auth/react"

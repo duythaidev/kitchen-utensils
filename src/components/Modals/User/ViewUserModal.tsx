@@ -10,12 +10,12 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Button } from "../../ui/button";
+} from "@/components/shadcn/dialog"
+import { Input } from "@/components/shadcn/input"
+import { Label } from "@/components/shadcn/label"
+import { Button } from "@/components/shadcn/button";
 import Image from "next/image";
-import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue, SelectLabel, SelectGroup } from "@/components/ui/select";
+import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue, SelectLabel, SelectGroup } from "@/components/shadcn/select";
 import CustomModalBox from "../CustomModalBox";
 
 const ViewUserModal = ({ user }: { user: any }) => {

@@ -6,20 +6,20 @@ import {
 } from "@tanstack/react-table"
 import { z } from "zod"
 
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/components/shadcn/badge"
 
 import { CircleCheck, CircleX, Phone, User } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar"
-import ViewUserModal from "../Modals/User/ViewUserModal"
-import EditUserModal from "../Modals/User/EditUserModal"
-import BanUserModal from "../Modals/User/BanUserModal"
-import ViewProductModal from "../Modals/Product/ViewProductModal"
-import EditProductModal from "../Modals/Product/EditProductModal"
-import DeleteProductModal from "../Modals/Product/DeleteProductModal"
-import EditCategoryModal from "../Modals/Category/EditCategoryModal"
-import DeleteCategoryModal from "../Modals/Category/DeleteCategoryModal"
-import ViewOrderModal from "../Modals/Order/ViewOrderModal"
-import ButtonStatus from "../Modals/Order/ButtonStatus"
+import ViewUserModal from "@/components/Modals//User/ViewUserModal"
+import EditUserModal from "@/components/Modals//User/EditUserModal"
+import BanUserModal from "@/components/Modals//User/BanUserModal"
+import ViewProductModal from "@/components/Modals//Product/ViewProductModal"
+import EditProductModal from "@/components/Modals//Product/EditProductModal"
+import DeleteProductModal from "@/components/Modals//Product/DeleteProductModal"
+import EditCategoryModal from "@/components/Modals//Category/EditCategoryModal"
+import DeleteCategoryModal from "@/components/Modals//Category/DeleteCategoryModal"
+import ViewOrderModal from "@/components/Modals//Order/ViewOrderModal"
+import ButtonStatus from "@/components/Modals//Order/ButtonStatus"
 
 export const userSchema = z.object({
   id: z.number(),

@@ -1,4 +1,4 @@
-import Login from "@/components/Auth/Login";
+import Login from "@/components/Pages/Auth/Login";
 import PageHeader from "@/components/Custom/PageHeader";
 
 const Page = () => {

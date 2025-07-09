@@ -1,6 +1,6 @@
 'use client'
 
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/shadcn/skeleton";
 // import { useRouter } from "next/navigation"
 import { useRouter } from 'nextjs-toploader/app';
 import { useEffect } from "react";

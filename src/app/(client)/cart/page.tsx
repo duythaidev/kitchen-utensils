@@ -1,5 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import CartList from "@/components/Cart/CartList";
+import CartList from "@/components/Pages/Cart/CartList";
 import PageHeader from "@/components/Custom/PageHeader";
 import { getServerSession } from "next-auth";
 const page = async () => {
@@ -24,7 +24,7 @@ const page = async () => {
 
         next: { tags: ['list-cartitems'] }
     });
-    
+
     const data = await res.json()
 
     // console.log("true data ", data)

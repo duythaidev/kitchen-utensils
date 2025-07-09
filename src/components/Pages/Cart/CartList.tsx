@@ -1,12 +1,12 @@
 'use client'
 import CartItem from "./CartItem"
-import CustomButton from "../Custom/CustomButton"
+import CustomButton from "../../Custom/CustomButton"
 import { ICartItem, IProduct } from "@/types"
 import { useMemo, useState } from "react"
 import { toast } from "sonner"
-import { Button } from "../ui/button"
+import { Button } from "@/components/shadcn/button"
 import { IconChevronsLeft, IconChevronLeft, IconChevronRight, IconChevronsRight } from "@tabler/icons-react"
-import { Input } from "../ui/input"
+import { Input } from "@/components/shadcn/input"
 import { checkout } from "@/actions/user.action"
 import { useSession } from "next-auth/react"
 

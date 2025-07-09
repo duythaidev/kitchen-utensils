@@ -7,15 +7,15 @@ import {
     DialogTitle,
     DialogDescription,
     DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "../../ui/button";
+} from "@/components/shadcn/dialog";
+import { Input } from "@/components/shadcn/input";
+import { Label } from "@/components/shadcn/label";
+import { Button } from "@/components/shadcn/button";
 import Image from "next/image";
 import CustomModalBox from "../CustomModalBox";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
+import { Checkbox } from "@/components/shadcn/checkbox";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/shadcn/select";
 import { IProduct } from "@/types";
 
 const ViewProductModal = ({ product }: { product: IProduct }) => {

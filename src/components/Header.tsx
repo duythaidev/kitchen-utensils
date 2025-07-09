@@ -17,9 +17,9 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   NavigationMenuViewport,
-} from "@/components/ui/navigation-menu"
-import { Input } from "./ui/input";
-import { Separator } from "./ui/separator";
+} from "@/components/shadcn/navigation-menu"
+import { Input } from "@/components/shadcn/input";
+import { Separator } from "@/components/shadcn/separator";
 import { useRouter } from "nextjs-toploader/app";
 
 

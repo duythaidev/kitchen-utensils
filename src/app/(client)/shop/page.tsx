@@ -1,5 +1,5 @@
 
-import ProductList from '@/components/Shop/ProductList';
+import ProductList from '@/components/Pages/Shop/ProductList';
 import PageHeader from '@/components/Custom/PageHeader';
 import { getServerSession } from 'next-auth';
 

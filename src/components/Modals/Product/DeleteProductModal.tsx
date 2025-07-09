@@ -8,8 +8,8 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "../../ui/button";
+} from "@/components/shadcn/dialog";
+import { Button } from "@/components/shadcn/button";
 import { useState } from "react";
 import { Trash2 } from "lucide-react";
 import CustomButton from "@/components/Custom/CustomButton";
@@ -18,7 +18,7 @@ import { useSession } from "next-auth/react";
 import CustomModalBox from "../CustomModalBox";
 import { handleDeleteProductAction } from "@/actions/admin.product.action";
 import { IProduct } from "@/types";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
 
 const DeleteProductModal = ({ product }: { product: IProduct }) => {
     const [open, setOpen] = useState(false);

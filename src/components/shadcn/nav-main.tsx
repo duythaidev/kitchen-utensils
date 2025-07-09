@@ -2,14 +2,14 @@
 
 import { IconCirclePlusFilled, IconDashboard, IconMail, type Icon } from "@tabler/icons-react"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/shadcn/button"
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/shadcn/sidebar"
 import { usePathname } from "next/navigation"
 import { useRouter } from 'nextjs-toploader/app';
 export function NavMain({

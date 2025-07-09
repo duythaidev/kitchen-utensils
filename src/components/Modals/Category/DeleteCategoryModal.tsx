@@ -8,8 +8,8 @@ import {
   DialogDescription,
   DialogFooter,
   DialogClose,
-} from "@/components/ui/dialog"
-import { Button } from "../../ui/button"
+} from "@/components/shadcn/dialog"
+import { Button } from "@/components/shadcn/button"
 import { Trash2 } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"

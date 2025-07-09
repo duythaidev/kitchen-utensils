@@ -1,7 +1,7 @@
 'use client'
 import { ChevronLeft, ChevronRight, Heart, MessageCircleMore, Rocket, ShieldCheck, Undo2 } from "lucide-react";
 import Link from "next/link";
-import CustomCarousel from "../Carousel/CustomCarousel";
+import CustomCarousel from "@/components/Custom/CustomCarousel";
 
 const Hero = () => {
     return (
@@ -15,8 +15,8 @@ const Hero = () => {
                     <div className="relative lg:col-span-2 lg:row-span-2">
                         <div className="absolute inset-px rounded-lg bg-white"></div>
                         <CustomCarousel />
-                        
-        
+
+
 
                         {/* <div className="relative px-8 py-12 flex h-[35rem] overflow-hidden ">
                             <div className="flex flex-col w-1/2 justify-around lg:pl-8 lg:py-10 sm:pl-10 sm:pt-10 ">

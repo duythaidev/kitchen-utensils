@@ -3,21 +3,21 @@
 import { CirclePlus } from "lucide-react";
 import {
     Dialog, DialogClose, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "../../ui/button";
+} from "@/components/shadcn/dialog";
+import { Input } from "@/components/shadcn/input";
+import { Label } from "@/components/shadcn/label";
+import { Button } from "@/components/shadcn/button";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Select, SelectValue, SelectTrigger, SelectContent, SelectItem } from "../../ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectValue, SelectTrigger, SelectContent, SelectItem } from "@/components/shadcn/select";
+import { Checkbox } from "@/components/shadcn/checkbox";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from 'uuid';
 import CustomModalBox from "../CustomModalBox";
 import CustomButton from "@/components/Custom/CustomButton";
 import { handleCreateProductAction, handleCreateProductImageAction } from "@/actions/admin.product.action";
 import { useSession } from "next-auth/react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
 import { fetchCategories } from "@/actions/client-api";
 import { ICategory, IProduct } from "@/types";
 

@@ -4,9 +4,9 @@ import { useSession } from "next-auth/react"
 import { useState, startTransition } from "react"
 import { toast } from "sonner"
 import { handleBanUserAction, refreshUserList } from "@/actions/admin.user.action"
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog"
-import { fetchUserList } from "@/actions/client-api"
+import { Button } from "@/components/shadcn/button"
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/shadcn/dialog"
+
 
 const BanUserModal = ({ user }: { user: any }) => {
     const { data: session } = useSession()

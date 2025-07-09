@@ -1,6 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { ChartAreaInteractive } from "@/components/ui/chart-area-interactive"
-import { SectionCards } from "@/components/ui/section-cards"
+import { ChartAreaInteractive } from "@/components/shadcn/chart-area-interactive"
+import { SectionCards } from "@/components/shadcn/section-cards"
 import { getServerSession } from "next-auth"
 
 export default async function Page() {

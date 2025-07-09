@@ -3,15 +3,15 @@ import { CirclePlus, Plus } from "lucide-react"
 import {
     Dialog, DialogClose, DialogContent, DialogDescription,
     DialogFooter, DialogHeader, DialogTitle, DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Button } from "../../ui/button"
+} from "@/components/shadcn/dialog"
+import { Input } from "@/components/shadcn/input"
+import { Label } from "@/components/shadcn/label"
+import { Button } from "@/components/shadcn/button"
 import Image from "next/image"
 import { useState } from "react"
 import {
     Select, SelectValue, SelectTrigger, SelectContent, SelectItem
-} from "../../ui/select"
+} from "@/components/shadcn/select"
 import { handleCreateUserAction, refreshUserList } from "@/actions/admin.user.action"
 import { toast } from "sonner"
 import { useSession } from "next-auth/react"

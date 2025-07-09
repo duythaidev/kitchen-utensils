@@ -30,7 +30,7 @@ import {
   VisibilityState,
 } from "@tanstack/react-table"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/shadcn/button"
 
 import {
   DropdownMenu,
@@ -41,16 +41,16 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/shadcn/dropdown-menu"
+import { Input } from "@/components/shadcn/input"
+import { Label } from "@/components/shadcn/label"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/shadcn/select"
 import {
   Table,
   TableBody,
@@ -58,20 +58,20 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/shadcn/table"
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@/components/ui/tabs"
+} from "@/components/shadcn/tabs"
 import { columnsMap, DataTableProps, InferData, TableType } from "./data-table-columns"
 import { ChevronDown, Filter } from "lucide-react"
-import AddUserModal from "../Modals/User/AddUserModal"
-import AddProductModal from "../Modals/Product/AddProductModal"
+import AddUserModal from "@/components/Modals//User/AddUserModal"
+import AddProductModal from "@/components/Modals//Product/AddProductModal"
 import { useEffect, useState } from "react"
-import AddCategoryModal from "../Modals/Category/AddCategoryModal"
-import EditCategoryModal from "../Modals/Category/EditCategoryModal"
+import AddCategoryModal from "@/components/Modals//Category/AddCategoryModal"
+import EditCategoryModal from "@/components/Modals//Category/EditCategoryModal"
 
 
 export function DataTable<T extends TableType>({ data, type }: DataTableProps<T>) {

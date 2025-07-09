@@ -3,13 +3,13 @@
 import { useState } from "react"
 import { CirclePlus, Plus } from "lucide-react"
 import { toast } from "sonner"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/shadcn/button"
 import {
   Dialog, DialogTrigger, DialogHeader, DialogTitle,
   DialogDescription, DialogFooter, DialogClose
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/shadcn/dialog"
+import { Input } from "@/components/shadcn/input"
+import { Label } from "@/components/shadcn/label"
 import CustomModalBox from "../CustomModalBox"
 import CustomButton from "@/components/Custom/CustomButton"
 import { handleCreateCategoryAction } from "@/actions/admin.category.action"

@@ -1,6 +1,6 @@
 import { changeStatus } from "@/actions/admin.order.action";
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/shadcn/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/shadcn/popover";
 import { IOrder } from "@/types";
 import { CircleCheck, CircleX } from "lucide-react";
 import { useState } from "react";

@@ -1,4 +1,4 @@
-import ProductDetailPage from "@/components/ProductDetail/ProductDetail"
+import ProductDetailPage from "@/components/Pages/ProductDetail/ProductDetail"
 
 export default async function Page({ params, }: { params: Promise<{ productId: string }> }) {
   const { productId } = await params

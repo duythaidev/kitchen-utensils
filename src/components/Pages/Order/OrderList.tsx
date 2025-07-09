@@ -1,12 +1,14 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { Button } from "../ui/button"
+import { Button } from "@/components/shadcn/button"
 import { IconChevronsLeft, IconChevronLeft, IconChevronRight, IconChevronsRight, IconEye } from "@tabler/icons-react"
-import { Badge } from "../ui/badge"
-import ViewOrderModal from "../Modals/Order/ViewOrderModal"
+// import { Badge } from "@/components/shadcn/badge" 
+import ViewOrderModal from "@/components/Modals/Order/ViewOrderModal"
+
 import { IOrder } from "@/types"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/shadcn/tooltip"
+import { Badge } from "@/components/shadcn/badge"
 
 const OrderList = ({ orders }: { orders: IOrder[] }) => {
   const [pageIndex, setPageIndex] = useState(0)
