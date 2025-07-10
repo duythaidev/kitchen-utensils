@@ -11,7 +11,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const { data: session } = useSession();
+    // const { data: session } = useSession();
     // console.log("session", session);
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {

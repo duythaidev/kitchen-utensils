@@ -167,7 +167,7 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
 
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
-                                            <Button variant="outline" className="text-red-500 border-red-500 hover:bg-red-50">
+                                            <Button variant="outline" className="cursor-pointer text-red-500 border-red-500 hover:bg-red-50">
                                                 Price: {priceSort === 'htl' ? 'High to Low' : priceSort === 'lth' ? 'Low to High' : 'Select'} <ChevronDown className="ml-2 w-4 h-4" />
                                             </Button>
                                         </DropdownMenuTrigger>

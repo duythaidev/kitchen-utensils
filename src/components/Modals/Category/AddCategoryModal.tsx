@@ -78,7 +78,7 @@ const AddCategoryModal = () => {
           <div className="flex flex-col gap-3 mx-auto items-center">
             <Label className="text-center">Image</Label>
             <div className="w-[120px] h-[120px] bg-gray-200 rounded-md overflow-hidden">
-              <Image
+              <img
                 src={imageFile ? URL.createObjectURL(imageFile) : "https://placehold.jp/150x150.png"}
                 alt="Category image"
                 width={120}

@@ -27,7 +27,7 @@ const ButtonStatus = ({ order, status }: { order: IOrder, status: "processing" |
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
-                <Button variant="outline" className={`text-primary 
+                <Button variant="outline" className={`text-primary cursor-pointer
                     ${status === "processing" ? "text-primary"
                         : status === "delivered" ? "text-green-600"
                             : status === "cancelled" ? "text-red-500"

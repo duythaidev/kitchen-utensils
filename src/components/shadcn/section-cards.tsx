@@ -1,54 +1,63 @@
-'use client'
-
-import { IconTrendingUp, IconTrendingDown } from "@tabler/icons-react"
+import { Badge } from "@/components/shadcn/badge";
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
-  CardAction,
   CardFooter,
-} from "@/components/shadcn/card"
-import { Badge } from "@/components/shadcn/badge"
+  CardAction,
+} from "@/components/shadcn/card";
+import { Minus, TrendingDown, TrendingUp } from "lucide-react";
+
 const fakeData = {
-  revenue: {
-    totalRevenue: 0,
-    percent: 0
-  },
-  users: {
-    totalUsers: 4,
-    percent: 0
-  },
-  orders: {
-    totalOrders: 0,
-    percent: 0
-  },
-  cancledOrders: {
-    totalCancledOrders: 0,
-    percent: 0
-  }
-}
+  revenue: { totalRevenue: 0, percent: 0 },
+  users: { totalUsers: 4, percent: 0 },
+  orders: { totalOrders: 0, percent: 0 },
+  cancledOrders: { totalCancledOrders: 0, percent: 0 },
+};
 
 interface IProps {
-  revenue: {
-    totalRevenue: number;
-    percent: number;
-  };
-  users: {
-    totalUsers: number;
-    percent: number;
-  };
-  orders: {
-    totalOrders: number;
-    percent: number;
-  };
-  cancledOrders: {
-    totalCancledOrders: number;
-    percent: number;
-  };
+  revenue: { totalRevenue: number; percent: number };
+  users: { totalUsers: number; percent: number };
+  orders: { totalOrders: number; percent: number };
+  cancledOrders: { totalCancledOrders: number; percent: number };
 }
+
+const TrendBadge = ({ percent }: { percent: number }) => {
+  const isUp = percent > 0;
+  const isDown = percent < 0;
+  const isNeutral = percent === 0;
+
+  const color = isUp
+    ? "text-green-600"
+    : isDown
+    ? "text-red-600"
+    : "text-muted-foreground";
+
+  const Icon = isUp ? TrendingUp : isDown ? TrendingDown : Minus;
+
+  return (
+    <Badge variant="outline" className={color}>
+      <Icon className="mr-1 size-4" />
+      {percent}%
+    </Badge>
+  );
+};
+
+const getTrendText = (
+  percent: number,
+  upText: string,
+  downText: string,
+  sameText: string
+) => {
+  if (percent > 0) return upText;
+  if (percent < 0) return downText;
+  return sameText;
+};
+
 export function SectionCards({ data = fakeData }: { data?: IProps }) {
-  const { revenue, users, orders, cancledOrders } = data
+  const { revenue, users, orders, cancledOrders } = data;
+
   return (
     <div className="grid grid-cols-1 gap-4 px-4 lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card *:data-[slot=card]:shadow-xs">
 
@@ -60,15 +69,17 @@ export function SectionCards({ data = fakeData }: { data?: IProps }) {
             {revenue.totalRevenue}
           </CardTitle>
           <CardAction>
-            <Badge variant="outline" className="text-green-600">
-              <IconTrendingUp className="mr-1" />
-              {revenue.percent}%
-            </Badge>
+            <TrendBadge percent={revenue.percent} />
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="flex gap-2 font-medium">
-            Trending up this month <IconTrendingUp className="size-4" />
+            {getTrendText(
+              revenue.percent,
+              "Trending up this month",
+              "Decreased this month",
+              "No change"
+            )}
           </div>
           <div className="text-muted-foreground">Compared to last 30 days</div>
         </CardFooter>
@@ -82,15 +93,17 @@ export function SectionCards({ data = fakeData }: { data?: IProps }) {
             {orders.totalOrders}
           </CardTitle>
           <CardAction>
-            <Badge variant="outline" className="text-red-600">
-              <IconTrendingDown className="mr-1" />
-              {orders.percent}%
-            </Badge>
+            <TrendBadge percent={orders.percent} />
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="flex gap-2 font-medium">
-            Dropped slightly <IconTrendingDown className="size-4" />
+            {getTrendText(
+              orders.percent,
+              "More orders this month",
+              "Dropped slightly",
+              "No change"
+            )}
           </div>
           <div className="text-muted-foreground">Orders this month</div>
         </CardFooter>
@@ -104,15 +117,17 @@ export function SectionCards({ data = fakeData }: { data?: IProps }) {
             {users.totalUsers}
           </CardTitle>
           <CardAction>
-            <Badge variant="outline" className="text-green-600">
-              <IconTrendingUp className="mr-1" />
-              {users.percent}%
-            </Badge>
+            <TrendBadge percent={users.percent} />
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="flex gap-2 font-medium">
-            Strong acquisition <IconTrendingUp className="size-4" />
+            {getTrendText(
+              users.percent,
+              "Strong acquisition",
+              "Lost some users",
+              "No change"
+            )}
           </div>
           <div className="text-muted-foreground">New vs returning users</div>
         </CardFooter>
@@ -126,20 +141,21 @@ export function SectionCards({ data = fakeData }: { data?: IProps }) {
             {cancledOrders.totalCancledOrders}
           </CardTitle>
           <CardAction>
-            <Badge variant="outline" className="text-red-600">
-              <IconTrendingUp className="mr-1" />
-              {cancledOrders.percent}%
-            </Badge>
+            <TrendBadge percent={cancledOrders.percent} />
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="flex gap-2 font-medium">
-            Needs attention <IconTrendingUp className="size-4" />
+            {getTrendText(
+              cancledOrders.percent,
+              "Increased cancellations",
+              "Fewer cancellations",
+              "No change"
+            )}
           </div>
-          <div className="text-muted-foreground">Higher than last month</div>
+          <div className="text-muted-foreground">Compared to last month</div>
         </CardFooter>
       </Card>
-
     </div>
   );
 }

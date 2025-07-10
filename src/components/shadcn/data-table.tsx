@@ -71,11 +71,11 @@ import AddUserModal from "@/components/Modals//User/AddUserModal"
 import AddProductModal from "@/components/Modals//Product/AddProductModal"
 import { useEffect, useState } from "react"
 import AddCategoryModal from "@/components/Modals//Category/AddCategoryModal"
-import EditCategoryModal from "@/components/Modals//Category/EditCategoryModal"
 import { useRouter } from "nextjs-toploader/app"
 import { useSearchParams } from "next/navigation"
-
-
+import { ICategory } from "@/types"
+import { fetchCategories } from "@/actions/client-api"
+import { useSession } from "next-auth/react"
 export function DataTable<T extends TableType>({ data, type, pagination }: DataTableProps<T>) {
 
   const [rowSelection, setRowSelection] = useState({})
@@ -83,9 +83,23 @@ export function DataTable<T extends TableType>({ data, type, pagination }: DataT
     useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
+  const [categories, setCategories] = useState<ICategory[]>([])
+
+  const { data: session } = useSession()
+  useEffect(() => {
+    if (type === "products") {
+      const getCategories = async () => {
+        const res = await fetchCategories(session?.accessToken || "")
+        if (res.success) {
+          setCategories(res.data.data)
+        }
+      }
+      getCategories()
+    }
+  }, [])
   const AddModal = {
     users: <AddUserModal />,
-    products: <AddProductModal />,
+    products: <AddProductModal categories={categories} />,
     categories: <AddCategoryModal />,
     orders: null,
   }[type]
@@ -226,7 +240,7 @@ export function DataTable<T extends TableType>({ data, type, pagination }: DataT
                 table={table}
               />
             ) : (
-              <FilterInput placeholder={`Search by user name`}
+              <FilterInput placeholder={`Search order by user name`}
                 columnIndex={1} // name column
                 table={table}
               />

@@ -30,9 +30,9 @@ const DeleteCategoryModal = ({ category }: { category: ICategory }) => {
 
   const handleDeleteCategory = async () => {
     setIsLoading(true);
-  
+
     const result = await handleDeleteCategoryAction(category.id, session?.accessToken || "");
-  
+
     if (result.success) {
       await new Promise(resolve => setTimeout(resolve, 1000));
       toast.success(result.message || "Category deleted successfully!");
@@ -40,16 +40,16 @@ const DeleteCategoryModal = ({ category }: { category: ICategory }) => {
     } else {
       toast.error(result.message || "Failed to delete category.");
     }
-  
+
     setIsLoading(false);
   };
-  
-  
+
+
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="text-red-500">
+        <Button variant="outline" className="cursor-pointer text-red-500">
           <Trash2 className="w-4 h-4" />
           Delete
         </Button>

@@ -64,7 +64,7 @@ const EditCategoryModal = ({ category }: { category: ICategory }) => {
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="text-orange-500">
+        <Button variant="outline" className="cursor-pointer text-orange-500">
           <Pencil className="w-4 h-4" />
           Edit
         </Button>

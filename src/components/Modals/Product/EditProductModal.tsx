@@ -35,7 +35,7 @@ async function imageUrlToFile(imageUrl: string, filename: string, mimeType: stri
 }
 
 
-const EditProductModal = ({ product }: { product: IProduct }) => {
+const EditProductModal = ({ product, categories }: { product: IProduct, categories: ICategory[] }) => {
     const [open, setOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const { data: session } = useSession()
@@ -83,12 +83,6 @@ const EditProductModal = ({ product }: { product: IProduct }) => {
                 }
 
                 // Fetch category
-                const fetchedCategories = await fetchCategories(session?.accessToken || "")
-                if (fetchedCategories) {
-                    setCategories(fetchedCategories)
-                } else {
-                    toast.error("Failed to fetch categories")
-                }
             }
 
             // Reset
@@ -111,19 +105,8 @@ const EditProductModal = ({ product }: { product: IProduct }) => {
     // const [mainImageId, setMainImageId] = useState(
     //     product.images?.find(img => img.is_main)?.id || null
     // )
-    const [categories, setCategories] = useState<ICategory[]>([])
 
-    useEffect(() => {
-        const getCategories = async () => {
-            const categories = await fetchCategories(session?.accessToken || "")
-            if (categories) {
-                setCategories(categories)
-            } else {
-                toast.error("Failed to fetch categories")
-            }
-        }
-        getCategories()
-    }, [])
+
 
     const handleAddImages = (e: React.ChangeEvent<HTMLInputElement>) => {
         const totalImages = (e?.target?.files?.length || 0) + (imageFiles?.length || 0)
@@ -161,12 +144,18 @@ const EditProductModal = ({ product }: { product: IProduct }) => {
         productData.product_name = productData.product_name.trim();
         productData.description = productData.description.trim();
 
-        if (
-            productData.product_name === "" ||
-            productData.price === 0 ||
-            productData.stock === 0
-        ) {
-            toast.error("Please fill in all required fields");
+        if (productData.product_name.length === 0) {
+            toast.error("Product name is required");
+            setIsLoading(false);
+            return;
+        }
+        if (productData.price < 0 || (productData.discounted_price && productData.discounted_price < 0)) {
+            toast.error("Price cannot be negative");
+            setIsLoading(false);
+            return;
+        }
+        if (productData.stock < 0) {
+            toast.error("Stock cannot be negative");
             setIsLoading(false);
             return;
         }
@@ -233,7 +222,7 @@ const EditProductModal = ({ product }: { product: IProduct }) => {
     return (
         <Dialog open={open} onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>
-                <Button variant="outline" className="text-orange-500">
+                <Button variant="outline" className="cursor-pointer text-orange-500">
                     <Pencil className="w-4 h-4" />
                     Edit
                 </Button>
@@ -251,47 +240,49 @@ const EditProductModal = ({ product }: { product: IProduct }) => {
                         {/* Image Section */}
                         <div className="flex flex-col gap-3 w-full justify-center items-center">
                             <Label className="justify-center">Product Images</Label>
-                            <div className={`flex gap-3 flex-wrap w-full justify-center items-center ${(blobImages && blobImages?.length > 0) ? "mb-10" : ""}`}>
+                            <div className={`flex gap-3 flex-wrap w-full justify-center items-center ${(blobImages && blobImages?.length > 0) ? "mb-12" : ""}`}>
                                 {/* Existing Images */}
 
-                                {blobImages && blobImages?.map((blob, index) => (
-                                    <div key={uuidv4()}>
-                                        <Card className="w-[200px] h-[200px]">
-                                            <CardHeader className="hover:scale-105 transition-all cursor-pointer"
-                                                onClick={() => setSelectedImage(imageFiles?.[index] || null)}
-                                            >
-                                                <img
-                                                    src={blob}
-                                                    alt="Preview"
-                                                    className="  object-cover"
+                                {blobImages && blobImages.map((blob, index) => (
+                                    <div key={uuidv4()} className="w-[200px] h-[200px] p-2 border rounded-md shadow-sm">
+                                        <div
+                                            className="hover:scale-105 transition-all cursor-pointer h-full flex justify-center items-center"
+                                            onClick={() => setSelectedImage(imageFiles?.[index] || null)}
+                                        >
+                                            <img
+                                                src={blob}
+                                                alt="Preview"
+                                                className="max-h-full"
+                                            />
+                                        </div>
+
+                                        <div className={`flex mt-5 justify-between items-center gap-2 px-2 ${imageFiles && imageFiles.length > 0 ? "mb-10" : ""}`}>
+                                            <div className="flex gap-2">
+                                                <Checkbox
+                                                    checked={selectedImage?.name === imageFiles?.[index]?.name}
+                                                    onCheckedChange={() => setSelectedImage(imageFiles?.[index] || null)}
                                                 />
-                                            </CardHeader>
-                                            <CardContent>
-                                                <div className={`flex mt-2 justify-between items-center gap-2 ${imageFiles && imageFiles?.length > 0 ? "mb-10" : ""}`}>
-                                                    <div className="flex gap-2">
-                                                        <Checkbox
-                                                            checked={selectedImage?.name === imageFiles?.[index]?.name}
-                                                            onCheckedChange={() => setSelectedImage(imageFiles?.[index] || null)}
+                                                <Label>Main</Label>
+                                            </div>
+                                            <div>
+                                                <Tooltip>
+                                                    <TooltipTrigger asChild>
+                                                        <Trash
+                                                            className="w-4 h-4 cursor-pointer hover:text-red-500"
+                                                            onClick={() =>
+                                                                handleDeleteImage(imageFiles && imageFiles.length > 0 ? imageFiles[index]?.name : "")
+                                                            }
                                                         />
-                                                        <Label>Main</Label>
-                                                    </div>
-                                                    <div>
-                                                        <Tooltip>
-                                                            <TooltipTrigger asChild>
-                                                                <Trash className="w-4 h-4 cursor-pointer hover:text-red-500"
-                                                                    onClick={() => handleDeleteImage(imageFiles && imageFiles?.length > 0 ? imageFiles[index]?.name : "")}
-                                                                />
-                                                            </TooltipTrigger>
-                                                            <TooltipContent>
-                                                                Delete Image
-                                                            </TooltipContent>
-                                                        </Tooltip>
-                                                    </div>
-                                                </div>
-                                            </CardContent>
-                                        </Card>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent>
+                                                        Delete Image
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                            </div>
+                                        </div>
                                     </div>
                                 ))}
+
                             </div>
                             <Button
                                 type="button"

@@ -36,7 +36,7 @@ const BanUserModal = ({ user }: { user: IUser }) => {
     return (
         <Dialog open={open} onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>
-                <Button variant="outline" className={user.is_active ? "text-red-500" : "text-green-500"}>
+                <Button variant="outline" className={`${user.is_active ? "text-red-500" : "text-green-500"} cursor-pointer`}>
                     <Ban className="w-4 h-4" />
                     {user.is_active ? "Ban" : "Unban"}
                 </Button>

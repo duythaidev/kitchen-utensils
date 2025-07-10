@@ -19,7 +19,7 @@ const ViewCategoryModal = ({ category }: { category: ICategory }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="text-blue-600">
+        <Button variant="outline" className="cursor-pointer text-blue-600">
           <Eye className="w-4 h-4" />
           View
         </Button>

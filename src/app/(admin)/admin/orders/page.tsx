@@ -17,11 +17,16 @@ const Page = async ({ searchParams, }: { searchParams: Promise<{ [key: string]: 
         next: { tags: ['list-orders'] }
     });
     const data = await res.json()
-    console.log("true data ", data)
+    // console.log("true data ", data)
 
     return (
         <div>
-            <DataTable data={data} type="orders" />
+            <DataTable data={data.data} type="orders"
+                pagination={{
+                    page: +data.pagination.page,
+                    limit: +data.pagination.limit,
+                    total: +data.pagination.total,
+                }} />
         </div>
     );
 }

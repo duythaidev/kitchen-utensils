@@ -31,26 +31,26 @@ const DeleteProductModal = ({ product }: { product: IProduct }) => {
 
     const handleDeleteProduct = async () => {
         setIsLoading(true);
-      
+
         const res = await handleDeleteProductAction(product.id, session?.accessToken || "");
-      
+
         if (res.success) {
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          toast.success(res.message || "Product deleted successfully!");
-          setOpen(false);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            toast.success(res.message || "Product deleted successfully!");
+            setOpen(false);
         } else {
-          toast.error(res.message || "Failed to delete product.");
+            toast.error(res.message || "Failed to delete product.");
         }
-      
+
         setIsLoading(false);
-      };
-      
+    };
+
 
 
     return (
         <Dialog open={open} onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>
-                <Button variant="outline" className="text-red-500">
+                <Button variant="outline" className="cursor-pointer text-red-500">
                     <Trash2 className="w-4 h-4" />
                     Delete
                 </Button>

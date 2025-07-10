@@ -21,14 +21,14 @@ import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
 import { fetchCategories } from "@/actions/client-api";
 import { ICategory, IProduct } from "@/types";
 
-const AddProductModal = () => {
+const AddProductModal = ({ categories }: { categories: ICategory[] }) => {
     const [open, setOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const { data: session } = useSession()
 
     const [productData, setProductData] = useState({
         product_name: "",
-        price: 0,
+        price: null as number | null,
         stock: 0,
         description: "",
         category_id: null as number | null,
@@ -36,18 +36,7 @@ const AddProductModal = () => {
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [productImages, setProductImages] = useState<File[]>([]);
     const [blobImages, setBlobImages] = useState<string[]>([]);
-    const [categories, setCategories] = useState<ICategory[]>([]);
-    useEffect(() => {
-        const getCategories = async () => {
-            const categories = await fetchCategories(session?.accessToken || "");
-            if (categories) {
-                setCategories(categories);
-            } else {
-                toast.error("Failed to fetch categories");
-            }
-        }
-        getCategories();
-    }, []);
+
 
     const handleAddImages = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e?.target?.files && e?.target?.files.length > 3) {
@@ -65,59 +54,67 @@ const AddProductModal = () => {
 
     const handleAddProduct = async () => {
         setIsLoading(true);
-      
+
         productData.product_name = productData.product_name.trim();
         productData.description = productData.description.trim();
-      
-        if (
-          productData.product_name === "" ||
-          productData.price === 0 ||
-          productData.stock === 0
-        ) {
-          toast.error("Please fill in all required fields");
-          setIsLoading(false);
-          return;
+
+
+        if (productData.product_name.length === 0) {
+            toast.error("Product name is required");
+            setIsLoading(false);
+            return;
         }
-      
+
+        if (productData.price === null || productData.price <= 0) {
+            toast.error("Price must be filled and larger than 0");
+            setIsLoading(false);
+            return;
+        }
+        if (productData.stock < 0) {
+            toast.error("Stock cannot be negative");
+            setIsLoading(false);
+            return;
+        }
+
         const resProduct = await handleCreateProductAction(productData, session?.accessToken || "");
         if (!resProduct.success) {
-          toast.error(resProduct.message);
-          setIsLoading(false);
-          return;
+            toast.error(resProduct.message);
+            setIsLoading(false);
+            return;
         }
-      
+
         const productId = resProduct.data.id;
-      
+
         if (productImages.length > 0) {
-          const productImageFormData = new FormData();
-          productImages.forEach(file => {
-            productImageFormData.append("product-images", file);
-          });
-      
-          const isMainIndex = productImages.findIndex(image => image.name === selectedImage?.name);
-          if (isMainIndex === -1) {
-            toast.error("Please select a main image");
-            setIsLoading(false);
-            return;
-          }
-      
-          productImageFormData.append("isMain", isMainIndex.toString());
-          productImageFormData.append("product_id", productId);
-      
-          const resImage = await handleCreateProductImageAction(productImageFormData, session?.accessToken || "");
-          if (!resImage.success) {
-            toast.error(resImage.message || "Product image creation failed!");
-            setIsLoading(false);
-            return;
-          }
+            const productImageFormData = new FormData();
+            productImages.forEach(file => {
+                productImageFormData.append("product-images", file);
+            });
+
+            const isMainIndex = productImages.findIndex(image => image.name === selectedImage?.name);
+            if (isMainIndex === -1) {
+                toast.error("Please select a main image");
+                setIsLoading(false);
+                return;
+            }
+
+            productImageFormData.append("isMain", isMainIndex.toString());
+            productImageFormData.append("product_id", productId);
+
+            const resImage = await handleCreateProductImageAction(productImageFormData, session?.accessToken || "");
+            if (!resImage.success) {
+                toast.error(resImage.message || "Product image creation failed!");
+                setIsLoading(false);
+                return;
+            }
         }
-      
+
         await new Promise(resolve => setTimeout(resolve, 1000));
         toast.success(resProduct.message);
         setOpen(false);
         setIsLoading(false);
-      };
-      
+    };
+
 
     const handleOpenChange = (state: boolean) => {
         setOpen(state);
@@ -208,7 +205,7 @@ const AddProductModal = () => {
                         <Input
                             type="number"
                             min={0}
-                            value={productData.price}
+                            value={productData.price || undefined}
                             onChange={(e) => setProductData({ ...productData, price: parseInt(e.target.value) })}
                         />
                     </div>

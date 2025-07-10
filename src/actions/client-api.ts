@@ -9,8 +9,10 @@ export const fetchCategories = async (accessToken: string) => {
 
     if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.message || "Failed to fetch categories list");
+        return { success: false, message: errorData.message || "Failed to fetch categories list" };
     }
 
-    return await res.json(); // hoặc set lại vào state nếu bạn dùng useState
+    const data = await res.json();
+
+    return { success: true, message: "Categories fetched successfully", data };
 };

@@ -21,7 +21,11 @@ import DeleteCategoryModal from "@/components/Modals//Category/DeleteCategoryMod
 import ViewOrderModal from "@/components/Modals//Order/ViewOrderModal"
 import ButtonStatus from "@/components/Modals//Order/ButtonStatus"
 import ViewCategoryModal from "../Modals/Category/ViewCategoryModal"
-
+import { useEffect } from "react"
+import { fetchCategories } from "@/actions/client-api"
+import { useSession } from "next-auth/react"
+import { ICategory } from "@/types"
+import { useState } from "react"  
 export const userSchema = z.object({
   id: z.number(),
   avatar_url: z.string(),
@@ -232,6 +236,7 @@ export const productsColumns: ColumnDef<z.infer<typeof productSchema>>[] = [
 
   {
     id: "category.category_name",
+    accessorKey: "category.category_name",
     header: "Category",
     size: 100,
     cell: ({ row }) => (
@@ -255,13 +260,25 @@ export const productsColumns: ColumnDef<z.infer<typeof productSchema>>[] = [
     id: "actions",
     header: "Actions",
     size: 250,
-    cell: ({ row }) => (
-      <div className="flex gap-2">
-        <ViewProductModal product={row.original}></ViewProductModal>
-        <EditProductModal product={row.original}></EditProductModal>
-        <DeleteProductModal product={row.original}></DeleteProductModal>
-      </div>
-    ),
+    cell: ({ row }) => {
+      const { data: session } = useSession()
+      const [categories, setCategories] = useState<ICategory[]>([])
+      useEffect(() => {
+        const getCategories = async () => {
+          const res = await fetchCategories(session?.accessToken || "")
+          if (res.success) {
+            setCategories(res.data.data)
+          }
+        }
+        getCategories()
+      }, [])
+      return (
+        <div className="flex gap-2">
+          <ViewProductModal product={row.original}></ViewProductModal>
+          <EditProductModal product={row.original} categories={categories}></EditProductModal>
+          <DeleteProductModal product={row.original}></DeleteProductModal>
+        </div>)
+    }
   },
 ]
 
@@ -275,9 +292,9 @@ export const categoriesColumns: ColumnDef<z.infer<typeof categorySchema>>[] = [
     ),
   },
   {
-    id: "avatar_url",
+    id: "image_url",
     size: 50,
-    header: "Avatar",
+    header: "Image",
     cell: ({ row }) =>
       row.original.image_url ?
         <img className="w-10 h-10 object-cover rounded-md" src={row.original.image_url} />
