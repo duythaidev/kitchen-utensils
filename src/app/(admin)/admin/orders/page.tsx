@@ -1,7 +1,6 @@
 import { DataTable } from "@/components/shadcn/data-table";
-import data from "./data.json";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 const Page = async () => {
     const session = await getServerSession(authOptions);
     const accessToken = session?.accessToken;

@@ -14,21 +14,21 @@ const BanUserModal = ({ user }: { user: any }) => {
     const [open, setOpen] = useState(false)
 
     const handleBan = async () => {
-        setIsLoading(true)
-        try {
-            const res = await handleBanUserAction(user.id, user.is_active, session?.accessToken || "")
-            if (res) {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                toast.success(user.is_active ? "User banned!" : "User unbanned!")
-                setOpen(false)
-                // refreshUserList()
-            }
-        } catch (error) {
-            toast.error("Failed to update user status")
-        } finally {
-            setIsLoading(false)
+        setIsLoading(true);
+      
+        const result = await handleBanUserAction(user.id, user.is_active, session?.accessToken || "");
+      
+        if (result.success) {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          toast.success(result.message || (user.is_active ? "User banned!" : "User unbanned!"));
+          setOpen(false);
+        } else {
+          toast.error(result.message || "Failed to update user status.");
         }
-    }
+      
+        setIsLoading(false);
+      };
+      
     const handleOpenChange = (open: boolean) => {
         setOpen(open)
     }

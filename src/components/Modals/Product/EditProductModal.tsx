@@ -156,59 +156,61 @@ const EditProductModal = ({ product }: { product: IProduct }) => {
     }
 
     const handleUpdateProduct = async () => {
-        setIsLoading(true)
-        try {
-            productData.product_name = productData.product_name.trim()
-            productData.description = productData.description.trim()
-            if (productData.product_name === "" || productData.price === 0 || productData.stock === 0) {
-                toast.error("Please fill in all required fields")
-                return
-            }
+        setIsLoading(true);
 
-            const resProduct = await handleUpdateProductAction(product.id, productData, session?.accessToken || "")
+        productData.product_name = productData.product_name.trim();
+        productData.description = productData.description.trim();
 
-            if (imageFiles && imageFiles?.length > 0) {
-                const productImageFormData = new FormData()
-                imageFiles.forEach(file => {
-                    if (file) {
-                        productImageFormData.append("product-images", file)
-                    }
-                })
-
-                const isMainIndex = imageFiles.findIndex(image => image?.name === selectedImage?.name)
-                if (isMainIndex !== -1) {
-                    if (isMainIndex !== -1) {
-                        productImageFormData.append("isMain", isMainIndex.toString())
-                    }
-                    productImageFormData.append("product_id", product.id.toString())
-                    // productImageFormData.append("mainImageId", mainImageId?.toString() || "")
-
-                    const resImage = await handleUpdateProductImageAction(product.id, productImageFormData, session?.accessToken || "")
-                    if (resProduct && resImage) {
-                        await new Promise(resolve => setTimeout(resolve, 1000))
-                        toast.success("Product updated successfully!")
-                        setOpen(false)
-                    }
-                    else {
-                        toast.error("Product created successfully, but image update failed!")
-                    }
-                } else {
-                    toast.error("Please select a main image")
-                }
-            } else {
-                if (resProduct) {
-                    await new Promise(resolve => setTimeout(resolve, 1000))
-                    toast.success("Product updated successfully!")
-                    setOpen(false)
-                }
-            }
-
-        } catch (error) {
-            toast.error("Update failed!")
-        } finally {
-            setIsLoading(false)
+        if (
+            productData.product_name === "" ||
+            productData.price === 0 ||
+            productData.stock === 0
+        ) {
+            toast.error("Please fill in all required fields");
+            setIsLoading(false);
+            return;
         }
-    }
+
+        const resProduct = await handleUpdateProductAction(product.id, productData, session?.accessToken || "");
+        if (!resProduct.success) {
+            toast.error(resProduct.message);
+            setIsLoading(false);
+            return;
+        }
+
+        if (imageFiles && imageFiles.length > 0) {
+            const productImageFormData = new FormData();
+            imageFiles.forEach(file => {
+                if (file) {
+                    productImageFormData.append("product-images", file);
+                }
+            });
+
+            const isMainIndex = imageFiles.findIndex(image => image?.name === selectedImage?.name);
+            if (isMainIndex === -1) {
+                toast.error("Please select a main image");
+                setIsLoading(false);
+                return;
+            }
+
+            productImageFormData.append("isMain", isMainIndex.toString());
+            productImageFormData.append("product_id", product.id.toString());
+
+            const resImage = await handleUpdateProductImageAction(product.id, productImageFormData, session?.accessToken || "");
+            if (!resImage.success) {
+                toast.error(resImage.message || "Image update failed!");
+                setIsLoading(false);
+                return;
+            }
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        toast.success(resProduct.message);
+        setOpen(false);
+        setIsLoading(false);
+    };
+
+
 
     const handleOpenChange = (state: boolean) => {
         setOpen(state)

@@ -28,25 +28,22 @@ const DeleteCategoryModal = ({ category }: { category: any }) => {
   }
 
   const handleDeleteCategory = async () => {
-    setIsLoading(true)
-    try {
-      const success = await handleDeleteCategoryAction(
-        category.id,
-        session?.accessToken || ""
-      )
-      if (success) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        toast.success("Category deleted successfully!")
-        setOpen(false)
-      } else {
-        toast.error("Failed to delete category.")
-      }
-    } catch (err) {
-      toast.error("Something went wrong.")
-    } finally {
-      setIsLoading(false)
+    setIsLoading(true);
+  
+    const result = await handleDeleteCategoryAction(category.id, session?.accessToken || "");
+  
+    if (result.success) {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      toast.success(result.message || "Category deleted successfully!");
+      setOpen(false);
+    } else {
+      toast.error(result.message || "Failed to delete category.");
     }
-  }
+  
+    setIsLoading(false);
+  };
+  
+  
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>

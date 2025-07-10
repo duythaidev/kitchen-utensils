@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth/next"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { authOptions } from "@/lib/authOptions";
 import Profile from "@/components/Pages/Profile/Profile"
 export default async function Page() {
   const session = await getServerSession(authOptions)

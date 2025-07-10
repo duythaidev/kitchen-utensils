@@ -1,5 +1,5 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { ChartAreaInteractive } from "@/components/shadcn/chart-area-interactive"
+import { authOptions } from "@/lib/authOptions";
+// import { ChartAreaInteractive } from "@/components/shadcn/chart-area-interactive"
 import { SectionCards } from "@/components/shadcn/section-cards"
 import { getServerSession } from "next-auth"
 
@@ -26,7 +26,7 @@ export default async function Page() {
         <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
           <SectionCards data={data} />
           <div className="px-4 lg:px-6">
-            <ChartAreaInteractive />
+            {/* <ChartAreaInteractive /> */}
           </div>
         </div>
       </div>

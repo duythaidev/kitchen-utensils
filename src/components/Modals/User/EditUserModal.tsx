@@ -36,31 +36,29 @@ const EditUserModal = ({ user }: { user: any }) => {
     }
 
     const handleUpdateUser = async () => {
-        setIsLoading(true)
-        try {
-            const formData = new FormData()
-            formData.append("user_name", userData.user_name)
-            formData.append("email", userData.email)
-            formData.append("phone", userData.phone)
-            formData.append("address", userData.address)
-            formData.append("role", userData.role)
-            if (avatar) {
-                formData.append("avatar", avatar)
-            }
+        setIsLoading(true);
 
-            const res = await handleUpdateUserAction(user.id, formData, session?.accessToken || "")
-            if (res) {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                toast.success("Update succeed!")
-                setOpen(false)
-                // refreshUserList()
-            }
-        } catch (err) {
-            toast.error("Update failed!")
-        } finally {
-            setIsLoading(false)
+        const formData = new FormData();
+        formData.append("user_name", userData.user_name);
+        formData.append("email", userData.email);
+        formData.append("phone", userData.phone);
+        formData.append("address", userData.address);
+        formData.append("role", userData.role);
+        if (avatar) formData.append("avatar", avatar);
+
+        const result = await handleUpdateUserAction(user.id, formData, session?.accessToken || "");
+
+        if (result.success) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            toast.success(result.message || "Update succeed!");
+            setOpen(false);
+        } else {
+            toast.error(result.message || "Update failed!");
         }
-    }
+
+        setIsLoading(false);
+    };
+
 
     return (
         <Dialog open={open} onOpenChange={handleOpenChange}>

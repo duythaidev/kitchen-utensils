@@ -1,4 +1,4 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 import CartList from "@/components/Pages/Cart/CartList";
 import PageHeader from "@/components/Custom/PageHeader";
 import { getServerSession } from "next-auth";

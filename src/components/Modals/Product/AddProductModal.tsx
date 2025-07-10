@@ -63,56 +63,61 @@ const AddProductModal = () => {
         }
     };
 
-
     const handleAddProduct = async () => {
         setIsLoading(true);
-        try {
-            productData.product_name = productData.product_name.trim();
-            productData.description = productData.description.trim();
-            if (productData.product_name === "" || productData.price === 0 || productData.stock === 0) {
-                toast.error("Please fill in all required fields");
-                return;
-            }
-            const resProduct = await handleCreateProductAction(productData, session?.accessToken || "");
-            const productId = resProduct.id;
-
-            if (productImages.length > 0) {
-                const productImageFormData = new FormData();
-                productImages.forEach(file => {
-                    productImageFormData.append("product-images", file);
-                });
-
-                const isMainIndex = productImages.findIndex(image => image.name === selectedImage?.name);
-                if (isMainIndex !== -1) {
-                    productImageFormData.append("isMain", isMainIndex.toString());
-                    productImageFormData.append("product_id", productId);
-                    const resImage = await handleCreateProductImageAction(productImageFormData, session?.accessToken || "");
-                    if (resProduct && resImage) {
-                        await new Promise(resolve => setTimeout(resolve, 1000));
-                        toast.success("Product created successfully!");
-                        setOpen(false);
-                    }
-                    else {
-                        toast.error("Product image created failed!");
-                    }
-                } else {
-                    toast.error("Please select a main image");
-                }
-            } else {
-                if (resProduct) {
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                    toast.success("Product created successfully!");
-                    setOpen(false);
-                }
-            }
-
-
-        } catch (error) {
-            toast.error("Create failed!");
-        } finally {
-            setIsLoading(false);
+      
+        productData.product_name = productData.product_name.trim();
+        productData.description = productData.description.trim();
+      
+        if (
+          productData.product_name === "" ||
+          productData.price === 0 ||
+          productData.stock === 0
+        ) {
+          toast.error("Please fill in all required fields");
+          setIsLoading(false);
+          return;
         }
-    };
+      
+        const resProduct = await handleCreateProductAction(productData, session?.accessToken || "");
+        if (!resProduct.success) {
+          toast.error(resProduct.message);
+          setIsLoading(false);
+          return;
+        }
+      
+        const productId = resProduct.data.id;
+      
+        if (productImages.length > 0) {
+          const productImageFormData = new FormData();
+          productImages.forEach(file => {
+            productImageFormData.append("product-images", file);
+          });
+      
+          const isMainIndex = productImages.findIndex(image => image.name === selectedImage?.name);
+          if (isMainIndex === -1) {
+            toast.error("Please select a main image");
+            setIsLoading(false);
+            return;
+          }
+      
+          productImageFormData.append("isMain", isMainIndex.toString());
+          productImageFormData.append("product_id", productId);
+      
+          const resImage = await handleCreateProductImageAction(productImageFormData, session?.accessToken || "");
+          if (!resImage.success) {
+            toast.error(resImage.message || "Product image creation failed!");
+            setIsLoading(false);
+            return;
+          }
+        }
+      
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        toast.success(resProduct.message);
+        setOpen(false);
+        setIsLoading(false);
+      };
+      
 
     const handleOpenChange = (state: boolean) => {
         setOpen(state);
