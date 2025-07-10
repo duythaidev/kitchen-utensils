@@ -1,9 +1,6 @@
-export const fetchCategories = async (accessToken: string) => {
+export const fetchCategories = async () => {
     const res = await fetch(`${process.env.BACKEND_API}/categories`, {
         method: "GET",
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
         cache: "no-store",
     });
 

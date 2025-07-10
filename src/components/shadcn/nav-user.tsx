@@ -1,14 +1,6 @@
 "use client"
 
 import {
-  IconCreditCard,
-  IconDotsVertical,
-  IconLogout,
-  IconNotification,
-  IconUserCircle,
-} from "@tabler/icons-react"
-
-import {
   Avatar,
   AvatarFallback,
   AvatarImage,
@@ -28,7 +20,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/shadcn/sidebar"
-import { User } from "lucide-react"
+import { EllipsisVertical, User, LogOut, CircleUser } from "lucide-react"
 import { signOut } from "next-auth/react"
 import Link from "next/link"
 
@@ -72,7 +64,7 @@ export function NavUser({
                   {user.email}
                 </span>
               </div>
-              <IconDotsVertical className="ml-auto size-4" />
+              <EllipsisVertical className="ml-auto size-4 w-4 h-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -106,14 +98,14 @@ export function NavUser({
             <DropdownMenuGroup>
               <Link href="/profile">
                 <DropdownMenuItem className="cursor-pointer" >
-                  <IconUserCircle />
+                  <CircleUser className="w-4 h-4" />
                   Account
                 </DropdownMenuItem>
               </Link>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer">
-              <IconLogout />
+              <LogOut className="w-4 h-4" />
               <p >
                 Log out
               </p>

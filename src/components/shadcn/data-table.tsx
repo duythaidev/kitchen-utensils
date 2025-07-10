@@ -1,19 +1,5 @@
 "use client"
 
-// import * as React from "react"
-import {
-  IconChevronDown,
-  IconChevronLeft,
-  IconChevronRight,
-  IconChevronsLeft,
-  IconChevronsRight,
-  IconCircleCheckFilled,
-  IconDotsVertical,
-  IconLayoutColumns,
-  IconLoader,
-  IconPlus,
-  IconTrendingUp,
-} from "@tabler/icons-react"
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -24,7 +10,6 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  Row,
   SortingState,
   useReactTable,
   VisibilityState,
@@ -36,21 +21,12 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/shadcn/dropdown-menu"
 import { Input } from "@/components/shadcn/input"
 import { Label } from "@/components/shadcn/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/shadcn/select"
 import {
   Table,
   TableBody,
@@ -62,11 +38,16 @@ import {
 import {
   Tabs,
   TabsContent,
-  TabsList,
-  TabsTrigger,
 } from "@/components/shadcn/tabs"
 import { columnsMap, DataTableProps, InferData, TableType } from "./data-table-columns"
-import { ChevronDown, Filter, Search } from "lucide-react"
+import {  Columns2, Search,
+
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+ } from "lucide-react"
 import AddUserModal from "@/components/Modals//User/AddUserModal"
 import AddProductModal from "@/components/Modals//Product/AddProductModal"
 import { useEffect, useState } from "react"
@@ -75,7 +56,6 @@ import { useRouter } from "nextjs-toploader/app"
 import { useSearchParams } from "next/navigation"
 import { ICategory } from "@/types"
 import { fetchCategories } from "@/actions/client-api"
-import { useSession } from "next-auth/react"
 export function DataTable<T extends TableType>({ data, type, pagination }: DataTableProps<T>) {
 
   const [rowSelection, setRowSelection] = useState({})
@@ -85,11 +65,10 @@ export function DataTable<T extends TableType>({ data, type, pagination }: DataT
 
   const [categories, setCategories] = useState<ICategory[]>([])
 
-  const { data: session } = useSession()
   useEffect(() => {
     if (type === "products") {
       const getCategories = async () => {
-        const res = await fetchCategories(session?.accessToken || "")
+        const res = await fetchCategories()
         if (res.success) {
           setCategories(res.data.data)
         }
@@ -165,10 +144,10 @@ export function DataTable<T extends TableType>({ data, type, pagination }: DataT
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm">
-                  <IconLayoutColumns />
+                  <Columns2 className="w-4 h-4" />
                   <span className="hidden lg:inline">Customize Columns</span>
                   <span className="lg:hidden">Columns</span>
-                  <IconChevronDown />
+                  <ChevronDown className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-56">
@@ -201,7 +180,6 @@ export function DataTable<T extends TableType>({ data, type, pagination }: DataT
                   <ChevronDown />
                   <span className="hidden lg:inline">Sort by</span>
                   <span className="lg:hidden">Sort</span>
-                  <IconChevronDown />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-56">
@@ -316,7 +294,7 @@ export function DataTable<T extends TableType>({ data, type, pagination }: DataT
               onClick={() => goToPage(1)}
               disabled={page <= 1}
             >
-              <IconChevronsLeft />
+              <ChevronsLeft className="w-4 h-4" />
             </Button>
             <Button
               variant="outline"
@@ -325,7 +303,7 @@ export function DataTable<T extends TableType>({ data, type, pagination }: DataT
               onClick={() => goToPage(page - 1)}
               disabled={page <= 1}
             >
-              <IconChevronLeft />
+              <ChevronLeft className="w-4 h-4" />
             </Button>
             <Button
               variant="outline"
@@ -334,7 +312,7 @@ export function DataTable<T extends TableType>({ data, type, pagination }: DataT
               onClick={() => goToPage(page + 1)}
               disabled={page >= totalPages}
             >
-              <IconChevronRight />
+              <ChevronRight className="w-4 h-4" />
             </Button>
             <Button
               variant="outline"
@@ -343,7 +321,7 @@ export function DataTable<T extends TableType>({ data, type, pagination }: DataT
               onClick={() => goToPage(totalPages)}
               disabled={page >= totalPages}
             >
-              <IconChevronsRight />
+              <ChevronsRight className="w-4 h-4" />
             </Button>
           </div>
         </div>

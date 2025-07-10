@@ -1,8 +1,6 @@
 "use client"
 
-import { IconCirclePlusFilled, IconDashboard, IconMail, type Icon } from "@tabler/icons-react"
-
-import { Button } from "@/components/shadcn/button"
+import { ChartNoAxesCombined } from "lucide-react"
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -18,7 +16,7 @@ export function NavMain({
   items: {
     title: string
     url: string
-    icon?: Icon
+    icon?: any
   }[]
 }) {
   const router = useRouter();
@@ -33,7 +31,7 @@ export function NavMain({
               onClick={() => router.push("/admin/dashboard")}
               className={`${(pathname === "/admin/dashboard" || pathname === "/admin") ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground" : ""} cursor-pointer min-w-8 duration-200 ease-linear`}
             >
-              <IconDashboard />
+              <ChartNoAxesCombined className="w-4 h-4" />
               <span>Dashboard</span>
             </SidebarMenuButton>
             {/* <Button

@@ -5,7 +5,9 @@ import { ICartItem, IProduct } from "@/types"
 import { useMemo, useState } from "react"
 import { toast } from "sonner"
 import { Button } from "@/components/shadcn/button"
-import { IconChevronsLeft, IconChevronLeft, IconChevronRight, IconChevronsRight } from "@tabler/icons-react"
+import { ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight } from "lucide-react"
+
+
 import { Input } from "@/components/shadcn/input"
 import { checkout } from "@/actions/user.action"
 import { useSession } from "next-auth/react"
@@ -117,7 +119,7 @@ const CartList = ({ cartItems = [], profile }: { cartItems?: ICartItem[], profil
                                                 disabled={pageIndex >= totalPages - 1}
                                             >
                                                 <span className="sr-only">Go to first page</span>
-                                                <IconChevronsLeft />
+                                                <ChevronsLeft className="w-4 h-4" />
                                             </Button>
                                             <Button
                                                 variant="outline"
@@ -127,7 +129,7 @@ const CartList = ({ cartItems = [], profile }: { cartItems?: ICartItem[], profil
                                                 disabled={pageIndex === 0}
                                             >
                                                 <span className="sr-only">Go to previous page</span>
-                                                <IconChevronLeft />
+                                                <ChevronLeft className="w-4 h-4" />
                                             </Button>
                                             <Button
                                                 variant="outline"
@@ -137,7 +139,7 @@ const CartList = ({ cartItems = [], profile }: { cartItems?: ICartItem[], profil
                                                 disabled={pageIndex >= totalPages - 1}
                                             >
                                                 <span className="sr-only">Go to next page</span>
-                                                <IconChevronRight />
+                                                <ChevronRight className="w-4 h-4" />
                                             </Button>
                                             <Button
                                                 variant="outline"
@@ -147,7 +149,7 @@ const CartList = ({ cartItems = [], profile }: { cartItems?: ICartItem[], profil
                                                 disabled={pageIndex >= totalPages - 1}
                                             >
                                                 <span className="sr-only">Go to last page</span>
-                                                <IconChevronsRight />
+                                                <ChevronsRight className="w-4 h-4" />
                                             </Button>
                                         </div>
                                     </div>

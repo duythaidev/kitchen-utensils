@@ -2,12 +2,9 @@
 
 import { useMemo, useState } from "react"
 import { Button } from "@/components/shadcn/button"
-import { IconChevronsLeft, IconChevronLeft, IconChevronRight, IconChevronsRight, IconEye } from "@tabler/icons-react"
-// import { Badge } from "@/components/shadcn/badge" 
+import { ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight } from "lucide-react"
 import ViewOrderModal from "@/components/Modals/Order/ViewOrderModal"
-
 import { IOrder } from "@/types"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/shadcn/tooltip"
 import { Badge } from "@/components/shadcn/badge"
 
 const OrderList = ({ orders }: { orders: IOrder[] }) => {
@@ -79,16 +76,16 @@ const OrderList = ({ orders }: { orders: IOrder[] }) => {
                   Page {pageIndex + 1} of {totalPages}
                   <div className="flex items-center gap-2">
                     <Button variant="outline" size="icon" className="size-8" onClick={() => setPageIndex(0)} disabled={pageIndex === 0}>
-                      <IconChevronsLeft />
+                      <ChevronsLeft className="w-4 h-4" />
                     </Button>
                     <Button variant="outline" size="icon" className="size-8" onClick={() => setPageIndex(pageIndex - 1)} disabled={pageIndex === 0}>
-                      <IconChevronLeft />
+                      <ChevronLeft className="w-4 h-4" />
                     </Button>
                     <Button variant="outline" size="icon" className="size-8" onClick={() => setPageIndex(pageIndex + 1)} disabled={pageIndex >= totalPages - 1}>
-                      <IconChevronRight />
+                      <ChevronRight className="w-4 h-4" />
                     </Button>
                     <Button variant="outline" size="icon" className="size-8" onClick={() => setPageIndex(totalPages - 1)} disabled={pageIndex >= totalPages - 1}>
-                      <IconChevronsRight />
+                      <ChevronsRight className="w-4 h-4" />
                     </Button>
                   </div>
                 </div>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ChevronDown, Clock, Heart, PhoneCall, Search, ShoppingBag, ShoppingCart, User } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import HoverLink from "./Custom/HoverLink";
 import { redirect } from "next/navigation";
 import MobileHeader from "./Mobile/MobileHeader";
@@ -23,7 +23,7 @@ import { Separator } from "@/components/shadcn/separator";
 import { useRouter } from "nextjs-toploader/app";
 
 
-const hoverStyle = `after:content-[''] after:w-0 after:absolute after:left-0 after:top-[-10] after:h-0.5  after:bg-blue-500 after:duration-500`
+const hoverStyle = `after:content-[''] after:w-0 after:absolute after:left-0 after:top-[-10] after:h-0.5  after:bg-primary after:duration-500`
 
 const Header = () => {
   const { data: session } = useSession()
@@ -38,6 +38,20 @@ const Header = () => {
     }
   };
   const router = useRouter()
+  const searchRef = useRef<HTMLInputElement>(null)
+
+  const handleSearch = () => {
+    if (searchRef.current) {
+      router.push(`/shop?keyword=${searchRef.current.value}`)
+    }
+  }
+  useEffect(() => {
+    // const getAllCategories = async () => {
+    //   const res = await axios.get('/api/categories')
+    //   console.log("res", res)
+    // }
+    // getAllCategories()
+  }, [])
 
   useEffect(() => {
     window.addEventListener("scroll", handleStickyMenu);
@@ -67,17 +81,25 @@ const Header = () => {
               <NavigationMenu >
                 <NavigationMenuList >
                   <NavigationMenuItem>
-                    <NavigationMenuTrigger className="p-0 font-normal">All Categories</NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <NavigationMenuLink className="w-[100px]">All Categories</NavigationMenuLink>
+                    <NavigationMenuTrigger className="p-0 font-normal cursor-pointer">All Categories</NavigationMenuTrigger>
+                    <NavigationMenuContent className="cursor-pointer">
+                      <NavigationMenuLink className="w-[100px]" onClick={() => router.push('/shop')}>
+                        All Categories
+                      </NavigationMenuLink>
                     </NavigationMenuContent>
                   </NavigationMenuItem>
                 </NavigationMenuList>
               </NavigationMenu>
             </div>
             <div className="relative border-l border-gray-300 px-2 ml-2 flex-1">
-              <Input type="email" className="w-[95%] border-none! bg-gray-100! focus-visible:ring-[0px] " placeholder="Search" />
-              <Search size={20} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"></Search>
+              <Input type="text" ref={searchRef} className="w-[95%] border-none! bg-gray-100! focus-visible:ring-[0px] "
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSearch()
+                  }
+                }}
+                placeholder="Search" />
+              <Search size={20} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-primary cursor-pointer" onClick={handleSearch}></Search>
             </div>
 
           </div>
@@ -86,7 +108,7 @@ const Header = () => {
             <PhoneCall className="text-primary" size={25}></PhoneCall>
             <div>
               <p className="text-gray-500 text-xs">24/7 SUPPORT</p>
-              <p className="font-bold ">0123456789</p>
+              <p className="font-bold ">0985486619</p>
             </div>
           </div>
           <div className="hidden gap-2 lg:flex lg:justify-end items-center">
@@ -95,30 +117,21 @@ const Header = () => {
                 <img alt="profile image" className="rounded-full " width={30} height={30} src={session?.user.avatar_url || ''}></img>
               </div>
               :
-              <User className="hover:text-blue-500 cursor-pointer text-primary" size={25}></User>
+              <User className="hover:text-primary cursor-pointer text-primary" size={25}></User>
             }
             <div>
               <p className="text-gray-500  text-xs uppercase">Account</p>
               {session?.user ?
-                <HoverLink link="/profile" className="text-dark font-medium hover:text-blue-500">
+                <HoverLink link="/profile" className="text-dark font-medium hover:text-primary">
                   {session?.user.user_name ? ((session?.user.user_name.length > 10) ? session?.user.user_name.slice(0, 10) + '...' : session?.user.user_name) : 'No name'}
                 </HoverLink>
                 :
-                <HoverLink link="/login" className="text-dark font-medium hover:text-blue-500">
+                <HoverLink link="/login" className="text-dark font-medium hover:text-primary">
                   Log in
                 </HoverLink>
               }
             </div>
-            <Link href="/cart" className="relative">
-              <ShoppingCart size={25} className="hover:text-blue-500 cursor-pointer text-primary ml-2"></ShoppingCart>
-              <div className="absolute top-[-5] w-3.5 h-3.5 text-[10px] text-center right-[-5] bg-blue-600 text-white rounded-full">
-                1
-              </div>
-            </Link>
-            <div >
-              <p className="text-gray-500 text-xs text-end uppercase">Cart</p>
-              <p className="font-bold text-end">$100</p>
-            </div>
+
           </div>
         </nav>
         <MobileHeader showNav={showNav} setShowNav={setShowNav}></MobileHeader>
@@ -150,11 +163,11 @@ const Header = () => {
             </div>
           </div>
           <div className="flex gap-3">
-            <Link href={'/cart'} className={`  flex items-center gap-2  h-[30px] relative ${hoverStyle} hover:after:w-full text-dark font-light`}>
+            <Link href={'/cart'} className={`hover:text-primary transition-all flex items-center gap-2  h-[30px] relative ${hoverStyle} hover:after:w-full text-dark font-light`}>
               <ShoppingCart className="w-5 h-5" />
               <span className="">Cart</span>
             </Link>
-            <Link href={'/order'} className={`  flex items-center gap-2  h-[30px] relative ${hoverStyle} hover:after:w-full text-dark font-light`}>
+            <Link href={'/order'} className={`hover:text-primary transition-all flex items-center gap-2  h-[30px] relative ${hoverStyle} hover:after:w-full text-dark font-light`}>
               <ShoppingBag className="w-5 h-5" />
               <span className="">Orders</span>
             </Link>

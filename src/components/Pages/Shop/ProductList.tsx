@@ -12,18 +12,22 @@ import {
 } from "@/components/shadcn/dropdown-menu"
 import { useRouter } from "nextjs-toploader/app"
 import { useSearchParams } from "next/navigation"
-import { ICategory, IProduct } from "@/types"
+import { ICategory, IProduct, IPagination } from "@/types"
 import { toast } from "sonner"
 
-const ProductList = ({ categories, products }: { categories: ICategory[], products: IProduct[] }) => {
+const ProductList = ({ categories, products, pagination }: { categories: ICategory[], products: IProduct[], pagination: IPagination }) => {
 
-    const keywordparam = useSearchParams().get('keyword')
-    const sortparam = useSearchParams().get('sort')
-    const priceSortParam = useSearchParams().get('priceSort')
+    const { page, limit, total } = pagination
+    const totalPages = Math.ceil(total / limit)
+    const router = useRouter()
 
-
-    const priceFromParam = useSearchParams().get('priceFrom')
-    const priceToParam = useSearchParams().get('priceTo')
+    const searchParams = useSearchParams();
+    const keywordparam = searchParams.get('keyword')
+    const sortparam = searchParams.get('sort')
+    const priceSortParam = searchParams.get('priceSort')
+    const priceFromParam = searchParams.get('priceFrom')
+    const priceToParam = searchParams.get('priceTo')
+    const categoryParam = searchParams.get('category')
 
 
     const [keyword, setKeyword] = useState(keywordparam || '')
@@ -33,16 +37,10 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
     const [priceFrom, setPriceFrom] = useState(priceFromParam || '')
     const [priceTo, setPriceTo] = useState(priceToParam || '')
 
-    const router = useRouter()
-
-    const categoryParam = useSearchParams().get('category')
-
-    const [selectedCategories, setSelectedCategories] = useState<string[]>(() => {
-        return categoryParam ? categoryParam.split(',') : []
-    })
-
-
     const [showCategories, setShowCategories] = useState(true)
+
+    const [selectedCategory, setSelectedCategory] = useState<string>(categoryParam || '')
+
 
     const searchInputRef = useRef<HTMLInputElement>(null)
     const priceFromRef = useRef<HTMLInputElement>(null)
@@ -56,35 +54,24 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
             router.push(`/shop?keyword=${searchKeyword}`)
         }
     }
-    const page = useSearchParams().get('page')
-
-    const [pageIndex, setPageIndex] = useState((page !== null && page !== undefined) ? Number(page) - 1 : 0)
-
-    const PAGE_SIZE = 6
-    const totalPages = Math.ceil(products.length / PAGE_SIZE)
-
-    const paginatedProducts = useMemo(() => {
-        const start = pageIndex * PAGE_SIZE
-        const end = start + PAGE_SIZE
-        return products.slice(start, end)
-    }, [products, pageIndex, PAGE_SIZE])
 
     useEffect(() => {
         const params = new URLSearchParams()
-        keyword && params.set("keyword", keyword)
-        sort && params.set("sort", sort)
-        priceSort && params.set("priceSort", priceSort)
+        keyword && params.set("keyword", keyword);
+        (sort || sort === '') && params.set("sort", sort);
+        (priceSort || priceSort === '') && params.set("priceSort", priceSort)
         priceFrom && params.set("priceFrom", priceFrom)
         priceTo && params.set("priceTo", priceTo)
-        selectedCategories.length > 0 && params.set("category", selectedCategories.join(','));
-
-        searchInputRef.current && (searchInputRef.current.value = keyword);
-        // 
-        (pageIndex !== null && pageIndex !== undefined && page !== null && page !== undefined) && params.set("page", (pageIndex + 1).toString())
+        selectedCategory && params.set("categoryId", selectedCategory)
 
         params.size > 0 && router.push(`/shop?${params.toString()}`)
-    }, [sort, priceSort, priceFrom, priceTo, selectedCategories, pageIndex])
+    }, [sort, priceSort, priceFrom, priceTo, selectedCategory])
 
+    const goToPage = (pageIndex: number) => {
+        const params = new URLSearchParams(searchParams)
+        params.set("page", pageIndex.toString())
+        router.push(`/shop?${params.toString()}`)
+    }
 
 
     const handleClearFilter = () => {
@@ -93,10 +80,15 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
         setPriceSort('')
         setPriceFrom('')
         setPriceTo('')
-        setSelectedCategories([])
-        setPageIndex(0)
+        setSelectedCategory('')
         if (searchInputRef.current) {
             searchInputRef.current.value = ''
+        }
+        if (priceFromRef.current) {
+            priceFromRef.current.value = ''
+        }
+        if (priceToRef.current) {
+            priceToRef.current.value = ''
         }
         router.push('/shop')
     }
@@ -105,7 +97,6 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
         if (priceFromRef.current && priceToRef.current) {
             const priceFrom = priceFromRef.current.value ? +priceFromRef.current.value : ""
             const priceTo = priceToRef.current.value ? +priceToRef.current.value : ""
-            // console.log("priceFrom , priceTo", priceFrom, priceTo)
             if (priceFrom && priceTo !== "" && (priceFrom > priceTo)) {
                 toast.error('Price from must be less than price to')
                 return
@@ -131,18 +122,16 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
                             </div>
                         </div>
                         <div className='col-span-3 flex justify-center md:justify-between bg-white shadow-1 rounded-lg px-5 py-2 flex-wrap'>
-                            <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2">
                                 <Input
                                     className="rounded-sm"
-                                    placeholder="Search products by name"
-                                    // value={keyword}
+                                    placeholder="Search by name"
                                     onKeyDown={(e) => {
                                         if (e.key === 'Enter') {
                                             handleSearchKeyword()
                                         }
                                     }}
                                     ref={searchInputRef}
-                                // onChange={(e) => setKeyword(e.target.value)}
                                 />
                                 <Button
                                     className="bg-white hover:bg-gray-100 cursor-pointer border" style={{ padding: 10 }}
@@ -167,13 +156,14 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
 
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
-                                            <Button variant="outline" className="cursor-pointer text-red-500 border-red-500 hover:bg-red-50">
-                                                Price: {priceSort === 'htl' ? 'High to Low' : priceSort === 'lth' ? 'Low to High' : 'Select'} <ChevronDown className="ml-2 w-4 h-4" />
+                                            <Button variant="outline" className="cursor-pointer">
+                                                Price: {priceSort === 'htl' ? 'High to Low' : priceSort === 'lth' ? 'Low to High' : 'Default'} <ChevronDown className="ml-2 w-4 h-4" />
                                             </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent>
                                             <DropdownMenuItem onSelect={() => setPriceSort('htl')}>Price: High to Low</DropdownMenuItem>
                                             <DropdownMenuItem onSelect={() => setPriceSort('lth')}>Price: Low to High</DropdownMenuItem>
+                                            <DropdownMenuItem onSelect={() => setPriceSort('')}>Price: Default</DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </div>
@@ -206,7 +196,7 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
                                         <div className="pt-6" id="filter-section-1">
                                             <div className="space-y-4">
                                                 {categories.map((category) => {
-                                                    const isChecked = selectedCategories.includes(category.id.toString())
+                                                    const isChecked = selectedCategory === category.id.toString()
 
                                                     return (
                                                         <div className="flex gap-3" key={category.id}>
@@ -219,11 +209,7 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
                                                                         checked={isChecked}
                                                                         onChange={(e) => {
                                                                             const value = e.target.value
-                                                                            setSelectedCategories((prev) =>
-                                                                                prev.includes(value)
-                                                                                    ? prev.filter((v) => v !== value)
-                                                                                    : [...prev, value]
-                                                                            )
+                                                                            setSelectedCategory(value)
                                                                         }}
                                                                         className="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-indigo-600"
                                                                     />
@@ -263,12 +249,12 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
                                     </h3>
                                     <div className="pt-4">
                                         <div className="flex items-center gap-2">
-                                            <Input ref={priceFromRef} type="number" placeholder="From" className="w-full" />
+                                            <Input ref={priceFromRef} type="number" min={0} placeholder="From" className="w-full" />
                                             <span className="text-gray-500">-</span>
-                                            <Input ref={priceToRef} type="number" placeholder="To" className="w-full" />
+                                            <Input ref={priceToRef} type="number" min={0} placeholder="To" className="w-full" />
                                         </div>
                                         <Button onClick={handleApplyPriceRange}
-                                            className="mt-3 w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+                                            className="mt-3 w-full cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white"
                                         >
                                             Apply
                                         </Button>
@@ -280,7 +266,7 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
                             <div className="relative lg:col-span-3 ">
 
                                 <div className="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-2 lg:grid-cols-3 justify-items-center">
-                                    {paginatedProducts.map((product) => {
+                                    {products.map((product: IProduct) => {
                                         return (
                                             <div key={product.id} className="bg-white shadow-1 rounded-lg py-4 px-5 col group flex w-full max-w-xs flex-col overflow-hidden ">
                                                 <ProductCard product={product} />
@@ -297,15 +283,15 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
                         <div className="mt-5 flex justify-end items-center  border-t border-gray-200 pt-6">
                             <div className="flex w-full items-center gap-8 lg:w-fit">
                                 <div className="flex w-fit items-center justify-center text-sm font-medium">
-                                    Page {pageIndex + 1} of {totalPages}
+                                    Page {page} of {totalPages || 1}
                                 </div>
                                 <div className="ml-auto flex items-center gap-2 lg:ml-0">
                                     <Button
                                         variant="outline"
                                         className="size-8"
                                         size="icon"
-                                        onClick={() => setPageIndex(0)}
-                                        disabled={pageIndex === 0}
+                                        onClick={() => goToPage(1)}
+                                        disabled={page <= 1}
                                     >
                                         <span className="sr-only">Go to first page</span>
                                         <ChevronsLeft className="w-4 h-4" />
@@ -314,8 +300,8 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
                                         variant="outline"
                                         className="size-8"
                                         size="icon"
-                                        onClick={() => setPageIndex(pageIndex - 1)}
-                                        disabled={pageIndex === 0}
+                                        onClick={() => goToPage(page - 1)}
+                                        disabled={page <= 1}
                                     >
                                         <span className="sr-only">Go to previous page</span>
                                         <ChevronLeft className="w-4 h-4" />
@@ -324,8 +310,8 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
                                         variant="outline"
                                         className="hidden size-8 lg:flex"
                                         size="icon"
-                                        onClick={() => setPageIndex(pageIndex + 1)}
-                                        disabled={pageIndex >= totalPages - 1}
+                                        onClick={() => goToPage(page + 1)}
+                                        disabled={page >= totalPages}
                                     >
                                         <span className="sr-only">Go to next page</span>
                                         <ChevronRight className="w-4 h-4" />
@@ -334,8 +320,8 @@ const ProductList = ({ categories, products }: { categories: ICategory[], produc
                                         variant="outline"
                                         className="hidden size-8 lg:flex"
                                         size="icon"
-                                        onClick={() => setPageIndex(totalPages - 1)}
-                                        disabled={pageIndex >= totalPages - 1}
+                                        onClick={() => goToPage(totalPages)}
+                                        disabled={page >= totalPages}
                                     >
                                         <span className="sr-only">Go to last page</span>
                                         <ChevronsRight className="w-4 h-4" />

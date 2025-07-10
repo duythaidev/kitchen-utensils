@@ -16,7 +16,7 @@ const PreviewProductModal = ({ product, setOpen }: { product?: IProduct, setOpen
         const accessToken = session?.data?.user?.accessToken;
 
         if (!product?.id || !accessToken) {
-            toast.error('Cannot add to cart');
+            toast.error('You must be logged in to add to cart');
             return;
         }
         const res = await addToCart(product?.id, quantity, accessToken);

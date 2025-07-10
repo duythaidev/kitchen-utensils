@@ -4,26 +4,22 @@ import * as React from "react"
 import {
   IconBuildingStore,
   IconCamera,
-  IconChartBar,
-  IconDashboard,
   IconDatabase,
   IconFileAi,
   IconFileDescription,
-  IconFileWord,
+  IconFileWord, // file type lucide
   IconFolder,
-  IconHelp,
-  IconInnerShadowTop,
-  IconListDetails,
-  IconReport,
+  IconHelp, //MessageCircleQuestion
+  IconReport, // <FileChartPie />
   IconSearch,
   IconSettings,
   IconShoppingCart,
   IconUsers,
 } from "@tabler/icons-react"
 
-import { NavDocuments } from "@/components/shadcn/nav-documents"
+import { Camera, Store, Database, File, FileText, FileType, Folder, MessageCircleQuestion, FileChartPie, Search, Settings, ShoppingCart, Users } from "lucide-react"
+
 import { NavMain } from "@/components/shadcn/nav-main"
-import { NavSecondary } from "@/components/shadcn/nav-secondary"
 import { NavUser } from "@/components/shadcn/nav-user"
 import {
   Sidebar,

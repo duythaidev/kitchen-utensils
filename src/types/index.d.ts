@@ -1,3 +1,4 @@
+
 export interface IProduct {
     id: number,
     product_name: string,
@@ -67,3 +68,8 @@ export interface IProductImage {
     is_main: boolean,
 }
 
+export interface IPagination {
+    page: number,
+    limit: number,
+    total: number,
+}

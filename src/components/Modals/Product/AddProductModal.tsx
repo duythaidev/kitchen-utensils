@@ -18,7 +18,6 @@ import CustomButton from "@/components/Custom/CustomButton";
 import { handleCreateProductAction, handleCreateProductImageAction } from "@/actions/admin.product.action";
 import { useSession } from "next-auth/react";
 import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
-import { fetchCategories } from "@/actions/client-api";
 import { ICategory, IProduct } from "@/types";
 
 const AddProductModal = ({ categories }: { categories: ICategory[] }) => {

@@ -23,7 +23,6 @@ import ButtonStatus from "@/components/Modals//Order/ButtonStatus"
 import ViewCategoryModal from "../Modals/Category/ViewCategoryModal"
 import { useEffect } from "react"
 import { fetchCategories } from "@/actions/client-api"
-import { useSession } from "next-auth/react"
 import { ICategory } from "@/types"
 import { useState } from "react"  
 export const userSchema = z.object({
@@ -261,11 +260,10 @@ export const productsColumns: ColumnDef<z.infer<typeof productSchema>>[] = [
     header: "Actions",
     size: 250,
     cell: ({ row }) => {
-      const { data: session } = useSession()
       const [categories, setCategories] = useState<ICategory[]>([])
       useEffect(() => {
         const getCategories = async () => {
-          const res = await fetchCategories(session?.accessToken || "")
+          const res = await fetchCategories()
           if (res.success) {
             setCategories(res.data.data)
           }
