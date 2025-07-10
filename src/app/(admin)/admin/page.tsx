@@ -5,6 +5,13 @@ import { Skeleton } from "@/components/shadcn/skeleton";
 import { useRouter } from 'nextjs-toploader/app';
 import { useEffect } from "react";
 
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: 'Admin Dashboard - Kitchen Utensils',
+    description: 'View dashboard',
+};
+
 export default function Page() {
   const router = useRouter();
   useEffect(() => {

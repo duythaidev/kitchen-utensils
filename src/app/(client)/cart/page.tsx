@@ -2,6 +2,17 @@ import { authOptions } from "@/lib/authOptions";
 import CartList from "@/components/Pages/Cart/CartList";
 import PageHeader from "@/components/Custom/PageHeader";
 import { getServerSession } from "next-auth";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: 'Shopping Cart - Kitchen Utensils',
+    description: 'Review and manage your selected kitchen utensils before checkout',
+    robots: {
+        index: false,
+        follow: true,
+    },
+}; 
+
 const page = async () => {
 
     const session = await getServerSession(authOptions);

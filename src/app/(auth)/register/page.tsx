@@ -1,6 +1,15 @@
-
 import Register from "@/components/Pages/Auth/Register";
 import PageHeader from "@/components/Custom/PageHeader";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: 'Register - Kitchen Utensils',
+    description: 'Sign in to your Kitchen Utensils account to access your dashboard, orders, and preferences',
+    robots: {
+        index: true,
+        follow: true,
+    },
+};
 
 const Page = () => {
     return (

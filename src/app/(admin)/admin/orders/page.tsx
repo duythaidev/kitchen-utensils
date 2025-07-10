@@ -1,6 +1,13 @@
 import { DataTable } from "@/components/shadcn/data-table";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: 'Orders Dashboard - Kitchen Utensils',
+    description: 'View orders dashboard',
+};
+
 const Page = async ({ searchParams, }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) => {
     const session = await getServerSession(authOptions);
     const accessToken = session?.accessToken;

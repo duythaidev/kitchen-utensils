@@ -1,23 +1,14 @@
 "use client"
 
-import * as React from "react"
 import {
-  IconBuildingStore,
-  IconCamera,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord, // file type lucide
-  IconFolder,
-  IconHelp, //MessageCircleQuestion
-  IconReport, // <FileChartPie />
-  IconSearch,
-  IconSettings,
-  IconShoppingCart,
-  IconUsers,
-} from "@tabler/icons-react"
-
-import { Camera, Store, Database, File, FileText, FileType, Folder, MessageCircleQuestion, FileChartPie, Search, Settings, ShoppingCart, Users } from "lucide-react"
+  Store,
+  Folder,
+  MessageCircleQuestion,
+  Search,
+  Settings,
+  ShoppingCart,
+  Users,
+} from "lucide-react"
 
 import { NavMain } from "@/components/shadcn/nav-main"
 import { NavUser } from "@/components/shadcn/nav-user"
@@ -44,113 +35,112 @@ const data = {
     {
       title: "Users",
       url: "/admin/users",
-      icon: IconUsers,
+      icon: Users,
     },
     {
       title: "Products",
       url: "/admin/products",
-      icon: IconBuildingStore,
+      icon: Store,
     },
     {
       title: "Orders",
       url: "/admin/orders",
-      icon: IconShoppingCart,
+      icon: ShoppingCart,
     },
     {
       title: "Categories",
       url: "/admin/categories",
-      icon: IconFolder,
-    },
-
-  ],
-  navClouds: [
-    {
-      title: "Capture",
-      icon: IconCamera,
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Proposal",
-      icon: IconFileDescription,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: IconFileAi,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
+      icon: Folder,
     },
   ],
+  // navClouds: [
+  //   {
+  //     title: "Capture",
+  //     icon: Camera,
+  //     isActive: true,
+  //     url: "#",
+  //     items: [
+  //       {
+  //         title: "Active Proposals",
+  //         url: "#",
+  //       },
+  //       {
+  //         title: "Archived",
+  //         url: "#",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     title: "Proposal",
+  //     icon: FileText,
+  //     url: "#",
+  //     items: [
+  //       {
+  //         title: "Active Proposals",
+  //         url: "#",
+  //       },
+  //       {
+  //         title: "Archived",
+  //         url: "#",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     title: "Prompts",
+  //     icon: FileType,
+  //     url: "#",
+  //     items: [
+  //       {
+  //         title: "Active Proposals",
+  //         url: "#",
+  //       },
+  //       {
+  //         title: "Archived",
+  //         url: "#",
+  //       },
+  //     ],
+  //   },
+  // ],
   navSecondary: [
     {
       title: "Settings",
       url: "#",
-      icon: IconSettings,
+      icon: Settings,
     },
     {
       title: "Get Help",
       url: "#",
-      icon: IconHelp,
+      icon: MessageCircleQuestion,
     },
     {
       title: "Search",
       url: "#",
-      icon: IconSearch,
+      icon: Search,
     },
   ],
-  documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: IconDatabase,
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: IconReport,
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
-    },
-  ],
+  // documents: [
+  //   {
+  //     name: "Data Library",
+  //     url: "#",
+  //     icon: Database,
+  //   },
+  //   {
+  //     name: "Reports",
+  //     url: "#",
+  //     icon: FileChartPie,
+  //   },
+  //   {
+  //     name: "Word Assistant",
+  //     url: "#",
+  //     icon: FileType,
+  //   },
+  // ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const session = useSession()
   const user = session.data?.user
-  // console.log(accessToken)
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>

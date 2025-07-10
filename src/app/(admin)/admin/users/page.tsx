@@ -1,6 +1,13 @@
 import { DataTable } from "@/components/shadcn/data-table";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: 'User Dashboard - Kitchen Utensils',
+    description: 'View user dashboard',
+};
+
 const Page = async ({
     searchParams,
 }: {

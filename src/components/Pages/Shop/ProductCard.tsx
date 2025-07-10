@@ -10,6 +10,7 @@ import CustomModalBox from "@/components/Modals//CustomModalBox";
 import { toast } from "sonner";
 import { addToCart } from "@/actions/user.action";
 import { useSession } from "next-auth/react";
+import StarRating from "@/components/Custom/StarRating";
 const ProductModal = ({ open, setOpen, product }: { open: boolean, setOpen: (open: boolean) => void, product: IProduct | undefined }) => {
     return (
         <Dialog open={open} onOpenChange={setOpen} >
@@ -81,7 +82,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
                 </Link>
 
                 <div className="mt-2 flex items-center gap-2">
-                    <div className="flex items-center">
+                    {/* <div className="flex items-center">
                         <div className="relative">
                             <div className="flex gap-2">
                                 {Array.from({ length: 5 }, () => (
@@ -94,9 +95,10 @@ const ProductCard = ({ product }: { product: IProduct }) => {
                                 <StarHalf fill="#FBB040" strokeWidth={1} color="#FBB040" />
                             </div>
                         </div>
-                    </div>
+                    </div> */}
+                    <StarRating rating={5}></StarRating>
 
-                    <p className="text-sm font-medium text-gray-900 ">5.0</p>
+                    <p className="text-sm font-medium text-gray-900 ">{(5).toFixed(1)}</p>
                     <p className="text-sm font-medium text-gray-500 ">(455)</p>
                 </div>
 

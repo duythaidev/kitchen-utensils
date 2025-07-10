@@ -2,6 +2,12 @@ import { authOptions } from "@/lib/authOptions";
 // import { ChartAreaInteractive } from "@/components/shadcn/chart-area-interactive"
 import { SectionCards } from "@/components/shadcn/section-cards"
 import { getServerSession } from "next-auth"
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: 'Admin Dashboard - Kitchen Utensils',
+    description: 'View admin dashboard',
+};
 
 export default async function Page() {
   // const data = await getDashboardData();

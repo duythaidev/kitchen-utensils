@@ -1,18 +1,15 @@
 'use client'
 
 import { IProduct, IReview } from "@/types"
-import { Circle, CircleX, LoaderCircle, Minus, Plus, ShoppingCart, Star, StarHalf, UserRoundIcon } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
-import Image from "next/image"
+import { LoaderCircle, Minus, Plus, ShoppingCart } from "lucide-react"
+import { useRef, useState } from "react"
 import { useSession } from "next-auth/react"
 import { toast } from "sonner"
-import { addReview, addToCart, deleteReview } from "@/actions/user.action"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/shadcn/avatar"
-import { Button } from "@/components/shadcn/button"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/shadcn/tooltip"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/shadcn/popover"
-import CustomButton from "@/components/Custom/CustomButton"
+import { addToCart } from "@/actions/user.action"
 import { Input } from "@/components/shadcn/input"
+import StarRating from "@/components/Custom/StarRating"
+import ReviewForm from "../Review/ReviewForm"
+import ReviewList from "@/components/Custom/ReviewList"
 const tabs = [
     {
         id: "tabOne",
@@ -64,12 +61,10 @@ const ProductDetailPage = ({ product, reviews }: { product: IProduct, reviews?: 
     const [quantity, setQuantity] = useState(1)
     const [activeTab, setActiveTab] = useState(tabs[0].id)
     const [selectedImage, setSelectedImage] = useState(product?.images?.find((image) => image.is_main) || product?.images?.[0])
-    const [rating, setRating] = useState(5)
     const [isLoading, setIsLoading] = useState(false)
     const session = useSession()
     const reviewRef = useRef<HTMLDivElement>(null)
 
-    const [comment, setComment] = useState("")
 
     const handleAddToCart = async () => {
         setIsLoading(true)
@@ -86,48 +81,6 @@ const ProductDetailPage = ({ product, reviews }: { product: IProduct, reviews?: 
         }
 
         setIsLoading(false)
-    }
-    const handleAddReview = async () => {
-        setIsLoading(true)
-
-        if (!session.data?.user?.accessToken) {
-            toast.error("Please login to add review")
-            setIsLoading(false)
-            return
-        }
-        if (comment.length < 10 || comment.length > 250) {
-            toast.error("Comment must be between 10 and 250 characters")
-            setIsLoading(false)
-            return
-        }
-        if (rating < 1 || rating > 5) {
-            toast.error("You must rate the product")
-            setIsLoading(false)
-            return
-        }
-
-        const res = await addReview(product.id, rating, comment, session.data?.user?.accessToken)
-        if (res.success) {
-            toast.success("Review added")
-        } else {
-            toast.error(res.message)
-        }
-        setIsLoading(false)
-    }
-    const [open, setOpen] = useState(false)
-
-    const handleDeleteReview = async () => {
-
-        if (!session.data?.user?.accessToken) {
-            toast.error("Please login to add review")
-            return
-        }
-        const res = await deleteReview(product.id, session.data?.user?.accessToken)
-        if (res.success) {
-            toast.success("Review deleted")
-        } else {
-            toast.error(res.message)
-        }
     }
 
     return (
@@ -270,279 +223,10 @@ const ProductDetailPage = ({ product, reviews }: { product: IProduct, reviews?: 
                     {activeTab === "tabOne" && (
                         <div>
                             <div ref={reviewRef} className={`flex-col sm:flex-row gap-7.5 xl:gap-12.5 mt-12.5 ${activeTab === "tabOne" ? "flex" : "hidden"}`} >
-                                <div className="max-w-[570px] w-full">
-                                    <h2 className="font-medium text-2xl text-dark mb-9">
-                                        {reviews?.length} Review for this product
-                                    </h2>
-
-                                    <div className="flex flex-col gap-6">
-                                        {/* <!-- review item --> */}
-                                        {
-                                            reviews?.map((review) => (
-                                                <div className="rounded-xl bg-white shadow-1 p-4 sm:p-6">
-                                                    <div className="flex items-center justify-between">
-                                                        <div className="flex items-center gap-4">
-                                                            <div className="rounded-full overflow-hidden">
-                                                                <Avatar>
-                                                                    <AvatarImage src={review.user.avatar_url || ""} />
-                                                                    <AvatarFallback>
-                                                                        <UserRoundIcon className="w-4 h-4" />
-                                                                    </AvatarFallback>
-                                                                </Avatar>
-                                                            </div>
-
-                                                            <div>
-                                                                <h3 className="font-medium text-dark">
-                                                                    {review.user.user_name}
-                                                                </h3>
-
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="flex items-center gap-1">
-                                                            <StarRating rating={Number(4.5)} />
-                                                        </div>
-                                                    </div>
-
-                                                    <p className="text-dark mt-6">
-                                                        {review.comment}
-                                                    </p>
-
-                                                    {/* Delete Review */}
-                                                    {
-                                                        review.user.email === session.data?.user?.email && (
-                                                            <div className="flex justify-end">
-                                                                <Popover open={open} onOpenChange={setOpen}>
-                                                                    <TooltipProvider>
-                                                                        <Tooltip>
-                                                                            <PopoverTrigger asChild>
-                                                                                <TooltipTrigger asChild>
-                                                                                    <button
-                                                                                        onClick={() => setOpen(true)}
-                                                                                        aria-label="button for remove product from wishlist"
-                                                                                        className="flex cursor-pointer items-center  justify-center rounded-md w-[40px] h-[40px] bg-gray-100 border border-gray-300 ease-out duration-200 hover:bg-red-200 hover:border-red-400 hover:text-red-600"
-                                                                                    >
-                                                                                        <CircleX className="w-5 h-5" />
-                                                                                    </button>
-                                                                                </TooltipTrigger>
-                                                                            </PopoverTrigger>
-                                                                            <TooltipContent>
-                                                                                Delete Review
-                                                                            </TooltipContent>
-                                                                        </Tooltip>
-                                                                    </TooltipProvider>
-                                                                    <PopoverContent className="w-[120px]">
-                                                                        <p className="text-sm mb-2">
-                                                                            Are you sure?
-                                                                        </p>
-                                                                        <div className="flex items-center justify-center gap-1">
-                                                                            <Button
-                                                                                onClick={handleDeleteReview}
-                                                                                aria-label="button for remove product from wishlist"
-                                                                                className="cursor-pointer"
-                                                                                variant="destructive"
-                                                                                size={"sm"}
-                                                                            >
-                                                                                Yes
-                                                                            </Button>
-                                                                            <Button onClick={() => setOpen(false)}
-                                                                                aria-label="button for remove product from wishlist"
-                                                                                variant="outline"
-                                                                                className="cursor-pointer"
-                                                                                size={"sm"}
-                                                                            >
-                                                                                No
-                                                                            </Button>
-                                                                        </div>
-                                                                    </PopoverContent>
-                                                                </Popover>
-                                                            </div>
-                                                        )
-                                                    }
-                                                </div>
-                                            ))
-                                        }
-
-                                        {/* <!-- review item --> */}
-                                        {/* <div className="rounded-xl bg-white shadow-1 p-4 sm:p-6">
-                                            <div className="flex items-center justify-between">
-                                                <a href="#" className="flex items-center gap-4">
-                                                    <div className="w-12.5 h-12.5 rounded-full overflow-hidden">
-                                                        <Image
-                                                            src="/images/users/user-01.jpg"
-                                                            alt="author"
-                                                            className="w-12.5 h-12.5 rounded-full overflow-hidden"
-                                                            width={50}
-                                                            height={50}
-                                                        />
-                                                    </div>
-
-                                                    <div>
-                                                        <h3 className="font-medium text-dark">
-                                                            Davis Dorwart
-                                                        </h3>
-                                                        <p className="text-custom-sm">
-                                                            Serial Entrepreneur
-                                                        </p>
-                                                    </div>
-                                                </a>
-
-                                                <div className="flex items-center gap-1">
-                                                    <span className="cursor-pointer text-[#FBB040]">
-                                                        <svg
-                                                            className="fill-current"
-                                                            width="15"
-                                                            height="16"
-                                                            viewBox="0 0 15 16"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                        >
-                                                            <path
-                                                                d="M14.6604 5.90785L9.97461 5.18335L7.85178 0.732874C7.69645 0.422375 7.28224 0.422375 7.12691 0.732874L5.00407 5.20923L0.344191 5.90785C0.0076444 5.9596 -0.121797 6.39947 0.137085 6.63235L3.52844 10.1255L2.72591 15.0158C2.67413 15.3522 3.01068 15.6368 3.32134 15.4298L7.54112 13.1269L11.735 15.4298C12.0198 15.5851 12.3822 15.3263 12.3046 15.0158L11.502 10.1255L14.8934 6.63235C15.1005 6.39947 14.9969 5.9596 14.6604 5.90785Z"
-                                                                fill=""
-                                                            />
-                                                        </svg>
-                                                    </span>
-
-                                                    <span className="cursor-pointer text-[#FBB040]">
-                                                        <svg
-                                                            className="fill-current"
-                                                            width="15"
-                                                            height="16"
-                                                            viewBox="0 0 15 16"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                        >
-                                                            <path
-                                                                d="M14.6604 5.90785L9.97461 5.18335L7.85178 0.732874C7.69645 0.422375 7.28224 0.422375 7.12691 0.732874L5.00407 5.20923L0.344191 5.90785C0.0076444 5.9596 -0.121797 6.39947 0.137085 6.63235L3.52844 10.1255L2.72591 15.0158C2.67413 15.3522 3.01068 15.6368 3.32134 15.4298L7.54112 13.1269L11.735 15.4298C12.0198 15.5851 12.3822 15.3263 12.3046 15.0158L11.502 10.1255L14.8934 6.63235C15.1005 6.39947 14.9969 5.9596 14.6604 5.90785Z"
-                                                                fill=""
-                                                            />
-                                                        </svg>
-                                                    </span>
-
-                                                    <span className="cursor-pointer text-[#FBB040]">
-                                                        <svg
-                                                            className="fill-current"
-                                                            width="15"
-                                                            height="16"
-                                                            viewBox="0 0 15 16"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                        >
-                                                            <path
-                                                                d="M14.6604 5.90785L9.97461 5.18335L7.85178 0.732874C7.69645 0.422375 7.28224 0.422375 7.12691 0.732874L5.00407 5.20923L0.344191 5.90785C0.0076444 5.9596 -0.121797 6.39947 0.137085 6.63235L3.52844 10.1255L2.72591 15.0158C2.67413 15.3522 3.01068 15.6368 3.32134 15.4298L7.54112 13.1269L11.735 15.4298C12.0198 15.5851 12.3822 15.3263 12.3046 15.0158L11.502 10.1255L14.8934 6.63235C15.1005 6.39947 14.9969 5.9596 14.6604 5.90785Z"
-                                                                fill=""
-                                                            />
-                                                        </svg>
-                                                    </span>
-
-                                                    <span className="cursor-pointer text-[#FBB040]">
-                                                        <svg
-                                                            className="fill-current"
-                                                            width="15"
-                                                            height="16"
-                                                            viewBox="0 0 15 16"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                        >
-                                                            <path
-                                                                d="M14.6604 5.90785L9.97461 5.18335L7.85178 0.732874C7.69645 0.422375 7.28224 0.422375 7.12691 0.732874L5.00407 5.20923L0.344191 5.90785C0.0076444 5.9596 -0.121797 6.39947 0.137085 6.63235L3.52844 10.1255L2.72591 15.0158C2.67413 15.3522 3.01068 15.6368 3.32134 15.4298L7.54112 13.1269L11.735 15.4298C12.0198 15.5851 12.3822 15.3263 12.3046 15.0158L11.502 10.1255L14.8934 6.63235C15.1005 6.39947 14.9969 5.9596 14.6604 5.90785Z"
-                                                                fill=""
-                                                            />
-                                                        </svg>
-                                                    </span>
-
-                                                    <span className="cursor-pointer text-[#FBB040]">
-                                                        <svg
-                                                            className="fill-current"
-                                                            width="15"
-                                                            height="16"
-                                                            viewBox="0 0 15 16"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                        >
-                                                            <path
-                                                                d="M14.6604 5.90785L9.97461 5.18335L7.85178 0.732874C7.69645 0.422375 7.28224 0.422375 7.12691 0.732874L5.00407 5.20923L0.344191 5.90785C0.0076444 5.9596 -0.121797 6.39947 0.137085 6.63235L3.52844 10.1255L2.72591 15.0158C2.67413 15.3522 3.01068 15.6368 3.32134 15.4298L7.54112 13.1269L11.735 15.4298C12.0198 15.5851 12.3822 15.3263 12.3046 15.0158L11.502 10.1255L14.8934 6.63235C15.1005 6.39947 14.9969 5.9596 14.6604 5.90785Z"
-                                                                fill=""
-                                                            />
-                                                        </svg>
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            <p className="text-dark mt-6">
-                                                “Lorem ipsum dolor sit amet, adipiscing elit. Donec
-                                                malesuada justo vitaeaugue suscipit beautiful
-                                                vehicula’’
-                                            </p>
-                                        </div> */}
-
-                                    </div>
-                                </div>
+                                <ReviewList reviews={reviews} product_id={product.id}></ReviewList>
 
                                 {/* Add a Review */}
-                                <div className="max-w-[550px] w-full">
-                                    <h2 className="font-medium text-2xl text-dark mb-3.5">
-                                        Add a Review
-                                    </h2>
-
-                                    <p className="mb-6">
-                                        Your email address will not be published. Required fields are marked *
-                                    </p>
-
-                                    <div className="flex items-center gap-3 mb-7.5">
-                                        <span>Your Rating*</span>
-                                        <StarRatingSelect rating={rating} onChange={setRating} />
-                                    </div>
-
-                                    <div className="rounded-xl bg-white shadow-1 p-4 sm:p-6">
-                                        <div className="mb-5">
-                                            <label htmlFor="comments" className="block mb-2.5">
-                                                Comments
-                                            </label>
-
-                                            <textarea
-                                                name="comments"
-                                                id="comments"
-                                                rows={5}
-                                                value={comment}
-                                                onChange={(e) => setComment(e.target.value)}
-                                                maxLength={250}
-                                                placeholder="Your comments"
-                                                className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full p-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                                            ></textarea>
-
-                                            <span className="flex items-center justify-end mt-2.5">
-                                                <span className="text-custom-sm text-dark-4">
-
-                                                    {comment.length < 10 ?
-                                                        <span className="text-red-500">
-                                                            {comment.length}
-                                                        </span>
-                                                        :
-                                                        <span>
-                                                            {comment.length}
-                                                        </span>
-                                                    }
-
-                                                    /250
-                                                </span>
-                                            </span>
-                                        </div>
-
-                                        <div className="flex flex-col lg:flex-row lg:justify-end lg:items-end gap-5 sm:gap-7.5">
-
-                                            <CustomButton
-                                                color="blue"
-                                                onClick={handleAddReview}
-                                                isLoading={isLoading}
-                                            >
-                                                Submit Reviews
-                                            </CustomButton>
-                                        </div>
-
-                                    </div>
-                                </div>
+                                <ReviewForm product_id={product.id} ></ReviewForm>
                             </div>
                         </div>
                     )}
@@ -551,104 +235,5 @@ const ProductDetailPage = ({ product, reviews }: { product: IProduct, reviews?: 
         </>
     )
 }
-
-const StarRatingSelect = ({ rating, onChange, }: { rating: number, onChange: (value: number) => void }) => {
-    const [hover, setHover] = useState<number | null>(null)
-
-    const handleMouseMove = (index: number, e: React.MouseEvent) => {
-        // index of star
-        // left = position x in window, width = width of the element
-        //  e.clientX = position cursor in window
-        const { left, width } = e.currentTarget.getBoundingClientRect()
-        // console.log(left, width, e.clientX)
-        const x = e.clientX - left
-        const percent = x / width
-        const value = index + (percent < 0.5 ? 0.5 : 1)
-        setHover(value)
-    }
-
-    const handleClick = (index: number, e: React.MouseEvent) => {
-        const { left, width } = e.currentTarget.getBoundingClientRect()
-        const x = e.clientX - left
-        const percent = x / width
-        const value = index + (percent < 0.5 ? 0.5 : 1)
-        onChange(value)
-    }
-
-    const displayRating = hover ?? rating
-
-    return (
-        <div className="relative flex gap-1">
-            {Array.from({ length: 5 }, (_, index) => {
-                return (
-                    <Star key={index} fill="gray" color="gray" strokeWidth={2} />
-                )
-            })}
-            <div className="flex gap-1 absolute">
-
-                {Array.from({ length: 5 }, (_, index) => {
-                    const full = index + 1 <= displayRating
-                    const half = !full && index + 0.5 <= displayRating
-
-                    return (
-                        <div
-                            key={index}
-                            // when hover send 
-                            onMouseMove={(e) => handleMouseMove(index, e)}
-                            onMouseLeave={() => setHover(null)}
-                            onClick={(e) => handleClick(index, e)}
-                            className="cursor-pointer top-0 left-0"
-                        >
-                            {full ? (
-                                <Star fill="#FBB040" color="#FBB040" strokeWidth={2} />
-                            ) : half ? (
-                                <StarHalf fill="#FBB040" color="#FBB040" strokeWidth={2} />
-                            ) : (
-                                <Star fill="gray" color="gray" strokeWidth={2} />
-                            )}
-                        </div>
-                    )
-                })}
-            </div>
-        </div>
-    )
-}
-const StarRating = ({ rating, }: { rating: number }) => {
-    const displayRating = rating
-
-    return (
-        <div className="relative flex gap-1">
-            {Array.from({ length: 5 }, (_, index) => {
-                return (
-                    <Star key={index} fill="gray" color="gray" strokeWidth={2} />
-                )
-            })}
-            <div className="flex gap-1 absolute">
-
-                {Array.from({ length: 5 }, (_, index) => {
-                    const full = index + 1 <= displayRating
-                    const half = !full && index + 0.5 <= displayRating
-
-                    return (
-                        <div
-                            key={index}
-                            className="cursor-pointer top-0 left-0"
-                        >
-                            {full ? (
-                                <Star fill="#FBB040" color="#FBB040" strokeWidth={2} />
-                            ) : half ? (
-                                <StarHalf fill="#FBB040" color="#FBB040" strokeWidth={2} />
-                            ) : (
-                                <Star fill="gray" color="gray" strokeWidth={2} />
-                            )}
-                        </div>
-                    )
-                })}
-            </div>
-        </div>
-    )
-}
-
-
 
 export default ProductDetailPage

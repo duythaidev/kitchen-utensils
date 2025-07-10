@@ -2,6 +2,16 @@ import PageHeader from "@/components/Custom/PageHeader";
 import { Phone, User, Home } from "lucide-react";
 import React from "react";
 
+import { Metadata } from 'next';
+export const metadata: Metadata = {
+    title: 'Contact Us - Kitchen Utensils',
+    description: 'Get in touch with our customer support team for any questions or assistance',
+    robots: {
+        index: true,
+        follow: true,
+    },
+}; 
+
 const Contact = () => {
   return (
     <>

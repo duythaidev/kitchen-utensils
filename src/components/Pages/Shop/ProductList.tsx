@@ -1,6 +1,6 @@
 'use client'
-import { ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search } from "lucide-react"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { ChevronDown, Search } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
 import ProductCard from "./ProductCard"
 import { Input } from "@/components/shadcn/input"
 import { Button } from "@/components/shadcn/button"
@@ -14,6 +14,7 @@ import { useRouter } from "nextjs-toploader/app"
 import { useSearchParams } from "next/navigation"
 import { ICategory, IProduct, IPagination } from "@/types"
 import { toast } from "sonner"
+import Pagination from "./Pagination"
 
 const ProductList = ({ categories, products, pagination }: { categories: ICategory[], products: IProduct[], pagination: IPagination }) => {
 
@@ -275,60 +276,12 @@ const ProductList = ({ categories, products, pagination }: { categories: ICatego
                                     })}
 
                                 </div>
-                                {/* Your content */}
                             </div>
 
 
                         </div>
-                        <div className="mt-5 flex justify-end items-center  border-t border-gray-200 pt-6">
-                            <div className="flex w-full items-center gap-8 lg:w-fit">
-                                <div className="flex w-fit items-center justify-center text-sm font-medium">
-                                    Page {page} of {totalPages || 1}
-                                </div>
-                                <div className="ml-auto flex items-center gap-2 lg:ml-0">
-                                    <Button
-                                        variant="outline"
-                                        className="size-8"
-                                        size="icon"
-                                        onClick={() => goToPage(1)}
-                                        disabled={page <= 1}
-                                    >
-                                        <span className="sr-only">Go to first page</span>
-                                        <ChevronsLeft className="w-4 h-4" />
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        className="size-8"
-                                        size="icon"
-                                        onClick={() => goToPage(page - 1)}
-                                        disabled={page <= 1}
-                                    >
-                                        <span className="sr-only">Go to previous page</span>
-                                        <ChevronLeft className="w-4 h-4" />
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        className="hidden size-8 lg:flex"
-                                        size="icon"
-                                        onClick={() => goToPage(page + 1)}
-                                        disabled={page >= totalPages}
-                                    >
-                                        <span className="sr-only">Go to next page</span>
-                                        <ChevronRight className="w-4 h-4" />
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        className="hidden size-8 lg:flex"
-                                        size="icon"
-                                        onClick={() => goToPage(totalPages)}
-                                        disabled={page >= totalPages}
-                                    >
-                                        <span className="sr-only">Go to last page</span>
-                                        <ChevronsRight className="w-4 h-4" />
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
+                        {/* Pagination */}
+                        <Pagination page={page} goToPage={goToPage} totalPages={totalPages}></Pagination>
 
                     </section>
                 </main>
@@ -336,5 +289,8 @@ const ProductList = ({ categories, products, pagination }: { categories: ICatego
         </>
     )
 }
+
+
+
 
 export default ProductList
