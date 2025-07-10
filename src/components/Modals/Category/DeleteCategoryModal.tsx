@@ -17,8 +17,9 @@ import { useSession } from "next-auth/react"
 import CustomModalBox from "../CustomModalBox"
 import CustomButton from "@/components/Custom/CustomButton"
 import { handleDeleteCategoryAction } from "@/actions/admin.category.action"
+import { ICategory } from "@/types"
 
-const DeleteCategoryModal = ({ category }: { category: any }) => {
+const DeleteCategoryModal = ({ category }: { category: ICategory }) => {
   const [open, setOpen] = useState(false)
   const { data: session } = useSession()
   const [isLoading, setIsLoading] = useState(false)

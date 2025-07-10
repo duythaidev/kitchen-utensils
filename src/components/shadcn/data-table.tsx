@@ -66,15 +66,17 @@ import {
   TabsTrigger,
 } from "@/components/shadcn/tabs"
 import { columnsMap, DataTableProps, InferData, TableType } from "./data-table-columns"
-import { ChevronDown, Filter } from "lucide-react"
+import { ChevronDown, Filter, Search } from "lucide-react"
 import AddUserModal from "@/components/Modals//User/AddUserModal"
 import AddProductModal from "@/components/Modals//Product/AddProductModal"
 import { useEffect, useState } from "react"
 import AddCategoryModal from "@/components/Modals//Category/AddCategoryModal"
 import EditCategoryModal from "@/components/Modals//Category/EditCategoryModal"
+import { useRouter } from "nextjs-toploader/app"
+import { useSearchParams } from "next/navigation"
 
 
-export function DataTable<T extends TableType>({ data, type }: DataTableProps<T>) {
+export function DataTable<T extends TableType>({ data, type, pagination }: DataTableProps<T>) {
 
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] =
@@ -92,10 +94,22 @@ export function DataTable<T extends TableType>({ data, type }: DataTableProps<T>
   const columns = [...(columnsMap[type] as ColumnDef<InferData<T>>[])]
 
   const [sorting, setSorting] = useState<SortingState>([])
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10,
-  })
+  // const [pagination, setPagination] = useState({
+  //   pageIndex: 0,
+  //   pageSize: 10,
+  // })
+
+  const { page = 1, limit = 10, total = 0 } = pagination || {};
+  const totalPages = Math.ceil(total / limit);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const goToPage = (newPage: number) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", newPage.toString());
+    params.set("limit", limit.toString());
+    router.push("?" + params.toString());
+  };
 
   const table = useReactTable({
     data,
@@ -105,7 +119,7 @@ export function DataTable<T extends TableType>({ data, type }: DataTableProps<T>
       columnVisibility,
       rowSelection,
       columnFilters,
-      pagination,
+      // pagination,
     },
     getRowId: (row) => row.id.toString(),
     enableRowSelection: true,
@@ -113,7 +127,7 @@ export function DataTable<T extends TableType>({ data, type }: DataTableProps<T>
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
-    onPaginationChange: setPagination,
+    // onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -184,7 +198,7 @@ export function DataTable<T extends TableType>({ data, type }: DataTableProps<T>
                     table.setSorting([
                       {
                         id: columnId,
-                        desc: false, // true nếu muốn sort mặc định theo chiều giảm dần
+                        desc: true, // true nếu muốn sort mặc định theo chiều giảm dần
                       },
                     ])
                   }}
@@ -277,80 +291,49 @@ export function DataTable<T extends TableType>({ data, type }: DataTableProps<T>
           </Table>
         </div>
         {/* Pagination */}
-        <div className="flex items-center justify-center px-4">
-
-          <div className="flex w-full items-center gap-8 lg:w-fit">
-            <div className="hidden items-center gap-2 lg:flex">
-              <Label htmlFor="rows-per-page" className="text-sm font-medium">
-                Rows per page
-              </Label>
-              <Select
-                value={`${table.getState().pagination.pageSize}`}
-                onValueChange={(value) => {
-                  table.setPageSize(Number(value))
-                }}
-              >
-                <SelectTrigger size="sm" className="w-20" id="rows-per-page">
-                  <SelectValue
-                    placeholder={table.getState().pagination.pageSize}
-                  />
-                </SelectTrigger>
-                <SelectContent side="top">
-                  {[10, 20, 30, 40, 50].map((pageSize) => (
-                    <SelectItem key={pageSize} value={`${pageSize}`}>
-                      {pageSize}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex w-fit items-center justify-center text-sm font-medium">
-              Page {table.getState().pagination.pageIndex + 1} of{" "}
-              {table.getPageCount()}
-            </div>
-            <div className="ml-auto flex items-center gap-2 lg:ml-0">
-              <Button
-                variant="outline"
-                className="hidden h-8 w-8 p-0 lg:flex"
-                onClick={() => table.setPageIndex(0)}
-                disabled={!table.getCanPreviousPage()}
-              >
-                <span className="sr-only">Go to first page</span>
-                <IconChevronsLeft />
-              </Button>
-              <Button
-                variant="outline"
-                className="size-8"
-                size="icon"
-                onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
-              >
-                <span className="sr-only">Go to previous page</span>
-                <IconChevronLeft />
-              </Button>
-              <Button
-                variant="outline"
-                className="size-8"
-                size="icon"
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-              >
-                <span className="sr-only">Go to next page</span>
-                <IconChevronRight />
-              </Button>
-              <Button
-                variant="outline"
-                className="hidden size-8 lg:flex"
-                size="icon"
-                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                disabled={!table.getCanNextPage()}
-              >
-                <span className="sr-only">Go to last page</span>
-                <IconChevronsRight />
-              </Button>
-            </div>
+        <div className="flex w-full items-center gap-8 lg:w-fit mb-5">
+          <div className="flex w-fit items-center justify-center text-sm font-medium">
+            Page {page} of {totalPages}
+          </div>
+          <div className="ml-auto flex items-center gap-2 lg:ml-0">
+            <Button
+              variant="outline"
+              className="hidden h-8 w-8 p-0 lg:flex"
+              onClick={() => goToPage(1)}
+              disabled={page <= 1}
+            >
+              <IconChevronsLeft />
+            </Button>
+            <Button
+              variant="outline"
+              className="size-8"
+              size="icon"
+              onClick={() => goToPage(page - 1)}
+              disabled={page <= 1}
+            >
+              <IconChevronLeft />
+            </Button>
+            <Button
+              variant="outline"
+              className="size-8"
+              size="icon"
+              onClick={() => goToPage(page + 1)}
+              disabled={page >= totalPages}
+            >
+              <IconChevronRight />
+            </Button>
+            <Button
+              variant="outline"
+              className="hidden size-8 lg:flex"
+              size="icon"
+              onClick={() => goToPage(totalPages)}
+              disabled={page >= totalPages}
+            >
+              <IconChevronsRight />
+            </Button>
           </div>
         </div>
+
       </TabsContent>
 
     </Tabs>
@@ -358,14 +341,28 @@ export function DataTable<T extends TableType>({ data, type }: DataTableProps<T>
 }
 
 const FilterInput = ({ placeholder, columnIndex, table }: { placeholder: string, columnIndex: number, table: any }) => {
+  const [search, setSearch] = useState("")
+  const router = useRouter()
+  const handleSearch = () => {
+    router.push(`?keyword=${search}`)
+  }
   return (
     <div className="p-2 border-b last:border-b-0 flex items-center gap-2 w-3xs">
       <Input
         placeholder={placeholder}
         className="w-full"
-        value={(table.getColumn(table.getAllColumns()[columnIndex].id)?.getFilterValue() ?? "") as string}
-        onChange={(e) => table.getColumn(table.getAllColumns()[columnIndex].id)?.setFilterValue(e.target.value)}
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleSearch()
+          }
+        }}
       />
+
+      <Button variant="outline" onClick={handleSearch}>
+        <Search />
+      </Button>
     </div>
   )
 }

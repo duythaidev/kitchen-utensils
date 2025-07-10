@@ -25,7 +25,7 @@ export const handleCreateUserAction = async (data: FormData, access_token: strin
   }
 };
 
-export const handleBanUserAction = async (userId: string, isActive: boolean, access_token: string) => {
+export const handleBanUserAction = async (userId: number, isActive: boolean, access_token: string) => {
   try {
     const res = await fetch(`${process.env.BACKEND_API}/users/${isActive ? "ban" : "unban"}/${userId}`, {
       method: "POST",
@@ -49,7 +49,7 @@ export const handleBanUserAction = async (userId: string, isActive: boolean, acc
   }
 };
 
-export const handleUpdateUserAction = async (id: string, formData: FormData, access_token: string) => {
+export const  handleUpdateUserAction = async (id: number, formData: FormData, access_token: string) => {
   try {
     const res = await fetch(`${process.env.BACKEND_API}/users/${id}`, {
       method: "PATCH",

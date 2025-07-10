@@ -263,8 +263,7 @@ const EditProductModal = ({ product }: { product: IProduct }) => {
                                                 <img
                                                     src={blob}
                                                     alt="Preview"
-                                                    width={300}
-                                                    height={300}
+                                                    className="  object-cover"
                                                 />
                                             </CardHeader>
                                             <CardContent>

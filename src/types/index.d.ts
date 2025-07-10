@@ -44,10 +44,21 @@ export interface IOrderDetail {
     price: number, // price of product at the time of order
 }
 
+export interface IUser {
+    id: number,
+    user_name: string | null,
+    email: string,
+    phone: string | null,
+    address: string | null,
+    role: string,
+    is_active: boolean,
+    avatar_url: string,
+}
 
 export interface ICategory {
     id: number,
     category_name: string,
+    image_url: string,
 }
 
 export interface IProductImage {

@@ -16,7 +16,7 @@ import CustomModalBox from "../CustomModalBox";
 import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
 import { Checkbox } from "@/components/shadcn/checkbox";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/shadcn/select";
-import { IProduct } from "@/types";
+import { IProduct, IProductImage } from "@/types";
 
 const ViewProductModal = ({ product }: { product: IProduct }) => {
 
@@ -41,14 +41,14 @@ const ViewProductModal = ({ product }: { product: IProduct }) => {
     );
 };
 
-const ViewProductModalContent = ({ product }: { product: any }) => {
+const ViewProductModalContent = ({ product }: { product: IProduct }) => {
     return (
         <div className="grid gap-4">
             {/* Product Images */}
             <div className="flex flex-col gap-3 w-full justify-center items-center">
                 <Label className="justify-center">Product Images</Label>
-                <div className={`flex gap-3 flex-wrap w-full justify-center items-center ${product.images?.length > 0 ? "mb-6" : ""}`}>
-                    {product.images && product.images?.length > 0 ? product.images?.map((image: any) => (
+                <div className={`flex gap-3 flex-wrap w-full justify-center items-center ${product.images?.length && product.images?.length > 0 ? "mb-6" : ""}`}>
+                    {product.images && product.images?.length > 0 ? product.images?.map((image: IProductImage) => (
                         <Card key={image.id} className="w-[200px] h-[200px]">
                             <CardHeader className="hover:scale-105 transition-all">
                                 <img
@@ -93,7 +93,7 @@ const ViewProductModalContent = ({ product }: { product: any }) => {
             </div>
             <div className="grid gap-3">
                 <Label>Discounted Price</Label>
-                <Input disabled value={product.discounted_price} type="number" readOnly />
+                <Input disabled value={product.discounted_price || undefined} type="number" readOnly />
             </div>
             <div className="grid gap-3">
                 <Label>Category</Label>
@@ -110,7 +110,7 @@ const ViewProductModalContent = ({ product }: { product: any }) => {
             </div>
             <div className="grid gap-3">
                 <Label >Description</Label>
-                <Input disabled value={product.description} readOnly />
+                <Input disabled value={product.description || "" } readOnly />
             </div>
         </div>
     );

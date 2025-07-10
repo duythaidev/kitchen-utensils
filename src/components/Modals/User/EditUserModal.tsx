@@ -22,7 +22,9 @@ import { toast } from "sonner"
 import { handleUpdateUserAction, refreshUserList } from "@/actions/admin.user.action"
 import { useSession } from "next-auth/react"
 import CustomModalBox from "../CustomModalBox"
-const EditUserModal = ({ user }: { user: any }) => {
+import { IUser } from "@/types"
+
+const EditUserModal = ({ user }: { user: IUser }) => {
     const [open, setOpen] = useState(false)
     const { data: session } = useSession()
     const [userData, setUserData] = useState(user)
@@ -37,13 +39,21 @@ const EditUserModal = ({ user }: { user: any }) => {
 
     const handleUpdateUser = async () => {
         setIsLoading(true);
-
+        if (
+            userData.user_name === "" ||
+            userData.email === "" ||
+            userData.role === ""
+        ) {
+            toast.error("Please fill in all required fields");
+            setIsLoading(false);
+            return;
+        }
         const formData = new FormData();
-        formData.append("user_name", userData.user_name);
-        formData.append("email", userData.email);
-        formData.append("phone", userData.phone);
-        formData.append("address", userData.address);
-        formData.append("role", userData.role);
+        formData.append("user_name", userData?.user_name || "");
+        formData.append("email", userData?.email || "");
+        formData.append("phone", userData?.phone || "");
+        formData.append("address", userData?.address || "");
+        formData.append("role", userData?.role || "");
         if (avatar) formData.append("avatar", avatar);
 
         const result = await handleUpdateUserAction(user.id, formData, session?.accessToken || "");
@@ -121,7 +131,7 @@ const EditUserModal = ({ user }: { user: any }) => {
                     </div>
 
                     <div className="grid gap-3">
-                        <Label>Username</Label>
+                        <Label>Username <span className="text-red-500">*</span></Label>
                         <Input
                             value={userData.user_name || ""}
                             placeholder="Enter username"
@@ -131,7 +141,7 @@ const EditUserModal = ({ user }: { user: any }) => {
                     </div>
 
                     <div className="grid gap-3">
-                        <Label>Email</Label>
+                        <Label>Email <span className="text-red-500">*</span></Label>
                         <Input
                             value={userData.email || ""}
                             placeholder="Enter email"

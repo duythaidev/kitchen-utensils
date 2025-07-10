@@ -8,7 +8,7 @@ import { z } from "zod"
 
 import { Badge } from "@/components/shadcn/badge"
 
-import { CircleCheck, CircleX, Phone, User } from "lucide-react"
+import { CircleCheck, CircleX, Image, Phone, User } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar"
 import ViewUserModal from "@/components/Modals//User/ViewUserModal"
 import EditUserModal from "@/components/Modals//User/EditUserModal"
@@ -20,6 +20,7 @@ import EditCategoryModal from "@/components/Modals//Category/EditCategoryModal"
 import DeleteCategoryModal from "@/components/Modals//Category/DeleteCategoryModal"
 import ViewOrderModal from "@/components/Modals//Order/ViewOrderModal"
 import ButtonStatus from "@/components/Modals//Order/ButtonStatus"
+import ViewCategoryModal from "../Modals/Category/ViewCategoryModal"
 
 export const userSchema = z.object({
   id: z.number(),
@@ -27,6 +28,7 @@ export const userSchema = z.object({
   user_name: z.string(),
   email: z.string(),
   phone: z.string(),
+  address: z.string(),
   role: z.string(),
   is_active: z.boolean(),
 });
@@ -34,6 +36,7 @@ export const userSchema = z.object({
 export const categorySchema = z.object({
   id: z.number(),
   category_name: z.string(),
+  image_url: z.string(),
 })
 
 
@@ -69,11 +72,7 @@ export const orderSchema = z.object({
   total_price: z.number(),
   status: z.enum(['pending', 'processing', 'delivered', 'cancelled']),
   created_at: z.date(),
-  user: z.object({
-    id: z.number(),
-    user_name: z.string(),
-    phone: z.string(),
-  }),
+  user: userSchema,
   orderDetails: z.array(orderDetailSchema),
 });
 
@@ -276,6 +275,16 @@ export const categoriesColumns: ColumnDef<z.infer<typeof categorySchema>>[] = [
     ),
   },
   {
+    id: "avatar_url",
+    size: 50,
+    header: "Avatar",
+    cell: ({ row }) =>
+      row.original.image_url ?
+        <img className="w-10 h-10 object-cover rounded-md" src={row.original.image_url} />
+        :
+        <Image className="w-10 h-10" />
+  },
+  {
     accessorKey: "category_name",
     header: "Category Name",
     cell: ({ row }) => (
@@ -291,6 +300,7 @@ export const categoriesColumns: ColumnDef<z.infer<typeof categorySchema>>[] = [
     header: "Actions",
     cell: ({ row }) => (
       <div className="flex gap-2 flex-wrap">
+        <ViewCategoryModal category={row.original} />
         <EditCategoryModal category={row.original} />
         <DeleteCategoryModal category={row.original} />
       </div>
@@ -402,6 +412,11 @@ export type InferData<T extends TableType> = z.infer<(typeof schemaMap)[T]>
 export interface DataTableProps<T extends TableType> {
   type: T
   data: InferData<T>[]
+  pagination?: {
+    page: number
+    limit: number
+    total: number
+  }
 }
 
 

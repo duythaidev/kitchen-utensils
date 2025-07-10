@@ -1,13 +1,12 @@
 import { DataTable } from "@/components/shadcn/data-table";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
-import AddUserModal from "@/components/Modals/User/AddUserModal";
-const Page = async () => {
+const Page = async ({ searchParams, }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) => {
     const session = await getServerSession(authOptions);
     const accessToken = session?.accessToken;
-    // console.log(accessToken)
+    const { keyword, page, limit } = await searchParams;
 
-    const res = await fetch(`${process.env.BACKEND_API}/products`, {
+    const res = await fetch(`${process.env.BACKEND_API}/products?keyword=${keyword || ""}&page=${page || 1}&limit=${limit || 10}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -15,14 +14,18 @@ const Page = async () => {
         },
         cache: 'no-store', //  test
 
-        next: { tags: ['list-users'] }
+        next: { tags: ['list-products'] }
     });
     const data = await res.json()
-    console.log("true data ", data)
 
     return (
         <div>
-            <DataTable data={data} type="products" />
+            <DataTable data={data.data} type="products"
+                pagination={{
+                    page: +data.pagination.page,
+                    limit: +data.pagination.limit,
+                    total: +data.pagination.total,
+                }} />
         </div>
     );
 }

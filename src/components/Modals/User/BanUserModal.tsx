@@ -6,9 +6,9 @@ import { toast } from "sonner"
 import { handleBanUserAction, refreshUserList } from "@/actions/admin.user.action"
 import { Button } from "@/components/shadcn/button"
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/shadcn/dialog"
+import { IUser } from "@/types"
 
-
-const BanUserModal = ({ user }: { user: any }) => {
+const BanUserModal = ({ user }: { user: IUser }) => {
     const { data: session } = useSession()
     const [isLoading, setIsLoading] = useState(false)
     const [open, setOpen] = useState(false)

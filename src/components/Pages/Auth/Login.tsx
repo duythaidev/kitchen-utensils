@@ -12,21 +12,21 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
 
     const { data: session } = useSession();
-    console.log("session", session);
+    // console.log("session", session);
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
 
         try {
-            const response: any = await signIn("credentials", {
+            const res = await signIn("credentials", {
                 email,
                 password,
                 redirect: false,
             });
 
-            if (!response || response?.error) {
-                throw new Error(response?.error || "Invalid credentials");
+            if (!res || res?.error) {
+                throw new Error(res?.error || "Invalid credentials");
             }
 
             toast.success("Login Successful");

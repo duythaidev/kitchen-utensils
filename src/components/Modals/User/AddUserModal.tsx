@@ -35,6 +35,17 @@ const AddUserModal = () => {
     const handleAddUser = async () => {
         setIsLoading(true);
       
+        if (
+            userData.user_name === "" ||
+            userData.email === "" ||
+            userData.password === "" ||
+            userData.role === ""
+          ) {
+            toast.error("Please fill in all required fields");
+            setIsLoading(false);
+            return;
+          }
+
         const formData = new FormData();
         formData.append("user_name", userData.user_name);
         formData.append("email", userData.email);
@@ -124,7 +135,7 @@ const AddUserModal = () => {
                     </div>
 
                     <div className="grid gap-3">
-                        <Label>Username</Label>
+                        <Label>Username <span className="text-red-500">*</span></Label>
                         <Input
                             value={userData.user_name}
                             onChange={(e) =>
@@ -134,7 +145,7 @@ const AddUserModal = () => {
                     </div>
 
                     <div className="grid gap-3">
-                        <Label>Email</Label>
+                        <Label>Email <span className="text-red-500">*</span></Label>
                         <Input
                             value={userData.email}
                             onChange={(e) =>
@@ -145,7 +156,7 @@ const AddUserModal = () => {
 
 
                     <div className="grid gap-3">
-                        <Label>Password</Label>
+                        <Label>Password <span className="text-red-500">*</span></Label>
                         <Input
                             value={userData.password}
                             onChange={(e) =>

@@ -20,8 +20,9 @@ import { useSession } from "next-auth/react"
 import CustomModalBox from "../CustomModalBox"
 import { handleUpdateCategoryAction } from "@/actions/admin.category.action"
 import Image from "next/image"
+import { ICategory } from "@/types"
 
-const EditCategoryModal = ({ category }: { category: any }) => {
+const EditCategoryModal = ({ category }: { category: ICategory }) => {
   const [open, setOpen] = useState(false)
   const { data: session } = useSession()
   const [categoryData, setCategoryData] = useState(category)
