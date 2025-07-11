@@ -2,8 +2,10 @@
 import { ChevronLeft, ChevronRight, Heart, MessageCircleMore, Rocket, ShieldCheck, Undo2 } from "lucide-react";
 import Link from "next/link";
 import CustomCarousel from "@/components/Custom/CustomCarousel";
+import { IProduct } from "@/types";
+// Top 5 most rated products
 
-const Hero = () => {
+const Hero = ({ products }: { products: IProduct[] }) => {
     return (
         <section className="bg-[#E5EAF4] py-24 sm:pb-16 sm:pt-2">
             <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
@@ -11,11 +13,12 @@ const Hero = () => {
                     {/* Slider */}
                     <div className="relative lg:col-span-2 lg:row-span-2">
                         <div className="absolute inset-px rounded-lg bg-white"></div>
-                        <CustomCarousel />
+                        {/* top 3 in carousel */}
+                        <CustomCarousel products={products} />
                         <div className="pointer-events-none absolute inset-px rounded-lg "></div>
                     </div>
 
-                    {/* small box */}
+                    {/* 2 left in 2 small box */}
                     <div className="relative lg:col-span-1 lg:row-span-1 ">
                         <div className="absolute inset-px rounded-lg bg-white "></div>
                         <div className=" relative flex h-full overflow-hidden rounded-lg ">
@@ -65,29 +68,29 @@ const Hero = () => {
                     <div className="flex items-center">
                         <Rocket size={45} />
                         <div className="ml-3.5">
-                            <p className="mx-auto max-w-lg text-center text-md font-semibold tracking-tight text-balance text-gray-950">Fast Shipping</p>
-                            <p className="text-gray-500">kjashdkad</p>
+                            <p className="mx-auto max-w-lg text-md font-semibold tracking-tight text-balance text-gray-950">Fast Shipping</p>
+                            <p className="text-gray-500">For all orders</p>
                         </div>
                     </div>
                     <div className="flex items-center">
                         <Undo2 size={45} />
                         <div className="ml-3.5">
-                            <p className="mx-auto max-w-lg text-center text-md font-semibold tracking-tight text-balance text-gray-950">Fast Shipping</p>
-                            <p className="text-gray-500">kjashdkad</p>
+                            <p className="mx-auto max-w-lg text-md font-semibold tracking-tight text-balance text-gray-950">1 & 1 Returns</p>
+                            <p className="text-gray-500">Cancellation after 1 day</p>
                         </div>
                     </div>
                     <div className="flex items-center">
                         <ShieldCheck size={45} />
                         <div className="ml-3.5">
-                            <p className="mx-auto max-w-lg text-center text-md font-semibold tracking-tight text-balance text-gray-950">Fast Shipping</p>
-                            <p className="text-gray-500">kjashdkad</p>
+                            <p className="mx-auto max-w-lg text-md font-semibold tracking-tight text-balance text-gray-950">100% Safety</p>
+                            <p className="text-gray-500">Gurantee product is safe</p>
                         </div>
                     </div>
                     <div className="flex items-center">
                         <MessageCircleMore size={45} />
                         <div className="ml-3.5">
-                            <p className="mx-auto max-w-lg text-center text-md font-semibold tracking-tight text-balance text-gray-950">Fast Shipping</p>
-                            <p className="text-gray-500">kjashdkad</p>
+                            <p className="mx-auto max-w-lg text-md font-semibold tracking-tight text-balance text-gray-950">24/7 Dedicated Support</p>
+                            <p className="text-gray-500">Anywhere & anytime</p>
                         </div>
                     </div>
                 </div>

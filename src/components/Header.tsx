@@ -1,31 +1,28 @@
 'use client'
 
 import Link from "next/link";
-import { ChevronDown, Clock, Heart, PhoneCall, Search, ShoppingBag, ShoppingCart, User } from "lucide-react";
+import { PhoneCall, Search, ShoppingBag, ShoppingCart, User } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import HoverLink from "./Custom/HoverLink";
-import { redirect } from "next/navigation";
 import MobileHeader from "./Mobile/MobileHeader";
-import { signIn, useSession } from "next-auth/react";
-import Image from "next/image";
+import { useSession } from "next-auth/react";
 import {
   NavigationMenu,
   NavigationMenuContent,
-  NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  NavigationMenuViewport,
 } from "@/components/shadcn/navigation-menu"
 import { Input } from "@/components/shadcn/input";
 import { Separator } from "@/components/shadcn/separator";
 import { useRouter } from "nextjs-toploader/app";
+import { ICategory } from "@/types";
 
 
 const hoverStyle = `after:content-[''] after:w-0 after:absolute after:left-0 after:top-[-10] after:h-0.5  after:bg-primary after:duration-500`
 
-const Header = () => {
+const Header = ({ categories } : { categories: ICategory[] }) => {
   const { data: session } = useSession()
   const [showNav, setShowNav] = useState<boolean>(false)
   const [stickyMenu, setStickyMenu] = useState<boolean>(false);
@@ -45,13 +42,7 @@ const Header = () => {
       router.push(`/shop?keyword=${searchRef.current.value}`)
     }
   }
-  useEffect(() => {
-    // const getAllCategories = async () => {
-    //   const res = await axios.get('/api/categories')
-    //   console.log("res", res)
-    // }
-    // getAllCategories()
-  }, [])
+
 
   useEffect(() => {
     window.addEventListener("scroll", handleStickyMenu);
@@ -86,6 +77,13 @@ const Header = () => {
                       <NavigationMenuLink className="w-[100px]" onClick={() => router.push('/shop')}>
                         All Categories
                       </NavigationMenuLink>
+                      <Separator></Separator>
+                      {categories.map((category) => (
+                        <NavigationMenuLink key={category.id} className="w-[100px]"
+                          onClick={() => router.push(`/shop?category=${category.id}`)}>
+                          {category.category_name}
+                        </NavigationMenuLink>
+                      ))}
                     </NavigationMenuContent>
                   </NavigationMenuItem>
                 </NavigationMenuList>
@@ -108,7 +106,7 @@ const Header = () => {
             <PhoneCall className="text-primary" size={25}></PhoneCall>
             <div>
               <p className="text-gray-500 text-xs">24/7 SUPPORT</p>
-              <p className="font-bold ">0985486619</p>
+              <p className="font-bold hover:text-primary">0985486619</p>
             </div>
           </div>
           <div className="hidden gap-2 lg:flex lg:justify-end items-center">

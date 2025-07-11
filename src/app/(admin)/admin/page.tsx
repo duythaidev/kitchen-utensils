@@ -1,58 +1,42 @@
-'use client'
-
-import { Skeleton } from "@/components/shadcn/skeleton";
-// import { useRouter } from "next/navigation"
-import { useRouter } from 'nextjs-toploader/app';
-import { useEffect } from "react";
-
+import { authOptions } from "@/lib/authOptions";
+// import { ChartAreaInteractive } from "@/components/shadcn/chart-area-interactive"
+import { SectionCards } from "@/components/shadcn/section-cards"
+import { getServerSession } from "next-auth"
 import { Metadata } from "next";
+import { ChartAreaInteractive } from "@/components/shadcn/chart-area-interactive";
 
 export const metadata: Metadata = {
     title: 'Admin Dashboard - Kitchen Utensils',
-    description: 'View dashboard',
+    description: 'View admin dashboard',
 };
 
-export default function Page() {
-  const router = useRouter();
-  useEffect(() => {
-    router.push("/admin/dashboard");
-  }, []);
+export default async function Page() {
+  // const data = await getDashboardData();
+  const session = await getServerSession(authOptions);
+  const accessToken = session?.accessToken;
+
+  const res = await fetch(`${process.env.BACKEND_API}/statistics`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`, // 
+    },
+    cache: 'no-store', //  test
+
+    next: { tags: ['list-users'] }
+  });
+  const data = await res.json()
+  console.log("true data ", data)
   return (
-    <div className="md:p-6 flex flex-wrap gap-6">
-
-      <div className="flex flex-col space-y-3 flex-1">
-        <Skeleton className="h-[125px] w-[250px] rounded-xl" />
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-[250px]" />
-          <Skeleton className="h-4 w-[200px]" />
+    <div className="flex flex-1 flex-col">
+      <div className="@container/main flex flex-1 flex-col gap-2">
+        <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+          <SectionCards data={data} />
+          <div className="px-4 lg:px-6">
+            <ChartAreaInteractive />
+          </div>
         </div>
       </div>
-      <div className="flex flex-col space-y-3 flex-1">
-        <Skeleton className="h-[125px] w-[250px] rounded-xl" />
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-[250px]" />
-          <Skeleton className="h-4 w-[200px]" />
-        </div>
-      </div>
-      <div className="flex flex-col space-y-3 flex-1">
-        <Skeleton className="h-[125px] w-[250px] rounded-xl" />
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-[250px]" />
-          <Skeleton className="h-4 w-[200px]" />
-        </div>
-      </div>
-      <div className="flex flex-col space-y-3 flex-1">
-        <Skeleton className="h-[125px] w-[250px] rounded-xl" />
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-[250px]" />
-          <Skeleton className="h-4 w-[200px]" />
-        </div>
-      </div>
-      <div className="flex flex-col space-y-3 w-full">
-        <Skeleton className="h-[300px] w-full rounded-xl" />
-
-      </div>
-
     </div>
   )
 }

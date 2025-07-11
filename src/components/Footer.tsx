@@ -38,7 +38,7 @@ const Footer = () => {
                                 <Link href="/cart">Shopping cart</Link>
                             </p>
                             <p className="text-gray-500 hover:text-blue-500 ">
-                                <Link href="/help">Help</Link>
+                                <Link href="/contact">Help</Link>
                             </p>
                         </div>
                         <div>

@@ -6,7 +6,7 @@ import Promotion from '@/components/Pages/Home/Promotion';;
 
 export default async function Home() {
 
-  const res = await fetch(`${process.env.BACKEND_API}/categories?limit=10`, {
+  const categoriesRes = await fetch(`${process.env.BACKEND_API}/categories?limit=10`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -15,13 +15,26 @@ export default async function Home() {
 
     next: { tags: ['list-categories'] }
   });
-  const data = await res.json()
+  const data = await categoriesRes.json()
+
+  // fetch product for carousel
+  // const productsRes = await fetch(`${process.env.BACKEND_API}/products?limit=10`, {
+  //   method: "GET",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   cache: 'no-store', //  test
+
+  //   next: { tags: ['list-products'] }
+  // });
+  // const productsData = await productsRes.json();
+
   console.log("true data ", data)
   return (
     <>
-      <Header></Header>
+      <Header categories={data.data}></Header>
       <div className='pt-[135px] '>
-        <Hero></Hero>
+        <Hero products={[]}></Hero>
         <CategoryList categories={data.data}></CategoryList>
         <Promotion></Promotion>
         {/* <Test></Test> */}

@@ -2,6 +2,8 @@
 import ErrorPage from "@/components/ErrorPage"
 
  // Error boundaries must be Client Components
+
+
  
 export default function GlobalError({
   error,

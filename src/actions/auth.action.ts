@@ -32,3 +32,24 @@ export async function register(userData: any) {
 
   return { success: true, message: 'Account created successfully' };
 }
+
+export async function forgotPassword(email: string) {
+  if (!validateEmail(email)) {
+    return { success: false, message: 'Email is invalid' };
+  }
+
+  const res = await fetch(`${process.env.BACKEND_API}/auth/forgot-password`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email }),
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    return { success: false, message: errorData.message || 'Server Error' };
+  }
+
+  return { success: true, message: 'Password reset link sent to your email' };
+}

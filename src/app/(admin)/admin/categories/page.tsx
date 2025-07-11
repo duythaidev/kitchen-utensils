@@ -26,7 +26,6 @@ const Page = async ({ searchParams }: { searchParams: Promise<{ [key: string]: s
         next: { tags: ['list-categories'] }
     });
     const data = await res.json()
-    console.log("true data ", data)
 
     return (
         <div>
