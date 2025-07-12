@@ -23,7 +23,6 @@ const Page = async ({ searchParams, }: { searchParams: Promise<{ [key: string]: 
             "Content-Type": "application/json",
         },
     });
-    console.log("productRes", productRes)
     const products = await productRes.json();
 
     const categoryRes = await fetch(`${process.env.BACKEND_API}/categories`, {
@@ -34,10 +33,8 @@ const Page = async ({ searchParams, }: { searchParams: Promise<{ [key: string]: 
     });
     const categories = await categoryRes.json();
 
-    console.log("products", products)
-    console.log("categories", categories)
-
-    // const category = categories.find((category: ICategory) => category.id == search.category)
+    // console.log("products", products)
+    // console.log("categories", categories)
 
     const breadcrumbs = [
         { name: 'Home', link: '/' },

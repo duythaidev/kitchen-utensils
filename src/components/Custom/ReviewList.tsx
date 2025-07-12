@@ -36,8 +36,8 @@ const ReviewList = ({ reviews, product_id }: { reviews?: IReview[], product_id: 
             <div className="flex flex-col gap-6">
                 {/* <!-- review item --> */}
                 {
-                    reviews?.map((review) => (
-                        <div className="rounded-xl bg-white shadow-1 p-4 sm:p-6">
+                    reviews && reviews?.map((review) => (
+                        <div key={review.id} className="rounded-xl bg-white shadow-1 p-4 sm:p-6">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-4">
                                     <div className="rounded-full overflow-hidden">

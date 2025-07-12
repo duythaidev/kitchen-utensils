@@ -6,8 +6,8 @@ import { Metadata } from "next";
 import { ChartAreaInteractive } from "@/components/shadcn/chart-area-interactive";
 
 export const metadata: Metadata = {
-    title: 'Admin Dashboard - Kitchen Utensils',
-    description: 'View admin dashboard',
+  title: 'Admin Dashboard - Kitchen Utensils',
+  description: 'View admin dashboard',
 };
 
 export default async function Page() {
@@ -26,7 +26,7 @@ export default async function Page() {
     next: { tags: ['list-users'] }
   });
   const data = await res.json()
-  console.log("true data ", data)
+
   return (
     <div className="flex flex-1 flex-col">
       <div className="@container/main flex flex-1 flex-col gap-2">

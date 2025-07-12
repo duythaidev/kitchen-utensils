@@ -22,7 +22,7 @@ import { ICategory } from "@/types";
 
 const hoverStyle = `after:content-[''] after:w-0 after:absolute after:left-0 after:top-[-10] after:h-0.5  after:bg-primary after:duration-500`
 
-const Header = ({ categories } : { categories: ICategory[] }) => {
+const Header = ({ categories }: { categories: ICategory[] }) => {
   const { data: session } = useSession()
   const [showNav, setShowNav] = useState<boolean>(false)
   const [stickyMenu, setStickyMenu] = useState<boolean>(false);
@@ -140,36 +140,40 @@ const Header = ({ categories } : { categories: ICategory[] }) => {
             <Link href={'/'} className={` inline-block h-[30px] relative ${hoverStyle} hover:after:w-full text-dark font-semibold`}>Home</Link>
             <Link href={'/shop'} className={` inline-block   h-[30px] relative ${hoverStyle} hover:after:w-full text-dark font-light`}>Shop</Link>
             <Link href={'/contact'} className={` inline-block h-[30px] relative ${hoverStyle} hover:after:w-full text-dark font-light`}>Contact</Link>
-            <div className="inline-block h-[30px]">
-              <NavigationMenu className={`inline-block ${hoverStyle} hover:after:w-full text-dark font-light`} >
-                <NavigationMenuList  >
-                  <NavigationMenuItem>
-                    <NavigationMenuTrigger className="cursor-pointer px-0 pb-5 font-light text-[16px] text-dark bg-background hover:bg-background">
-                      Admin
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent >
-                      <NavigationMenuLink className="w-[100px]" href="/admin">Dashboard</NavigationMenuLink>
-                      <Separator />
-                      <NavigationMenuLink className="w-[100px]" href="/admin/users">Users</NavigationMenuLink>
-                      <NavigationMenuLink className="w-[100px]" href="/admin/products">Products</NavigationMenuLink>
-                      <NavigationMenuLink className="w-[100px]" href="/admin/orders">Orders</NavigationMenuLink>
-                      {/* <NavigationMenuLink className="w-[100px]" href="/admin/settings">Settings</NavigationMenuLink> */}
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
-                </NavigationMenuList>
-              </NavigationMenu>
+            {
+              session?.user?.role === 'admin' &&
+              <div className="inline-block h-[30px]">
+                <NavigationMenu className={`inline-block ${hoverStyle} hover:after:w-full text-dark font-light`} >
+                  <NavigationMenuList  >
+                    <NavigationMenuItem>
+                      <NavigationMenuTrigger className="cursor-pointer px-0 pb-5 font-light text-[16px] text-dark bg-background hover:bg-background">
+                        Admin
+                      </NavigationMenuTrigger>
+                      <NavigationMenuContent >
+                        <NavigationMenuLink className="w-[100px]" href="/admin">Dashboard</NavigationMenuLink>
+                        <Separator />
+                        <NavigationMenuLink className="w-[100px]" href="/admin/users">Users</NavigationMenuLink>
+                        <NavigationMenuLink className="w-[100px]" href="/admin/products">Products</NavigationMenuLink>
+                        <NavigationMenuLink className="w-[100px]" href="/admin/orders">Orders</NavigationMenuLink>
+                      </NavigationMenuContent>
+                    </NavigationMenuItem>
+                  </NavigationMenuList>
+                </NavigationMenu>
+              </div>}
+          </div>
+          {
+            session?.user &&
+            <div className="flex gap-3">
+              <Link href={'/cart'} className={`hover:text-primary transition-all flex items-center gap-2  h-[30px] relative ${hoverStyle} hover:after:w-full text-dark font-light`}>
+                <ShoppingCart className="w-5 h-5" />
+                <span className="">Cart</span>
+              </Link>
+              <Link href={'/order'} className={`hover:text-primary transition-all flex items-center gap-2  h-[30px] relative ${hoverStyle} hover:after:w-full text-dark font-light`}>
+                <ShoppingBag className="w-5 h-5" />
+                <span className="">Orders</span>
+              </Link>
             </div>
-          </div>
-          <div className="flex gap-3">
-            <Link href={'/cart'} className={`hover:text-primary transition-all flex items-center gap-2  h-[30px] relative ${hoverStyle} hover:after:w-full text-dark font-light`}>
-              <ShoppingCart className="w-5 h-5" />
-              <span className="">Cart</span>
-            </Link>
-            <Link href={'/order'} className={`hover:text-primary transition-all flex items-center gap-2  h-[30px] relative ${hoverStyle} hover:after:w-full text-dark font-light`}>
-              <ShoppingBag className="w-5 h-5" />
-              <span className="">Orders</span>
-            </Link>
-          </div>
+          }
         </nav>
       </div>
     </header>

@@ -9,7 +9,6 @@ import { handleUpdateProfileAction } from "@/actions/user.action"
 
 
 const Profile = ({ profile }: { profile: any }) => {
-
     const [myProfile, setMyProfile] = useState(profile)
 
     const [activeTab, setActiveTab] = useState("account-details")
@@ -34,6 +33,8 @@ const Profile = ({ profile }: { profile: any }) => {
             formData,
             session?.user?.accessToken as string
         )
+
+        // console.log(res)
 
         if (!res.success) {
             toast.error(res.message)

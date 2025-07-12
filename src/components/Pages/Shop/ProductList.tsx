@@ -32,8 +32,8 @@ const ProductList = ({ categories, products, pagination }: { categories: ICatego
 
 
     const [keyword, setKeyword] = useState(keywordparam || '')
-    const [priceSort, setPriceSort] = useState(priceSortParam || '')
-    const [sort, setSort] = useState(sortparam || null)
+    const [priceSort, setPriceSort] = useState<string | undefined>(priceSortParam || undefined)
+    const [sort, setSort] = useState<string | undefined>(sortparam || undefined)
 
     const [priceFrom, setPriceFrom] = useState(priceFromParam || '')
     const [priceTo, setPriceTo] = useState(priceToParam || '')
@@ -98,9 +98,12 @@ const ProductList = ({ categories, products, pagination }: { categories: ICatego
         if (priceFromRef.current && priceToRef.current) {
             const priceFrom = priceFromRef.current.value ? +priceFromRef.current.value : ""
             const priceTo = priceToRef.current.value ? +priceToRef.current.value : ""
-            if (priceFrom && priceTo !== "" && (priceFrom > priceTo)) {
+            if (priceFrom  && priceTo !== "" && (priceFrom > priceTo)) {
                 toast.error('Price from must be less than price to')
                 return
+            }
+            if ((priceFrom === 0 && priceTo === 0) || +priceFrom < 0 || +priceTo < 0) {
+                toast.error('Please enter valid price range')
             }
             setPriceFrom(priceFrom.toString())
             setPriceTo(priceTo.toString())

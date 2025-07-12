@@ -3,6 +3,7 @@ import CartList from "@/components/Pages/Cart/CartList";
 import PageHeader from "@/components/Custom/PageHeader";
 import { getServerSession } from "next-auth";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
     title: 'Shopping Cart - Kitchen Utensils',
@@ -11,11 +12,14 @@ export const metadata: Metadata = {
         index: false,
         follow: true,
     },
-}; 
+};
 
 const page = async () => {
 
     const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
+        redirect('/login?unauthorized=true');
+    }
     const accessToken = session?.accessToken;
     const resprofile = await fetch(`${process.env.BACKEND_API}/users/me`, {
         method: "GET",
@@ -38,7 +42,7 @@ const page = async () => {
 
     const data = await res.json()
 
-    // console.log("true data ", data)
+
 
     return (
         <>

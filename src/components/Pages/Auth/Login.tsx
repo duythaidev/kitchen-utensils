@@ -2,17 +2,31 @@
 
 import { signIn, useSession } from "next-auth/react"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { LoaderCircle } from "lucide-react"
+import { useSearchParams } from "next/navigation"
 
 const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
 
-    // const { data: session } = useSession()
-    // console.log("session", session)
+    const searchParams = useSearchParams()
+
+    useEffect(() => {
+        const unauthorized = searchParams.get('unauthorized')
+        if (unauthorized === 'true') {
+            const timerId = setTimeout(() => {
+                toast.error("You need to login to access this page")
+            });
+
+            return () => {
+                clearTimeout(timerId);
+            };
+        }
+    }, [searchParams]);
+
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -22,7 +36,7 @@ const Login = () => {
             const res = await signIn("credentials", {
                 email,
                 password,
-                redirect: false,
+                callbackUrl: `/`,
             })
 
             if (!res || res?.error) {

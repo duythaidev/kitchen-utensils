@@ -24,7 +24,7 @@ const Page = async ({ searchParams, }: { searchParams: Promise<{ [key: string]: 
         next: { tags: ['list-orders'] }
     });
     const data = await res.json()
-    // console.log("true data ", data)
+
 
     return (
         <div>

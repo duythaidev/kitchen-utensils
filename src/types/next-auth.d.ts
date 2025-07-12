@@ -12,6 +12,7 @@ declare module 'next-auth' {
       email?: string | null | undefined;
       avatar_url?: string | null | undefined;
       accessToken?: string | null | undefined;
+      role?: string | null | undefined;
     }
   }
 }

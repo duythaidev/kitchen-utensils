@@ -48,10 +48,8 @@ const EditProductModal = ({ product, categories }: { product: IProduct, categori
 
     const isMainImageIndex = product.images?.findIndex(img => img.is_main)
 
-    // console.log("isMainImageIndex", isMainImageIndex)
 
     const [selectedImage, setSelectedImage] = useState<File | null>(null)
-    // console.log("selectedImage", selectedImage)
     // image url to file list
     const [imageFiles, setImageFiles] = useState<(File | null)[]>([])
     // file list to blob url list
@@ -121,17 +119,12 @@ const EditProductModal = ({ product, categories }: { product: IProduct, categori
             // }
         }
     }
-    // console.log("imageFiles", imageFiles)
-    // console.log("blobImages", blobImages)
 
     const handleDeleteImage = (imageName: string | undefined) => {
-        console.log("imageName", imageName)
         const newImages = imageFiles?.filter(image => image?.name !== imageName)
-        console.log("newImages", newImages)
         setImageFiles(newImages)
         const blobArray = newImages.map(file => file ? URL.createObjectURL(file) : "")
         setBlobImages(blobArray)
-        console.log("newBlobImages", blobArray)
         setSelectedImage(newImages[0] || null)
     }
 

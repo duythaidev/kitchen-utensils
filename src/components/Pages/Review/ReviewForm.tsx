@@ -8,10 +8,11 @@ import { toast } from "sonner";
 
 const ReviewForm = ({ product_id }: { product_id: number }) => {
 
-    const [rating, setRating] = useState(5)
+    const [rating, setRating] = useState(0)
     const [isLoading, setIsLoading] = useState(false)
     const session = useSession()
     const [comment, setComment] = useState("")
+    console.log(rating)
 
     const handleAddReview = async () => {
         setIsLoading(true)
@@ -26,7 +27,7 @@ const ReviewForm = ({ product_id }: { product_id: number }) => {
             setIsLoading(false)
             return
         }
-        if (rating < 1 || rating > 5) {
+        if (rating < 0.5 || rating > 5) {
             toast.error("You must rate the product")
             setIsLoading(false)
             return
@@ -51,7 +52,7 @@ const ReviewForm = ({ product_id }: { product_id: number }) => {
             </p>
 
             <div className="flex items-center gap-3 mb-7.5">
-                <span>Your Rating*</span>
+                <span>Your Rating <span className="text-red-500">*</span></span>
                 <StarRatingSelect rating={rating} onChange={setRating} />
             </div>
 
