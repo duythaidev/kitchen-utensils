@@ -1,22 +1,18 @@
 'use server'
 import { revalidateTag } from 'next/cache'
+import { fetchWithAuth } from '@/lib/fetchWithAuth'
 
-export const handleCreateCategoryAction = async (formData: FormData, access_token: string) => {
+export const handleCreateCategoryAction = async (formData: FormData, accessToken: string) => {
   try {
-    const res = await fetch(`${process.env.BACKEND_API}/categories`, {
+    const { ok, data } = await fetchWithAuth({
+      url: '/categories',
       method: 'POST',
       body: formData,
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
+      accessToken,
+      tag: 'list-categories',
+      isFormData: true,
     })
-
-    if (!res.ok) {
-      const errorData = await res.json()
-      return { success: false, message: errorData.message || 'Server Error' }
-    }
-
-    const data = await res.json()
+    if (!ok) return { success: false, message: data.message || 'Server Error' }
     revalidateTag('list-categories')
     return { success: true, message: 'Category created successfully', data }
   } catch (error: any) {
@@ -25,22 +21,17 @@ export const handleCreateCategoryAction = async (formData: FormData, access_toke
   }
 }
 
-export const handleUpdateCategoryAction = async (id: number, formData: FormData, access_token: string) => {
+export const handleUpdateCategoryAction = async (id: number, formData: FormData, accessToken: string) => {
   try {
-    const res = await fetch(`${process.env.BACKEND_API}/categories/${id}`, {
+    const { ok, data } = await fetchWithAuth({
+      url: `/categories/${id}`,
       method: 'PATCH',
       body: formData,
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
+      accessToken,
+      tag: 'list-categories',
+      isFormData: true,
     })
-
-    if (!res.ok) {
-      const errorData = await res.json()
-      return { success: false, message: errorData.message || 'Update failed' }
-    }
-
-    const data = await res.json()
+    if (!ok) return { success: false, message: data.message || 'Update failed' }
     revalidateTag('list-categories')
     return { success: true, message: 'Category updated successfully', data }
   } catch (error: any) {
@@ -49,21 +40,15 @@ export const handleUpdateCategoryAction = async (id: number, formData: FormData,
   }
 }
 
-export const handleDeleteCategoryAction = async (id: number, access_token: string) => {
+export const handleDeleteCategoryAction = async (id: number, accessToken: string) => {
   try {
-    const res = await fetch(`${process.env.BACKEND_API}/categories/${id}`, {
+    const { ok, data } = await fetchWithAuth({
+      url: `/categories/${id}`,
       method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
+      accessToken,
+      tag: 'list-categories',
     })
-
-    if (!res.ok) {
-      const errorData = await res.json()
-      return { success: false, message: errorData.message || 'Delete failed' }
-    }
-
-    const data = await res.json()
+    if (!ok) return { success: false, message: data.message || 'Delete failed' }
     revalidateTag('list-categories')
     return { success: true, message: 'Category deleted successfully', data }
   } catch (error: any) {

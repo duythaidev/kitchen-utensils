@@ -34,15 +34,15 @@ export const fetchWithAuth = async ({
         next: tag ? { tags: [tag] } : undefined,
     });
 
-    if ([400, 401, 403].includes(response.status)) {
+    if ([401].includes(response.status)) {
         redirect("/logout");
     }
 
-    const result = await response.json();
+    const data = await response.json();
 
     return {
         ok: response.ok,
         status: response.status,
-        result,
+        data,
     };
 };

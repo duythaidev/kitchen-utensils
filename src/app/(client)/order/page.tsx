@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 
 import { Metadata } from 'next';
 import { redirect } from "next/navigation";
+import { fetchWithAuth } from "@/lib/fetchWithAuth";
 
 export const metadata: Metadata = {
     title: 'Orders - Kitchen Utensils',
@@ -22,16 +23,12 @@ const page = async () => {
         redirect('/login?unauthorized=true');
     }
     const accessToken = session?.accessToken;
-    const res = await fetch(`${process.env.BACKEND_API}/orders/me`, {
+    const { ok, data } = await fetchWithAuth({
+        url: `/orders/me`,
         method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`, // 
-        },
-    })
-
-    const data = await res.json()
-
+        accessToken: accessToken as string,
+        tag: "orders",
+    });
 
     return (
         <>

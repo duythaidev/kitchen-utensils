@@ -6,11 +6,13 @@ import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { LoaderCircle } from "lucide-react"
 import { useSearchParams } from "next/navigation"
+import { useRouter } from "nextjs-toploader/app"
 
 const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
+    const router = useRouter()
 
     const searchParams = useSearchParams()
 
@@ -36,14 +38,14 @@ const Login = () => {
             const res = await signIn("credentials", {
                 email,
                 password,
-                callbackUrl: `/`,
             })
 
-            if (!res || res?.error) {
+            if (res?.error) {
                 throw new Error(res?.error || "Invalid credentials")
             }
 
             toast.success("Login Successful")
+            router.push('/'); // Redirect to home page after successful login
             // Optionally redirect here (e.g., router.push('/'))
         } catch (error: any) {
             console.error("Login Failed:", error)

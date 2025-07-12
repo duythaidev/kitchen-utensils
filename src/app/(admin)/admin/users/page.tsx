@@ -2,6 +2,7 @@ import { DataTable } from "@/components/shadcn/data-table";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { Metadata } from "next";
+import { fetchWithAuth } from "@/lib/fetchWithAuth";
 
 export const metadata: Metadata = {
     title: 'User Dashboard - Kitchen Utensils',
@@ -13,21 +14,24 @@ const Page = async ({
 }: {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) => {
-    const session = await getServerSession(authOptions);
-    const accessToken = session?.accessToken;
-    const { keyword, page, limit } = await searchParams;
+     const session = await getServerSession(authOptions);
+  const accessToken = session?.accessToken;
+  const { keyword, page, limit } = await searchParams;
 
-    const res = await fetch(`${process.env.BACKEND_API}/users?keyword=${keyword || ""}&page=${page || 1}&limit=${limit || 10}`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`, // 
-        },
-        cache: 'no-store', //  test
+  const query = new URLSearchParams({
+    keyword: keyword?.toString() || '',
+    page: page?.toString() || '1',
+    limit: limit?.toString() || '10',
+  });
 
-        next: { tags: ['list-users'] }
-    });
-    const data = await res.json()
+  const { data } = await fetchWithAuth({
+    url: `/users?${query.toString()}`,
+    method: 'GET',
+    accessToken: accessToken as string,
+    tag: 'list-users',
+    cache: 'no-store',
+  });
+
     return (
         <div>
             <DataTable data={data.data} type="users"

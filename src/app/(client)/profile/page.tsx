@@ -19,16 +19,12 @@ export default async function Page() {
   if (!session || !session.user) {
     redirect('/login?unauthorized=true');
   }
-  const {ok, result} = await fetchWithAuth({
-    url: '/users/profile',
+  const { ok, data } = await fetchWithAuth({
+    url: '/users/me',
     method: 'GET',
     accessToken: session?.user?.accessToken as string,
     tag: 'profile',
   })
-  if (!ok) {
-    const errorData = await result.json();
-    console.log(errorData);
-  }
-  const profile = await result.json()
-  return <Profile profile={profile} />
+
+  return <Profile profile={data} />
 }

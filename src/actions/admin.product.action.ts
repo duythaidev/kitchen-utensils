@@ -1,123 +1,94 @@
 'use server'
 import { revalidateTag } from 'next/cache'
+import { fetchWithAuth } from '@/lib/fetchWithAuth'
 
-export const handleCreateProductAction = async (data: any, access_token: string) => {
+export const handleCreateProductAction = async (data: any, accessToken: string) => {
   try {
-    const res = await fetch(`${process.env.BACKEND_API}/products`, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${access_token}`,
-      },
-    })
-
-    if (!res.ok) {
-      const errorData = await res.json()
-      return { success: false, message: errorData.message || 'Server Error' }
-    }
-
-    const result = await res.json()
-    revalidateTag("list-products")
-    return { success: true, message: "Product created", data: result }
-  } catch (error: any) {
-    console.error("handleCreateProductAction Error:", error)
-    return { success: false, message: error.message || "Network error" }
-  }
-}
-
-export const handleCreateProductImageAction = async (data: FormData, access_token: string) => {
-  try {
-    const res = await fetch(`${process.env.BACKEND_API}/product-images`, {
-      method: "POST",
+    const { ok, data: result } = await fetchWithAuth({
+      url: '/products',
+      method: 'POST',
       body: data,
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
+      accessToken,
+      tag: 'list-products',
     })
-
-    if (!res.ok) {
-      const errorData = await res.json()
-      return { success: false, message: errorData.message || 'Server Error' }
-    }
-
-    const result = await res.json()
-    revalidateTag("list-products")
-    return { success: true, message: "Image added", data: result }
+    if (!ok) return { success: false, message: result.message || 'Server Error' }
+    revalidateTag('list-products')
+    return { success: true, message: 'Product created', data: result }
   } catch (error: any) {
-    console.error("handleCreateProductImageAction Error:", error)
-    return { success: false, message: error.message || "Network error" }
+    console.error('handleCreateProductAction Error:', error)
+    return { success: false, message: error.message || 'Network error' }
   }
 }
 
-export const handleUpdateProductAction = async (productId: number, data: any, access_token: string) => {
+export const handleCreateProductImageAction = async (formData: FormData, accessToken: string) => {
   try {
-    const res = await fetch(`${process.env.BACKEND_API}/products/${productId}`, {
-      method: "PATCH",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${access_token}`,
-      },
+    const { ok, data: result } = await fetchWithAuth({
+      url: '/product-images',
+      method: 'POST',
+      body: formData,
+      accessToken,
+      tag: 'list-products',
+      isFormData: true,
     })
-
-    if (!res.ok) {
-      const errorData = await res.json()
-      return { success: false, message: errorData.message || 'Update failed' }
-    }
-
-    const result = await res.json()
-    revalidateTag("list-products")
-    return { success: true, message: "Product updated", data: result }
+    if (!ok) return { success: false, message: result.message || 'Server Error' }
+    revalidateTag('list-products')
+    return { success: true, message: 'Image added', data: result }
   } catch (error: any) {
-    console.error("handleUpdateProductAction Error:", error)
-    return { success: false, message: error.message || "Network error" }
+    console.error('handleCreateProductImageAction Error:', error)
+    return { success: false, message: error.message || 'Network error' }
   }
 }
 
-export const handleUpdateProductImageAction = async (productId: number, data: FormData, access_token: string) => {
+export const handleUpdateProductAction = async (productId: number, data: any, accessToken: string) => {
   try {
-    const res = await fetch(`${process.env.BACKEND_API}/product-images/${productId}`, {
-      method: "PATCH",
+    const { ok, data: result } = await fetchWithAuth({
+      url: `/products/${productId}`,
+      method: 'PATCH',
       body: data,
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
+      accessToken,
+      tag: 'list-products',
     })
-
-    if (!res.ok) {
-      const errorData = await res.json()
-      return { success: false, message: errorData.message || 'Update failed' }
-    }
-
-    const result = await res.json()
-    revalidateTag("list-products")
-    return { success: true, message: "Image updated", data: result }
+    if (!ok) return { success: false, message: result.message || 'Update failed' }
+    revalidateTag('list-products')
+    return { success: true, message: 'Product updated', data: result }
   } catch (error: any) {
-    console.error("handleUpdateProductImageAction Error:", error)
-    return { success: false, message: error.message || "Network error" }
+    console.error('handleUpdateProductAction Error:', error)
+    return { success: false, message: error.message || 'Network error' }
   }
 }
 
-export const handleDeleteProductAction = async (productId: number, token: string) => {
+export const handleUpdateProductImageAction = async (productId: number, formData: FormData, accessToken: string) => {
   try {
-    const res = await fetch(`${process.env.BACKEND_API}/products/${productId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    const { ok, data: result } = await fetchWithAuth({
+      url: `/product-images/${productId}`,
+      method: 'PATCH',
+      body: formData,
+      accessToken,
+      tag: 'list-products',
+      isFormData: true,
     })
-
-    if (!res.ok) {
-      const errorData = await res.json()
-      return { success: false, message: errorData.message || 'Delete failed' }
-    }
-
-    const result = await res.json()
-    revalidateTag("list-products")
-    return { success: true, message: "Product deleted", data: result }
+    if (!ok) return { success: false, message: result.message || 'Update failed' }
+    revalidateTag('list-products')
+    return { success: true, message: 'Image updated', data: result }
   } catch (error: any) {
-    console.error("handleDeleteProductAction Error:", error)
-    return { success: false, message: error.message || "Network error" }
+    console.error('handleUpdateProductImageAction Error:', error)
+    return { success: false, message: error.message || 'Network error' }
+  }
+}
+
+export const handleDeleteProductAction = async (productId: number, accessToken: string) => {
+  try {
+    const { ok, data: result } = await fetchWithAuth({
+      url: `/products/${productId}`,
+      method: 'DELETE',
+      accessToken,
+      tag: 'list-products',
+    })
+    if (!ok) return { success: false, message: result.message || 'Delete failed' }
+    revalidateTag('list-products')
+    return { success: true, message: 'Product deleted', data: result }
+  } catch (error: any) {
+    console.error('handleDeleteProductAction Error:', error)
+    return { success: false, message: error.message || 'Network error' }
   }
 }

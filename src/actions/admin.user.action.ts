@@ -1,78 +1,66 @@
 'use server'
-import { revalidateTag } from 'next/cache'
+import { revalidateTag } from "next/cache"
+import { fetchWithAuth } from "@/lib/fetchWithAuth"
 
-export const handleCreateUserAction = async (data: FormData, access_token: string) => {
+// Tạo user
+export const handleCreateUserAction = async (formData: FormData, accessToken: string) => {
   try {
-    const res = await fetch(`${process.env.BACKEND_API}/users`, {
+    const { ok, data } = await fetchWithAuth({
+      url: "/users",
       method: "POST",
-      body: data,
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
+      body: formData,
+      accessToken,
+      tag: "list-users",
+      isFormData: true,
     })
-
-    if (!res.ok) {
-      const errorData = await res.json()
-      return { success: false, message: errorData.message || 'Create failed' }
-    }
-
-    const result = await res.json()
+    if (!ok) return { success: false, message: data.message || "Create failed" }
     revalidateTag("list-users")
-    return { success: true, message: "User created", data: result }
+    return { success: true, message: "User created", data }
   } catch (error: any) {
     console.error("handleCreateUserAction Error:", error)
     return { success: false, message: error.message || "Network error" }
   }
 }
 
-export const handleBanUserAction = async (userId: number, isActive: boolean, access_token: string) => {
+// Ban / Unban user
+export const handleBanUserAction = async (userId: number, isActive: boolean, accessToken: string) => {
   try {
-    const res = await fetch(`${process.env.BACKEND_API}/users/${isActive ? "ban" : "unban"}/${userId}`, {
+    const { ok, data } = await fetchWithAuth({
+      url: `/users/${isActive ? "ban" : "unban"}/${userId}`,
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${access_token}`,
-      },
+      accessToken,
+      tag: "list-users",
     })
-
-    if (!res.ok) {
-      const errorData = await res.json()
-      return { success: false, message: errorData.message || 'Action failed' }
-    }
-
-    const result = await res.json()
+    if (!ok) return { success: false, message: data.message || "Action failed" }
     revalidateTag("list-users")
-    return { success: true, message: isActive ? "User banned" : "User unbanned", data: result }
+    return { success: true, message: isActive ? "User banned" : "User unbanned", data }
   } catch (error: any) {
     console.error("handleBanUserAction Error:", error)
     return { success: false, message: error.message || "Network error" }
   }
 }
 
-export const  handleUpdateUserAction = async (id: number, formData: FormData, access_token: string) => {
+// Cập nhật user
+export const handleUpdateUserAction = async (id: number, formData: FormData, accessToken: string) => {
   try {
-    const res = await fetch(`${process.env.BACKEND_API}/users/${id}`, {
+    const { ok, data } = await fetchWithAuth({
+      url: `/users/${id}`,
       method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
       body: formData,
+      accessToken,
+      tag: "list-users",
+      isFormData: true,
     })
-
-    if (!res.ok) {
-      const errorData = await res.json()
-      return { success: false, message: errorData.message || "Update failed" }
-    }
-
-    const result = await res.json()
+    if (!ok) return { success: false, message: data.message || "Update failed" }
     revalidateTag("list-users")
-    return { success: true, message: "User updated", data: result }
+    return { success: true, message: "User updated", data }
   } catch (error: any) {
     console.error("handleUpdateUserAction Error:", error)
     return { success: false, message: error.message || "Network error" }
   }
 }
 
+// Force revalidate
 export const refreshUserList = async () => {
   revalidateTag("list-users")
 }
