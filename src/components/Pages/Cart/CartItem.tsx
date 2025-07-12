@@ -58,7 +58,7 @@ const CartItem = ({ item }: { item: ICartItem }) => {
                         </div>
 
                         <div>
-                            <h3 className="text-dark ease-out duration-200 hover:text-blue-500">
+                            <h3 className="text-dark ease-out duration-200 hover:text-primary">
                                 <Link href={`/product/${item.product.id}`}> {item.product.product_name} </Link>
                             </h3>
                         </div>

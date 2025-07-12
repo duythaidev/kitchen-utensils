@@ -38,7 +38,7 @@ const Profile = ({ profile }: { profile: any }) => {
             session?.user?.accessToken as string
         )
 
-        // console.log(res)
+        console.log(res)
 
         if (!res.success) {
             toast.error(res.message)
@@ -51,7 +51,7 @@ const Profile = ({ profile }: { profile: any }) => {
             user: {
                 ...session?.user,
                 user_name: res.data.user_name,
-                avatar_url: res.data.avatar_url,
+                // avatar_url: res.data.avatar_url,
             },
         })
 
@@ -101,8 +101,8 @@ const Profile = ({ profile }: { profile: any }) => {
                                 <div className="flex flex-wrap xl:flex-nowrap xl:flex-col gap-4">
 
                                     <button onClick={() => setActiveTab("account-details")}
-                                        className={`cursor-pointer flex items-center rounded-md gap-2.5 py-3 px-4.5 ease-out duration-200 hover:bg-blue-700 hover:text-white ${activeTab === "account-details"
-                                            ? "text-white bg-blue-700"
+                                        className={`cursor-pointer flex items-center rounded-md gap-2.5 py-3 px-4.5 ease-out duration-200 hover:bg-primary-dark hover:text-white ${activeTab === "account-details"
+                                            ? "text-white bg-primary-dark"
                                             : "text-dark-2 bg-gray-1"
                                             }`}
                                     >
@@ -116,8 +116,8 @@ const Profile = ({ profile }: { profile: any }) => {
 
                                     <button onClick={() => signOut({ callbackUrl: '/login', redirect: true })}
 
-                                        className={`cursor-pointer flex items-center rounded-md gap-2.5 py-3 px-4.5 ease-out duration-200 hover:bg-blue-700 hover:text-white ${activeTab === "logout"
-                                            ? "text-white bg-blue-700"
+                                        className={`cursor-pointer flex items-center rounded-md gap-2.5 py-3 px-4.5 ease-out duration-200 hover:bg-primary-dark hover:text-white ${activeTab === "logout"
+                                            ? "text-white bg-primary-dark"
                                             : "text-dark-2 bg-gray-1"
                                             }`}
                                     >
@@ -150,14 +150,14 @@ const Profile = ({ profile }: { profile: any }) => {
 
                                         <div className="flex justify-center">
                                             <Button type="button"
-                                            variant="outline"
-                                            onClick={() =>
-                                                document.getElementById("picture-input")?.click()
-                                            }
-                                            className="mb-5 mx-auto text-sm w-[100px] cursor-pointer"
-                                        >
-                                            {avatar ? "Change Avatar" : "Select Avatar"}
-                                        </Button>
+                                                variant="outline"
+                                                onClick={() =>
+                                                    document.getElementById("picture-input")?.click()
+                                                }
+                                                className="mb-5 mx-auto text-sm w-[100px] cursor-pointer"
+                                            >
+                                                {avatar ? "Change Avatar" : "Select Avatar"}
+                                            </Button>
                                         </div>
                                         <input
                                             id="picture-input"

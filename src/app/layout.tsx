@@ -1,8 +1,5 @@
-import Footer from '@/components/Footer';
 import './globals.css'
-import Header from '@/components/Header';
 import NextAuthWrapper from '@/components/NextAuthWrapper';
-// import ProgressBarProvider from '@/components/ProgressBarProvider';
 import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'sonner';
 

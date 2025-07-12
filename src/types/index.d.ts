@@ -8,6 +8,7 @@ export interface IProduct {
     description?: string | null,
     category?: ICategory | null,
     images?: IProductImage[] | null,
+    reviews?: IReview[]
 }
 
 export interface IReview {

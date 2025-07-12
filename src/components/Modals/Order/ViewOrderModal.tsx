@@ -20,7 +20,7 @@ const ViewOrderModal = ({ order, isAdmin, title }: { order: IOrder, isAdmin: boo
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="cursor-pointer text-blue-700">
+        <Button variant="outline" className="cursor-pointer text-primary-dark">
           <Eye className="w-4 h-4 mr-1" />
           {title}
         </Button>

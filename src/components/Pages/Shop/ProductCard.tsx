@@ -38,6 +38,14 @@ const ProductCard = ({ product }: { product: IProduct }) => {
             toast.error('You must be logged in to add to cart');
         }
     }
+    let rating = 0;
+
+    if (product.reviews && product.reviews.length > 0) {
+        const ratingSum = product.reviews?.reduce((sum, e) => sum + +e.rating, 0)
+        const ratingLength = product.reviews.length;
+        rating = ratingSum / ratingLength;
+    }
+
     const [open, setOpen] = useState(false);
     return (
         <>
@@ -54,7 +62,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
                 <div className="absolute flex justify-center bottom-[-100] w-full gap-x-5 mb-4 space-y-2 transition-all duration-300 group-hover:bottom-[-20]">
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <button onClick={() => setOpen(true)} className="flex h-10 w-10 items-center justify-center bg-white rounded-lg cursor-pointer transition hover:text-blue-500">
+                            <button onClick={() => setOpen(true)} className="flex h-10 w-10 items-center justify-center bg-white rounded-lg cursor-pointer transition hover:text-primary">
                                 <Eye className="h-5 w-5"></Eye>
                             </button>
                         </TooltipTrigger>
@@ -65,7 +73,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
 
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <button onClick={() => handleAddToCart(1)} className="flex h-10 w-10 items-center justify-center bg-white rounded-lg cursor-pointer transition hover:text-blue-500">
+                            <button onClick={() => handleAddToCart(1)} className="flex h-10 w-10 items-center justify-center bg-white rounded-lg cursor-pointer transition hover:text-primary">
                                 <ShoppingBag className="h-5 w-5"></ShoppingBag>
                             </button>
                         </TooltipTrigger>
@@ -82,24 +90,10 @@ const ProductCard = ({ product }: { product: IProduct }) => {
                 </Link>
 
                 <div className="mt-2 flex items-center gap-2">
-                    {/* <div className="flex items-center">
-                        <div className="relative">
-                            <div className="flex gap-2">
-                                {Array.from({ length: 5 }, () => (
-                                    <Star fill="gray" strokeWidth={1} color="gray" />
-                                ))}
-                            </div>
-                            <div className="absolute top-0 flex gap-2">
-                                <Star fill="#FBB040" strokeWidth={1} color="#FBB040" />
-                                <Star fill="#FBB040" strokeWidth={1} color="#FBB040" />
-                                <StarHalf fill="#FBB040" strokeWidth={1} color="#FBB040" />
-                            </div>
-                        </div>
-                    </div> */}
-                    <StarRating rating={5}></StarRating>
+                    <StarRating rating={rating}></StarRating>
 
-                    <p className="text-sm font-medium text-gray-900 ">{(5).toFixed(1)}</p>
-                    <p className="text-sm font-medium text-gray-500 ">(455)</p>
+                    <p className="text-sm font-medium text-gray-900 ">{(rating).toFixed(1)}</p>
+                    <p className="text-sm font-medium text-gray-500 ">({product.reviews?.length || 0})</p>
                 </div>
 
                 <ul className="mt-2 flex items-center gap-4">

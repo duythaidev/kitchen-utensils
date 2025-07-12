@@ -4,7 +4,7 @@ import { signIn, useSession } from "next-auth/react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import { LoaderCircle } from "lucide-react"
+import { LoaderCircle, Lock, Shield, User } from "lucide-react"
 import { useSearchParams } from "next/navigation"
 import { useRouter } from "nextjs-toploader/app"
 
@@ -63,6 +63,52 @@ const Login = () => {
                         <h1 className="text-3xl font-bold text-gray-900">Sign In to Your Account</h1>
                         <p className="text-gray-500">Enter your detail below</p>
                     </div>
+                    <div className="bg-gray-100 border rounded-lg p-4 mb-6">
+                        <h2 className="text-lg text-center font-semibold mb-3 text-gray-800">
+                            Demo account
+                        </h2>
+
+                        <div className="flex flex-col gap-3">
+                            <button onClick={() => {
+                                    setEmail('admin@gmail.com');
+                                    setPassword('123123');
+                                }}
+                                className="flex cursor-pointer items-center justify-between bg-purple-100 hover:bg-purple-200 transition text-purple-800 rounded-md px-4 py-3 border border-purple-300"
+                            >
+                                <div className="flex items-center gap-5">
+                                    <div className="rounded-full bg-purple-200 p-2">
+                                        <Shield></Shield>
+                                    </div>
+                                    <div>
+                                        <p className="font-semibold text-start">Admin</p>
+                                        <p className="text-sm text-purple-600">Full access to system</p>
+                                    </div>
+                                </div>
+                                <span className="text-sm font-medium underline">Click to fill</span>
+                            </button>
+
+                            <button onClick={() => {
+                                    setEmail('customer@gmail.com');
+                                    setPassword('123123');
+                                }}
+                                className="flex cursor-pointer items-center justify-between bg-blue-100 hover:bg-blue-200 transition text-blue-800 rounded-md px-4 py-3 border border-blue-300"
+                            >
+                                <div className="flex items-center gap-5">
+                                    <div className="rounded-full bg-blue-200 p-2">
+                                        <User></User>
+                                    </div>
+                                    <div>
+                                        <p className="font-semibold text-start">Customer</p>
+                                        <p className="text-sm text-blue-600">Buy products</p>
+                                    </div>
+                                </div>
+                                <span className="text-sm font-medium underline">Click to fill</span>
+                            </button>
+
+                        </div>
+                    </div>
+
+
 
                     <form className="space-y-6" onSubmit={handleLogin}>
                         <div>
@@ -113,9 +159,7 @@ const Login = () => {
                                 className={`cursor-pointer group relative flex w-full justify-center items-center rounded-md border border-transparent bg-blue-950 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-wait disabled:opacity-50`}
                             >
                                 <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                    <svg className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                                    </svg>
+                                    <Lock className="w-4 h-4"></Lock>
                                 </span>
                                 <span>Sign In</span>
                                 {loading &&
@@ -157,7 +201,7 @@ const Login = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 

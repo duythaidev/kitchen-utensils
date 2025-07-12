@@ -54,7 +54,7 @@ export default function CustomCarousel({ products }: { products: IProduct[] }) {
                             <div className="flex flex-col w-[55%] justify-around ">
                                 {product.discounted_price && (
                                     <div className="flex items-end">
-                                        <span className=" text-blue-700 font-bold text-5xl tracking-tight max-lg:text-center">
+                                        <span className=" text-primary-dark font-bold text-5xl tracking-tight max-lg:text-center">
                                             {((product.discounted_price / product.price) * 100).toFixed(0)}%
                                         </span>
                                         <span className="ml-5 text-xl inline-block w-2.5 uppercase leading-none">sale off</span>
@@ -88,7 +88,7 @@ export default function CustomCarousel({ products }: { products: IProduct[] }) {
                     <div className="relative  flex h-[450px] overflow-hidden ">
                         <div className="flex flex-col w-[55%] justify-around ">
                             <div className="flex items-end">
-                                <span className=" text-blue-700 font-bold text-5xl tracking-tight max-lg:text-center">
+                                <span className=" text-primary-dark font-bold text-5xl tracking-tight max-lg:text-center">
                                     30%
                                 </span>
                                 <span className="ml-5 text-xl inline-block w-2.5 uppercase leading-none">sale off</span>

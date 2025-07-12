@@ -29,17 +29,17 @@ const Contact = () => {
               <div className="p-4 sm:p-7.5">
                 <div className="flex flex-col gap-4">
                   <p className="flex items-center gap-4">
-                    <User className="w-6 h-6" color="#3C50E0" />
+                    <User className="w-6 h-6 text-primary"   />
                     Name: Nguyen Duy Thai 
                   </p>
 
                   <p className="flex items-center gap-4">
-                    <Phone className="w-6 h-6" color="#3C50E0" />
+                    <Phone className="w-6 h-6 text-primary"  />
                     Phone: 0985486619
                   </p>
 
                   <p className="flex gap-4">
-                    <Home className="w-6 h-6" color="#3C50E0" />
+                    <Home className="w-6 h-6 text-primary"  />
                     Address: Ha Noi, Viet Nam
                   </p>
                 </div>

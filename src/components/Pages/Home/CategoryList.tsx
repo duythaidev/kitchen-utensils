@@ -12,7 +12,7 @@ const CategoryList = ({ categories }: { categories: ICategory[] }) => {
                     <div className="mb-10 flex items-center justify-between">
                         <div>
                             <span className="flex items-center gap-2.5 font-medium text-dark mb-1.5">
-                                <Tag className="text-blue-700" />
+                                <Tag className="text-primary" />
                                 Categories
                             </span>
                             <h2 className="font-semibold text-3xl xl:text-heading-5 text-dark">
@@ -28,7 +28,7 @@ const CategoryList = ({ categories }: { categories: ICategory[] }) => {
                                     <Image alt="Category Image" className="w-[100px] h-[100px] object-cover" width={100} height={100} src={category.image_url}></Image>
                                 </div>
                                 <div className="flex justify-center">
-                                    <h3 className="inline-block font-medium text-center text-dark bg-gradient-to-r from-blue-700 to-blue-700 bg-[length:0px_1px] bg-left-bottom bg-no-repeat transition-[background-size] duration-500 hover:bg-[length:100%_3px] group-hover:bg-[length:100%_1px] group-hover:text-blue">
+                                    <h3 className="inline-block font-medium text-center text-dark bg-gradient-to-r from-primary-dark to-primary-dark bg-[length:0px_1px] bg-left-bottom bg-no-repeat transition-[background-size] duration-500 hover:bg-[length:100%_3px] group-hover:bg-[length:100%_1px] group-hover:text-blue">
                                         {category.category_name}
                                     </h3>
                                 </div>
@@ -40,7 +40,7 @@ const CategoryList = ({ categories }: { categories: ICategory[] }) => {
                                 <Image alt="as" width={100} height={100} src={'https://www.tefal.com.au/cdn/shop/products/01.C2783883TefalGenerousCookInductionNon-StickPancakePan25cmPackshot1.png?v=1746169211'}></Image>
                             </div>
                             <div className="flex justify-center">
-                                <h3 className="inline-block font-medium text-center text-dark bg-gradient-to-r from-blue-700 to-blue-700 bg-[length:0px_1px] bg-left-bottom bg-no-repeat transition-[background-size] duration-500 hover:bg-[length:100%_3px] group-hover:bg-[length:100%_1px] group-hover:text-blue">
+                                <h3 className="inline-block font-medium text-center text-dark bg-gradient-to-r from-primary-dark to-primary-dark bg-[length:0px_1px] bg-left-bottom bg-no-repeat transition-[background-size] duration-500 hover:bg-[length:100%_3px] group-hover:bg-[length:100%_1px] group-hover:text-blue">
                                     Laptop &amp; PC
                                 </h3>
                             </div>

@@ -31,7 +31,7 @@ const ViewUserModal = ({ user }: { user: IUser }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="cursor-pointer text-blue-700">
+        <Button variant="outline" className="cursor-pointer text-primary-dark">
           <Eye className="w-4 h-4" />
           View
         </Button>

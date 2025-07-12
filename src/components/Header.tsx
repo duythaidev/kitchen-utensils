@@ -66,7 +66,7 @@ const Header = ({ categories }: { categories: ICategory[] }) => {
               </svg>
             </button>
           </div>
-          <div className="hidden lg:flex items-center rounded-md border-gray-200 bg-gray-100 w-1/3">
+          <div className="hidden lg:flex items-center rounded-md border-gray-200  bg-gray-100 w-1/3">
             <div className="relative pl-3.5 py-2">
 
               <NavigationMenu >
@@ -90,7 +90,7 @@ const Header = ({ categories }: { categories: ICategory[] }) => {
               </NavigationMenu>
             </div>
             <div className="relative border-l border-gray-300 px-2 ml-2 flex-1">
-              <Input type="text" ref={searchRef} className="w-[95%] border-none! bg-gray-100! focus-visible:ring-[0px] "
+              <Input type="text" ref={searchRef} className="w-[95%] border-none! bg-gray-100! shadow-none focus-visible:ring-[0px] "
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     handleSearch()
@@ -106,7 +106,7 @@ const Header = ({ categories }: { categories: ICategory[] }) => {
             <PhoneCall className="text-primary" size={25}></PhoneCall>
             <div>
               <p className="text-gray-500 text-xs">24/7 SUPPORT</p>
-              <p className="font-bold hover:text-primary">0985486619</p>
+              <p className=" font-bold hover:text-primary">0985486619</p>
             </div>
           </div>
           <div className="hidden gap-2 lg:flex lg:justify-end items-center">

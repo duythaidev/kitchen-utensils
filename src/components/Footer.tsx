@@ -12,32 +12,32 @@ const Footer = () => {
                                 Help & Support
                             </h6>
                             <p className="mb-4 flex items-center justify-center md:justify-start">
-                                <Home className="text-blue-600 me-3 w-5 h-5 [&>svg]:h-5 [&>svg]:w-5"> </Home>
+                                <Home className="text-primary me-3 w-5 h-5 [&>svg]:h-5 [&>svg]:w-5"> </Home>
                                 Ha Noi, Viet Nam
                             </p>
                             <p className="mb-4 flex items-center justify-center md:justify-start">
-                                <Mail className="text-blue-600 me-3 w-5 h-5 [&>svg]:h-5 [&>svg]:w-5"> </Mail>
+                                <Mail className="text-primary me-3 w-5 h-5 [&>svg]:h-5 [&>svg]:w-5"> </Mail>
                                 <Link href="mailto:nguyenduythai17092005@gmail.com">nguyenduythai17092005@gmail.com</Link>
                             </p>
                             <p className="mb-5 flex items-center justify-center md:justify-start">
-                                <Phone className="text-blue-600 me-3 w-5 h-5 [&>svg]:h-5 [&>svg]:w-5"> </Phone>
+                                <Phone className="text-primary me-3 w-5 h-5 [&>svg]:h-5 [&>svg]:w-5"> </Phone>
                                 <Link href="tel:0985486619">0985486619</Link>
                             </p>
 
-                            
+
                         </div>
 
                         <div>
                             <h6 className="text-xl mb-4 flex justify-center font-semibold uppercase md:justify-start">
                                 My account
                             </h6>
-                            <p className="text-gray-500 hover:text-blue-500 mb-4">
+                            <p className="text-gray-500 hover:text-primary mb-4">
                                 <Link href="/order">Order history</Link>
                             </p>
-                            <p className="text-gray-500 hover:text-blue-500 mb-4">
+                            <p className="text-gray-500 hover:text-primary mb-4">
                                 <Link href="/cart">Shopping cart</Link>
                             </p>
-                            <p className="text-gray-500 hover:text-blue-500 ">
+                            <p className="text-gray-500 hover:text-primary ">
                                 <Link href="/contact">Help</Link>
                             </p>
                         </div>
@@ -45,7 +45,7 @@ const Footer = () => {
                             <h6 className="text-xl mb-4 flex justify-center font-semibold uppercase md:justify-start">
                                 Information
                             </h6>
-                            <p className="text-gray-500 hover:text-blue-500 mb-4">
+                            <p className="text-gray-500 hover:text-primary mb-4">
                                 <Link href="/contact">Contact</Link>
                             </p>
                             <div className="mb-5 flex items-center justify-center md:justify-start">

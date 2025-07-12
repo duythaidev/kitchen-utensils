@@ -23,7 +23,7 @@ const Hero = ({ products }: { products: IProduct[] }) => {
                         <div className="absolute inset-px rounded-lg bg-white "></div>
                         <div className=" relative flex h-full overflow-hidden rounded-lg ">
                             <div className="flex flex-col w-1/2 justify-between lg:pl-8 lg:py-10 sm:pl-10 sm:pt-10 ">
-                                <Link href="/" className="hover:text-blue-700 font-bold mt-2 text-lg tracking-tight text-gray-950 max-lg:text-center">Macbook Pro - 512/16GB</Link>
+                                <Link href="/" className="hover:text-primary-dark font-bold mt-2 text-lg tracking-tight text-gray-950 max-lg:text-center">Macbook Pro - 512/16GB</Link>
                                 <div>
                                     <p className="  max-w-lg text-sm/6 text-gray-600 ">
                                         limited time offer
@@ -46,7 +46,7 @@ const Hero = ({ products }: { products: IProduct[] }) => {
                         <div className="absolute inset-px rounded-lg bg-white "></div>
                         <div className=" relative flex h-full overflow-hidden rounded-lg ">
                             <div className="flex flex-col w-1/2 justify-between lg:pl-8 lg:py-10 sm:pl-10 sm:pt-10 ">
-                                <Link href="/" className="hover:text-blue-700 font-bold mt-2 text-lg tracking-tight text-gray-950 max-lg:text-center">Macbook Pro - 512/16GB</Link>
+                                <Link href="/" className="hover:text-primary-dark font-bold mt-2 text-lg tracking-tight text-gray-950 max-lg:text-center">Macbook Pro - 512/16GB</Link>
                                 <div>
                                     <p className="  max-w-lg text-sm/6 text-gray-600 ">
                                         limited time offer

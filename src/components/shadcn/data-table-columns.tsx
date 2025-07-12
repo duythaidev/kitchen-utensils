@@ -24,7 +24,7 @@ import ViewCategoryModal from "../Modals/Category/ViewCategoryModal"
 import { useEffect } from "react"
 import { fetchCategories } from "@/actions/client-api"
 import { ICategory } from "@/types"
-import { useState } from "react"  
+import { useState } from "react"
 export const userSchema = z.object({
   id: z.number(),
   avatar_url: z.string(),
@@ -142,7 +142,7 @@ export const usersColumns: ColumnDef<z.infer<typeof userSchema>>[] = [
     header: "Role",
     size: 50,
     cell: ({ row }) => (
-      <Badge variant="outline" className={`${row.original.role === "Admin" ? "text-blue-700" : "text-orange-500"} px-1.5`}>
+      <Badge variant="outline" className={`${row.original.role === "Admin" ? "text-primary-dark" : "text-orange-500"} px-1.5`}>
         {row.original.role === "Admin" ? "Admin" : "User"}
       </Badge>
     ),

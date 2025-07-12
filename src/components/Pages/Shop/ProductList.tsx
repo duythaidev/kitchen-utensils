@@ -98,7 +98,7 @@ const ProductList = ({ categories, products, pagination }: { categories: ICatego
         if (priceFromRef.current && priceToRef.current) {
             const priceFrom = priceFromRef.current.value ? +priceFromRef.current.value : ""
             const priceTo = priceToRef.current.value ? +priceToRef.current.value : ""
-            if (priceFrom  && priceTo !== "" && (priceFrom > priceTo)) {
+            if (priceFrom && priceTo !== "" && (priceFrom > priceTo)) {
                 toast.error('Price from must be less than price to')
                 return
             }
@@ -118,7 +118,7 @@ const ProductList = ({ categories, products, pagination }: { categories: ICatego
                         <div className="col-span-3 mt-5 md:mt-0 md:col-span-1 flex justify-center md:justify-between bg-white shadow-1 rounded-lg px-5 py-3 flex-wrap">
                             <div className="flex items-center justify-between w-full">
                                 <p>Filters:</p>
-                                <button className="block text-blue-600 hover:text-blue-700 cursor-pointer"
+                                <button className="block text-primary hover:text-primary-dark cursor-pointer"
                                     onClick={handleClearFilter}
                                 >
                                     Clear Filter
