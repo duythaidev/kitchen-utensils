@@ -78,7 +78,7 @@ const Header = ({ categories } : { categories: ICategory[] }) => {
                         All Categories
                       </NavigationMenuLink>
                       <Separator></Separator>
-                      {categories.map((category) => (
+                      {categories?.map((category) => (
                         <NavigationMenuLink key={category.id} className="w-[100px]"
                           onClick={() => router.push(`/shop?category=${category.id}`)}>
                           {category.category_name}

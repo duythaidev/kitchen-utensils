@@ -22,8 +22,8 @@ const CategoryList = ({ categories }: { categories: ICategory[] }) => {
                     </div>
 
                     <div className="flex justify-center gap-12">
-                        {categories.map((category) => (
-                            <Link href={`/shop?category=${category.id}`} className="group flex w-[150px] flex-col items-center">
+                        {categories?.map((category) => (
+                            <Link key={category.id} href={`/shop?category=${category.id}`} className="group flex w-[150px] flex-col items-center">
                                 <div className="max-w-[130px] w-full bg-[#F2F3F8] h-32.5 rounded-full flex items-center justify-center mb-4 overflow-hidden">
                                     <Image alt="Category Image" className="w-[100px] h-[100px] object-cover" width={100} height={100} src={category.image_url}></Image>
                                 </div>

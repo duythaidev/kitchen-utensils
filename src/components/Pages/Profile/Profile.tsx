@@ -1,44 +1,44 @@
-'use client';
-import Image from "next/image";
-import { useState } from "react";
-import { signOut, useSession } from "next-auth/react";
-import CustomButton from "../../Custom/CustomButton";
-import { Button } from "@/components/shadcn/button";
-import { toast } from "sonner";
-import { handleUpdateProfileAction } from "@/actions/user.action";
+'use client'
+import Image from "next/image"
+import { useState } from "react"
+import { signOut, useSession } from "next-auth/react"
+import CustomButton from "../../Custom/CustomButton"
+import { Button } from "@/components/shadcn/button"
+import { toast } from "sonner"
+import { handleUpdateProfileAction } from "@/actions/user.action"
 
 
 const Profile = ({ profile }: { profile: any }) => {
 
     const [myProfile, setMyProfile] = useState(profile)
 
-    const [activeTab, setActiveTab] = useState("account-details");
-    const [avatar, setAvatar] = useState<File | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [activeTab, setActiveTab] = useState("account-details")
+    const [avatar, setAvatar] = useState<File | null>(null)
+    const [isLoading, setIsLoading] = useState(false)
     const { data: session, update: sessionUpdate } = useSession()
 
     const handleUpdateProfile = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsLoading(true);
+        e.preventDefault()
+        setIsLoading(true)
 
-        const formData = new FormData();
-        formData.append("user_name", myProfile?.user_name.trim() || '');
-        formData.append("address", myProfile?.address.trim() || '');
-        formData.append("phone", myProfile?.phone.trim() || '');
+        const formData = new FormData()
+        formData.append("user_name", myProfile?.user_name.trim() || '')
+        formData.append("address", myProfile?.address.trim() || '')
+        formData.append("phone", myProfile?.phone.trim() || '')
         if (avatar) {
-            formData.append("avatar", avatar);
+            formData.append("avatar", avatar)
         }
 
         const res = await handleUpdateProfileAction(
             myProfile?.id,
             formData,
             session?.user?.accessToken as string
-        );
+        )
 
         if (!res.success) {
-            toast.error(res.message);
-            setIsLoading(false);
-            return;
+            toast.error(res.message)
+            setIsLoading(false)
+            return
         }
 
         // Cập nhật session nếu thành công
@@ -48,11 +48,11 @@ const Profile = ({ profile }: { profile: any }) => {
                 user_name: res.data.user_name,
                 avatar_url: res.data.avatar_url,
             },
-        });
+        })
 
-        toast.success("Profile updated successfully");
-        setIsLoading(false);
-    };
+        toast.success("Profile updated successfully")
+        setIsLoading(false)
+    }
 
     return (
         <section className="overflow-hidden py-20 bg-gray-100">
@@ -318,7 +318,7 @@ const Profile = ({ profile }: { profile: any }) => {
                 </div>
             </div>
         </section>
-    );
+    )
 }
 
-export default Profile;
+export default Profile

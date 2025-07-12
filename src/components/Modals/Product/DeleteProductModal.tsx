@@ -8,42 +8,42 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/shadcn/dialog";
-import { Button } from "@/components/shadcn/button";
-import { useState } from "react";
-import { Trash2 } from "lucide-react";
-import CustomButton from "@/components/Custom/CustomButton";
-import { toast } from "sonner";
-import { useSession } from "next-auth/react";
-import CustomModalBox from "../CustomModalBox";
-import { handleDeleteProductAction } from "@/actions/admin.product.action";
-import { IProduct } from "@/types";
-import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
+} from "@/components/shadcn/dialog"
+import { Button } from "@/components/shadcn/button"
+import { useState } from "react"
+import { Trash2 } from "lucide-react"
+import CustomButton from "@/components/Custom/CustomButton"
+import { toast } from "sonner"
+import { useSession } from "next-auth/react"
+import CustomModalBox from "../CustomModalBox"
+import { handleDeleteProductAction } from "@/actions/admin.product.action"
+import { IProduct } from "@/types"
+import { Card, CardContent, CardHeader } from "@/components/shadcn/card"
 
 const DeleteProductModal = ({ product }: { product: IProduct }) => {
-    const [open, setOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const { data: session } = useSession();
+    const [open, setOpen] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const { data: session } = useSession()
 
     const handleOpenChange = (open: boolean) => {
-        setOpen(open);
-    };
+        setOpen(open)
+    }
 
     const handleDeleteProduct = async () => {
-        setIsLoading(true);
+        setIsLoading(true)
 
-        const res = await handleDeleteProductAction(product.id, session?.accessToken || "");
+        const res = await handleDeleteProductAction(product.id, session?.accessToken || "")
 
         if (res.success) {
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            toast.success(res.message || "Product deleted successfully!");
-            setOpen(false);
+            await new Promise(resolve => setTimeout(resolve, 1000))
+            toast.success(res.message || "Product deleted successfully!")
+            setOpen(false)
         } else {
-            toast.error(res.message || "Failed to delete product.");
+            toast.error(res.message || "Failed to delete product.")
         }
 
-        setIsLoading(false);
-    };
+        setIsLoading(false)
+    }
 
 
 
@@ -99,7 +99,7 @@ const DeleteProductModal = ({ product }: { product: IProduct }) => {
                 </DialogFooter>
             </CustomModalBox>
         </Dialog>
-    );
-};
+    )
+}
 
-export default DeleteProductModal;
+export default DeleteProductModal

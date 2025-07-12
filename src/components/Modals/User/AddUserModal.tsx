@@ -33,7 +33,7 @@ const AddUserModal = () => {
     const [avatar, setAvatar] = useState<File | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const handleAddUser = async () => {
-        setIsLoading(true);
+        setIsLoading(true)
       
         if (
             userData.user_name === "" ||
@@ -41,32 +41,32 @@ const AddUserModal = () => {
             userData.password === "" ||
             userData.role === ""
           ) {
-            toast.error("Please fill in all required fields");
-            setIsLoading(false);
-            return;
+            toast.error("Please fill in all required fields")
+            setIsLoading(false)
+            return
           }
 
-        const formData = new FormData();
-        formData.append("user_name", userData.user_name);
-        formData.append("email", userData.email);
-        formData.append("phone", userData.phone);
-        formData.append("address", userData.address);
-        formData.append("role", userData.role);
-        formData.append("password", userData.password);
-        if (avatar) formData.append("avatar", avatar);
+        const formData = new FormData()
+        formData.append("user_name", userData.user_name)
+        formData.append("email", userData.email)
+        formData.append("phone", userData.phone)
+        formData.append("address", userData.address)
+        formData.append("role", userData.role)
+        formData.append("password", userData.password)
+        if (avatar) formData.append("avatar", avatar)
       
-        const result = await handleCreateUserAction(formData, session?.accessToken || "");
+        const result = await handleCreateUserAction(formData, session?.accessToken || "")
       
         if (result.success) {
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          toast.success(result.message || "Create succeed!");
-          setOpen(false);
+          await new Promise(resolve => setTimeout(resolve, 1000))
+          toast.success(result.message || "Create succeed!")
+          setOpen(false)
         } else {
-          toast.error(result.message || "Create failed!");
+          toast.error(result.message || "Create failed!")
         }
       
-        setIsLoading(false);
-      };
+        setIsLoading(false)
+      }
       
     const handleOpenChange = (open: boolean) => {
         setOpen(open)

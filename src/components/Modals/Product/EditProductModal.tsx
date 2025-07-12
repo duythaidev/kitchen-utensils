@@ -136,65 +136,65 @@ const EditProductModal = ({ product, categories }: { product: IProduct, categori
     }
 
     const handleUpdateProduct = async () => {
-        setIsLoading(true);
+        setIsLoading(true)
 
-        productData.product_name = productData.product_name.trim();
-        productData.description = productData.description.trim();
+        productData.product_name = productData.product_name.trim()
+        productData.description = productData.description.trim()
 
         if (productData.product_name.length === 0) {
-            toast.error("Product name is required");
-            setIsLoading(false);
-            return;
+            toast.error("Product name is required")
+            setIsLoading(false)
+            return
         }
         if (productData.price < 0 || (productData.discounted_price && productData.discounted_price < 0)) {
-            toast.error("Price cannot be negative");
-            setIsLoading(false);
-            return;
+            toast.error("Price cannot be negative")
+            setIsLoading(false)
+            return
         }
         if (productData.stock < 0) {
-            toast.error("Stock cannot be negative");
-            setIsLoading(false);
-            return;
+            toast.error("Stock cannot be negative")
+            setIsLoading(false)
+            return
         }
 
-        const resProduct = await handleUpdateProductAction(product.id, productData, session?.accessToken || "");
+        const resProduct = await handleUpdateProductAction(product.id, productData, session?.accessToken || "")
         if (!resProduct.success) {
-            toast.error(resProduct.message);
-            setIsLoading(false);
-            return;
+            toast.error(resProduct.message)
+            setIsLoading(false)
+            return
         }
 
         if (imageFiles && imageFiles.length > 0) {
-            const productImageFormData = new FormData();
+            const productImageFormData = new FormData()
             imageFiles.forEach(file => {
                 if (file) {
-                    productImageFormData.append("product-images", file);
+                    productImageFormData.append("product-images", file)
                 }
-            });
+            })
 
-            const isMainIndex = imageFiles.findIndex(image => image?.name === selectedImage?.name);
+            const isMainIndex = imageFiles.findIndex(image => image?.name === selectedImage?.name)
             if (isMainIndex === -1) {
-                toast.error("Please select a main image");
-                setIsLoading(false);
-                return;
+                toast.error("Please select a main image")
+                setIsLoading(false)
+                return
             }
 
-            productImageFormData.append("isMain", isMainIndex.toString());
-            productImageFormData.append("product_id", product.id.toString());
+            productImageFormData.append("isMain", isMainIndex.toString())
+            productImageFormData.append("product_id", product.id.toString())
 
-            const resImage = await handleUpdateProductImageAction(product.id, productImageFormData, session?.accessToken || "");
+            const resImage = await handleUpdateProductImageAction(product.id, productImageFormData, session?.accessToken || "")
             if (!resImage.success) {
-                toast.error(resImage.message || "Image update failed!");
-                setIsLoading(false);
-                return;
+                toast.error(resImage.message || "Image update failed!")
+                setIsLoading(false)
+                return
             }
         }
 
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        toast.success(resProduct.message);
-        setOpen(false);
-        setIsLoading(false);
-    };
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        toast.success(resProduct.message)
+        setOpen(false)
+        setIsLoading(false)
+    }
 
 
 
@@ -351,7 +351,7 @@ const EditProductModal = ({ product, categories }: { product: IProduct, categori
                                 </SelectTrigger>
                                 {categories.length > 0 && (
                                     <SelectContent>
-                                        {categories.map((category) => (
+                                        {categories?.map((category) => (
                                             <SelectItem key={category.id} value={category.id.toString()}>
                                                 {category.category_name}
                                             </SelectItem>

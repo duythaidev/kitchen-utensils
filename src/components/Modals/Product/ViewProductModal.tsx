@@ -1,20 +1,20 @@
 'use client'
 
-import { Eye } from "lucide-react";
+import { Eye } from "lucide-react"
 import {
     Dialog,
     DialogHeader,
     DialogTitle,
     DialogDescription,
     DialogTrigger,
-} from "@/components/shadcn/dialog";
-import { Input } from "@/components/shadcn/input";
-import { Label } from "@/components/shadcn/label";
-import { Button } from "@/components/shadcn/button";
-import { Checkbox } from "@/components/shadcn/checkbox";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/shadcn/select";
-import CustomModalBox from "../CustomModalBox";
-import { IProduct, IProductImage } from "@/types";
+} from "@/components/shadcn/dialog"
+import { Input } from "@/components/shadcn/input"
+import { Label } from "@/components/shadcn/label"
+import { Button } from "@/components/shadcn/button"
+import { Checkbox } from "@/components/shadcn/checkbox"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/shadcn/select"
+import CustomModalBox from "../CustomModalBox"
+import { IProduct, IProductImage } from "@/types"
 
 const ViewProductModal = ({ product }: { product: IProduct }) => {
     return (
@@ -33,8 +33,8 @@ const ViewProductModal = ({ product }: { product: IProduct }) => {
                 <ViewProductModalContent product={product} />
             </CustomModalBox>
         </Dialog>
-    );
-};
+    )
+}
 
 const ViewProductModalContent = ({ product }: { product: IProduct }) => {
     return (
@@ -102,7 +102,7 @@ const ViewProductModalContent = ({ product }: { product: IProduct }) => {
                 <Input disabled value={product.description || ""} />
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default ViewProductModal;
+export default ViewProductModal

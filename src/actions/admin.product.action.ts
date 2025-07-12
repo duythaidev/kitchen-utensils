@@ -1,5 +1,5 @@
-'use server';
-import { revalidateTag } from 'next/cache';
+'use server'
+import { revalidateTag } from 'next/cache'
 
 export const handleCreateProductAction = async (data: any, access_token: string) => {
   try {
@@ -10,21 +10,21 @@ export const handleCreateProductAction = async (data: any, access_token: string)
         "Content-Type": "application/json",
         Authorization: `Bearer ${access_token}`,
       },
-    });
+    })
 
     if (!res.ok) {
-      const errorData = await res.json();
-      return { success: false, message: errorData.message || 'Server Error' };
+      const errorData = await res.json()
+      return { success: false, message: errorData.message || 'Server Error' }
     }
 
-    const result = await res.json();
-    revalidateTag("list-products");
-    return { success: true, message: "Product created", data: result };
+    const result = await res.json()
+    revalidateTag("list-products")
+    return { success: true, message: "Product created", data: result }
   } catch (error: any) {
-    console.error("handleCreateProductAction Error:", error);
-    return { success: false, message: error.message || "Network error" };
+    console.error("handleCreateProductAction Error:", error)
+    return { success: false, message: error.message || "Network error" }
   }
-};
+}
 
 export const handleCreateProductImageAction = async (data: FormData, access_token: string) => {
   try {
@@ -34,21 +34,21 @@ export const handleCreateProductImageAction = async (data: FormData, access_toke
       headers: {
         Authorization: `Bearer ${access_token}`,
       },
-    });
+    })
 
     if (!res.ok) {
-      const errorData = await res.json();
-      return { success: false, message: errorData.message || 'Server Error' };
+      const errorData = await res.json()
+      return { success: false, message: errorData.message || 'Server Error' }
     }
 
-    const result = await res.json();
-    revalidateTag("list-products");
-    return { success: true, message: "Image added", data: result };
+    const result = await res.json()
+    revalidateTag("list-products")
+    return { success: true, message: "Image added", data: result }
   } catch (error: any) {
-    console.error("handleCreateProductImageAction Error:", error);
-    return { success: false, message: error.message || "Network error" };
+    console.error("handleCreateProductImageAction Error:", error)
+    return { success: false, message: error.message || "Network error" }
   }
-};
+}
 
 export const handleUpdateProductAction = async (productId: number, data: any, access_token: string) => {
   try {
@@ -59,21 +59,21 @@ export const handleUpdateProductAction = async (productId: number, data: any, ac
         "Content-Type": "application/json",
         Authorization: `Bearer ${access_token}`,
       },
-    });
+    })
 
     if (!res.ok) {
-      const errorData = await res.json();
-      return { success: false, message: errorData.message || 'Update failed' };
+      const errorData = await res.json()
+      return { success: false, message: errorData.message || 'Update failed' }
     }
 
-    const result = await res.json();
-    revalidateTag("list-products");
-    return { success: true, message: "Product updated", data: result };
+    const result = await res.json()
+    revalidateTag("list-products")
+    return { success: true, message: "Product updated", data: result }
   } catch (error: any) {
-    console.error("handleUpdateProductAction Error:", error);
-    return { success: false, message: error.message || "Network error" };
+    console.error("handleUpdateProductAction Error:", error)
+    return { success: false, message: error.message || "Network error" }
   }
-};
+}
 
 export const handleUpdateProductImageAction = async (productId: number, data: FormData, access_token: string) => {
   try {
@@ -83,21 +83,21 @@ export const handleUpdateProductImageAction = async (productId: number, data: Fo
       headers: {
         Authorization: `Bearer ${access_token}`,
       },
-    });
+    })
 
     if (!res.ok) {
-      const errorData = await res.json();
-      return { success: false, message: errorData.message || 'Update failed' };
+      const errorData = await res.json()
+      return { success: false, message: errorData.message || 'Update failed' }
     }
 
-    const result = await res.json();
-    revalidateTag("list-products");
-    return { success: true, message: "Image updated", data: result };
+    const result = await res.json()
+    revalidateTag("list-products")
+    return { success: true, message: "Image updated", data: result }
   } catch (error: any) {
-    console.error("handleUpdateProductImageAction Error:", error);
-    return { success: false, message: error.message || "Network error" };
+    console.error("handleUpdateProductImageAction Error:", error)
+    return { success: false, message: error.message || "Network error" }
   }
-};
+}
 
 export const handleDeleteProductAction = async (productId: number, token: string) => {
   try {
@@ -106,18 +106,18 @@ export const handleDeleteProductAction = async (productId: number, token: string
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    });
+    })
 
     if (!res.ok) {
-      const errorData = await res.json();
-      return { success: false, message: errorData.message || 'Delete failed' };
+      const errorData = await res.json()
+      return { success: false, message: errorData.message || 'Delete failed' }
     }
 
-    const result = await res.json();
-    revalidateTag("list-products");
-    return { success: true, message: "Product deleted", data: result };
+    const result = await res.json()
+    revalidateTag("list-products")
+    return { success: true, message: "Product deleted", data: result }
   } catch (error: any) {
-    console.error("handleDeleteProductAction Error:", error);
-    return { success: false, message: error.message || "Network error" };
+    console.error("handleDeleteProductAction Error:", error)
+    return { success: false, message: error.message || "Network error" }
   }
-};
+}

@@ -83,7 +83,7 @@ const Hero = ({ products }: { products: IProduct[] }) => {
                         <ShieldCheck size={45} />
                         <div className="ml-3.5">
                             <p className="mx-auto max-w-lg text-md font-semibold tracking-tight text-balance text-gray-950">100% Safety</p>
-                            <p className="text-gray-500">Gurantee product is safe</p>
+                            <p className="text-gray-500">Gurantee no shipping damage </p>
                         </div>
                     </div>
                     <div className="flex items-center">

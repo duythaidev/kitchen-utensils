@@ -29,7 +29,7 @@ export default async function Home() {
   // });
   // const productsData = await productsRes.json();
 
-  console.log("true data ", data)
+  // console.log("true data ", data)
   return (
     <>
       <Header categories={data.data}></Header>

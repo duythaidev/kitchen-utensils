@@ -1,43 +1,43 @@
 'use client'
 
-import { signIn, useSession } from "next-auth/react";
-import Link from "next/link";
-import { useState } from "react";
-import { toast } from "sonner";
-import { LoaderCircle } from "lucide-react";
+import { signIn, useSession } from "next-auth/react"
+import Link from "next/link"
+import { useState } from "react"
+import { toast } from "sonner"
+import { LoaderCircle } from "lucide-react"
 
 const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [loading, setLoading] = useState(false)
 
-    // const { data: session } = useSession();
-    // console.log("session", session);
+    // const { data: session } = useSession()
+    // console.log("session", session)
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setLoading(true);
+        e.preventDefault()
+        setLoading(true)
 
         try {
             const res = await signIn("credentials", {
                 email,
                 password,
                 redirect: false,
-            });
+            })
 
             if (!res || res?.error) {
-                throw new Error(res?.error || "Invalid credentials");
+                throw new Error(res?.error || "Invalid credentials")
             }
 
-            toast.success("Login Successful");
+            toast.success("Login Successful")
             // Optionally redirect here (e.g., router.push('/'))
         } catch (error: any) {
-            console.error("Login Failed:", error);
-            toast.error(`Login Failed: ${error.message}`);
+            console.error("Login Failed:", error)
+            toast.error(`Login Failed: ${error.message}`)
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
-    };
+    }
 
     return (
         <div className="bg-gray-100 flex min-h-[80vh] flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -142,7 +142,7 @@ const Login = () => {
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default Login;
+export default Login

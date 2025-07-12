@@ -18,7 +18,7 @@ const CartList = ({ cartItems = [], profile }: { cartItems?: ICartItem[], profil
     const [loading, setLoading] = useState(false)
 
     if (cartItems) {
-        totalPrice = useMemo(() => cartItems.reduce((sum, item) => {
+        totalPrice = useMemo(() => cartItems?.reduce((sum, item) => {
             return sum + (item.product?.discounted_price || item.product.price) * (item.quantity || 1)
         }, 0), [cartItems])
     }

@@ -1,44 +1,44 @@
 'use client'
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { toast } from 'sonner';
-import { LoaderCircle } from 'lucide-react';
-import { validateEmail } from '@/utils/validate';
-import { forgotPassword } from '@/actions/auth.action';
+import { useState } from 'react'
+import Link from 'next/link'
+import { toast } from 'sonner'
+import { LoaderCircle } from 'lucide-react'
+import { validateEmail } from '@/utils/validate'
+import { forgotPassword } from '@/actions/auth.action'
 
 const ForgotPassword = () => {
-    const [email, setEmail] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const handleForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setLoading(true);
+        e.preventDefault()
+        setLoading(true)
 
         try {
             // Gọi API gửi email reset (tùy bạn cấu hình)
             if (!email) {
-                toast.error('Please enter your email address.');
-                return;
+                toast.error('Please enter your email address.')
+                return
             }
             if (!validateEmail(email)) {
-                toast.error('Please enter a valid email address.');
-                return;
+                toast.error('Please enter a valid email address.')
+                return
             }
 
-            // const res = await forgotPassword(email);
+            // const res = await forgotPassword(email)
             // if (!res.success) {
-            //     toast.error(`Error: ${res.message}`);
-            //     return;
+            //     toast.error(`Error: ${res.message}`)
+            //     return
             // }
-            // setEmail('');
-            toast.success('Password reset link has been sent to your email.');
+            // setEmail('')
+            toast.success('Password reset link has been sent to your email.')
         } catch (err: any) {
-            toast.error(`Error: ${err.message}`);
+            toast.error(`Error: ${err.message}`)
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
-    };
+    }
 
     return (
         <div className="bg-gray-100 flex min-h-[80vh] flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -86,7 +86,7 @@ const ForgotPassword = () => {
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default ForgotPassword;
+export default ForgotPassword

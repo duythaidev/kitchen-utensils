@@ -196,7 +196,7 @@ const ProductList = ({ categories, products, pagination }: { categories: ICatego
                                     {showCategories && (
                                         <div className="pt-6" id="filter-section-1">
                                             <div className="space-y-4">
-                                                {categories.map((category) => {
+                                                {categories?.map((category) => {
                                                     const isChecked = selectedCategory === category.id.toString()
 
                                                     return (

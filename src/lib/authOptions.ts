@@ -1,8 +1,6 @@
-import { NextAuthOptions } from "next-auth";
-import NextAuth, { DefaultSession, Session } from "next-auth"
-import { JWT } from "next-auth/jwt";
-import GoogleProvider from "next-auth/providers/google";
-import CredentialsProvider from "next-auth/providers/credentials";
+import { NextAuthOptions } from "next-auth"
+import GoogleProvider from "next-auth/providers/google"
+import CredentialsProvider from "next-auth/providers/credentials"
 
 export const authOptions: NextAuthOptions = {
     session: {
@@ -22,7 +20,7 @@ export const authOptions: NextAuthOptions = {
             },
             async authorize(credentials, req) {
                 try {
-                    const res = await fetch("http://localhost:8080/api/v1/auth/login", {
+                    const res = await fetch(`${process.env.BACKEND_API}/auth/login`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -31,13 +29,12 @@ export const authOptions: NextAuthOptions = {
                             email: credentials?.email,
                             password: credentials?.password,
                         }),
-                    });
+                    })
 
-                    const data = await res.json();
-                    console.log("data", data)
+                    const data = await res.json()
 
                     if (!res.ok || !data.access_token) {
-                        throw new Error("Login failed");
+                        throw new Error("Login failed")
                     }
 
                     // add token to callback 
@@ -47,46 +44,35 @@ export const authOptions: NextAuthOptions = {
                         email: data.user.email,
                         avatar_url: data.user.avatar_url,
                         accessToken: data.access_token,
-                    };
+                    }
                 } catch (error) {
-                    console.error("Login error:", error);
-                    return null;
+                    console.error("Login error:", error)
+                    return null
                 }
             },
         }),
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID as string,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-            // authorization: {
-            //     params: {
-            //         prompt: "consent",
-            //         access_type: "offline",
-            //         response_type: "code"
-            //     }
-            // }
         }),
     ],
     callbacks: {
         // add accessToken to token
-        async jwt({ token, user, account, trigger, session }: { token: any; user?: any; account?: any; trigger?: string; session?: any }) {
+        async jwt({ token, user, account, trigger, session }: any) {
             // Credentials login
-            if (user?.accessToken) {
-                token.accessToken = user.accessToken;
-                token.user = user;
-            }
-            if (trigger === "update") {
-                // console.log(session)
-                if (session?.user.user_name) {
-                    token.user.user_name = session?.user.user_name;
+            if (account?.provider === "credentials" && user) {
+                token.accessToken = user.accessToken
+                token.user = {
+                    email: user.email,
+                    user_name: user.user_name,
+                    avatar_url: user.avatar_url,
+                    role: user.role || "user", // Default role if not provided
                 }
-                if (session?.user.avatar_url) {
-                    token.user.avatar_url = session?.user.avatar_url;
-                }
-                
             }
+
             // Google login
             if (account?.provider === "google") {
-                const res = await fetch("http://localhost:8080/api/v1/auth/google", {
+                const res = await fetch(`${process.env.BACKEND_API}/auth/google`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -97,26 +83,43 @@ export const authOptions: NextAuthOptions = {
                         avatar_url: token.picture,
                         auth_provider: account?.provider, // Google
                     }),
-                });
+                })
 
-                const data = await res.json();
-                console.log("data", data)
+                const data = await res.json()
+                // console.log("data", data)
 
-                token.accessToken = data.access_token; // Gán JWT từ backend
-                token.user = data.user;
+                token.accessToken = data.access_token // Gán JWT từ backend trả về
+
+                token.user = {
+                    email: data.email,
+                    user_name: data.user_name,
+                    avatar_url: data.avatar_url,
+                    role: data.role || "user", // Default role if not provided
+                }
             }
-            console.log( '>>> token', token)
-            return token;
+
+            // khi client side update info -> cập nhật token
+            if (trigger === "update" && session?.user) {
+                token.user = {
+                    ...token.user,
+                    user_name: session.user.user_name,
+                    avatar_url: session.user.avatar_url,
+                }
+            }
+
+            return token
         },
         // add accessToken to session
-        async session({ session, token }: { session: any, token: any }) {
-            session.accessToken = token.accessToken as string
-            session.user!.accessToken = token.accessToken as string
-            session.user!.avatar_url = token.user.avatar_url as string
-            session.user!.user_name = token.user.user_name as string
-            session.user!.email = token.user.email as string
-            return session;
-        },
+        async session({ session, token }: any) {
+            return {
+                ...session,
+                accessToken: token.accessToken,
+                user: {
+                    ...session.user,
+                    ...token.user,
+                    accessToken: token.accessToken,
+                },
+            }
+        }
     }
-
 }

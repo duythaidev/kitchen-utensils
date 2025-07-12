@@ -1,28 +1,28 @@
 'use client'
 
-import { CirclePlus } from "lucide-react";
+import { CirclePlus } from "lucide-react"
 import {
     Dialog, DialogClose, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger,
-} from "@/components/shadcn/dialog";
-import { Input } from "@/components/shadcn/input";
-import { Label } from "@/components/shadcn/label";
-import { Button } from "@/components/shadcn/button";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { Select, SelectValue, SelectTrigger, SelectContent, SelectItem } from "@/components/shadcn/select";
-import { Checkbox } from "@/components/shadcn/checkbox";
-import { toast } from "sonner";
-import { v4 as uuidv4 } from 'uuid';
-import CustomModalBox from "../CustomModalBox";
-import CustomButton from "@/components/Custom/CustomButton";
-import { handleCreateProductAction, handleCreateProductImageAction } from "@/actions/admin.product.action";
-import { useSession } from "next-auth/react";
-import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
-import { ICategory, IProduct } from "@/types";
+} from "@/components/shadcn/dialog"
+import { Input } from "@/components/shadcn/input"
+import { Label } from "@/components/shadcn/label"
+import { Button } from "@/components/shadcn/button"
+import Image from "next/image"
+import { useEffect, useState } from "react"
+import { Select, SelectValue, SelectTrigger, SelectContent, SelectItem } from "@/components/shadcn/select"
+import { Checkbox } from "@/components/shadcn/checkbox"
+import { toast } from "sonner"
+import { v4 as uuidv4 } from 'uuid'
+import CustomModalBox from "../CustomModalBox"
+import CustomButton from "@/components/Custom/CustomButton"
+import { handleCreateProductAction, handleCreateProductImageAction } from "@/actions/admin.product.action"
+import { useSession } from "next-auth/react"
+import { Card, CardContent, CardHeader } from "@/components/shadcn/card"
+import { ICategory, IProduct } from "@/types"
 
 const AddProductModal = ({ categories }: { categories: ICategory[] }) => {
-    const [open, setOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [open, setOpen] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const { data: session } = useSession()
 
     const [productData, setProductData] = useState({
@@ -31,98 +31,98 @@ const AddProductModal = ({ categories }: { categories: ICategory[] }) => {
         stock: 0,
         description: "",
         category_id: null as number | null,
-    });
-    const [selectedImage, setSelectedImage] = useState<File | null>(null);
-    const [productImages, setProductImages] = useState<File[]>([]);
-    const [blobImages, setBlobImages] = useState<string[]>([]);
+    })
+    const [selectedImage, setSelectedImage] = useState<File | null>(null)
+    const [productImages, setProductImages] = useState<File[]>([])
+    const [blobImages, setBlobImages] = useState<string[]>([])
 
 
     const handleAddImages = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e?.target?.files && e?.target?.files.length > 3) {
-            toast.error("You can only upload up to 3 images");
-            return;
+            toast.error("You can only upload up to 3 images")
+            return
         }
         if (e?.target?.files?.length) {
-            const filesArray = Array.from(e.target.files);
-            const blobArray = filesArray.map(file => URL.createObjectURL(file));
-            setBlobImages(blobArray);
-            setProductImages(filesArray);
-            setSelectedImage(filesArray[0]);
+            const filesArray = Array.from(e.target.files)
+            const blobArray = filesArray.map(file => URL.createObjectURL(file))
+            setBlobImages(blobArray)
+            setProductImages(filesArray)
+            setSelectedImage(filesArray[0])
         }
-    };
+    }
 
     const handleAddProduct = async () => {
-        setIsLoading(true);
+        setIsLoading(true)
 
-        productData.product_name = productData.product_name.trim();
-        productData.description = productData.description.trim();
+        productData.product_name = productData.product_name.trim()
+        productData.description = productData.description.trim()
 
 
         if (productData.product_name.length === 0) {
-            toast.error("Product name is required");
-            setIsLoading(false);
-            return;
+            toast.error("Product name is required")
+            setIsLoading(false)
+            return
         }
 
         if (productData.price === null || productData.price <= 0) {
-            toast.error("Price must be filled and larger than 0");
-            setIsLoading(false);
-            return;
+            toast.error("Price must be filled and larger than 0")
+            setIsLoading(false)
+            return
         }
         if (productData.stock < 0) {
-            toast.error("Stock cannot be negative");
-            setIsLoading(false);
-            return;
+            toast.error("Stock cannot be negative")
+            setIsLoading(false)
+            return
         }
 
-        const resProduct = await handleCreateProductAction(productData, session?.accessToken || "");
+        const resProduct = await handleCreateProductAction(productData, session?.accessToken || "")
         if (!resProduct.success) {
-            toast.error(resProduct.message);
-            setIsLoading(false);
-            return;
+            toast.error(resProduct.message)
+            setIsLoading(false)
+            return
         }
 
-        const productId = resProduct.data.id;
+        const productId = resProduct.data.id
 
         if (productImages.length > 0) {
-            const productImageFormData = new FormData();
+            const productImageFormData = new FormData()
             productImages.forEach(file => {
-                productImageFormData.append("product-images", file);
-            });
+                productImageFormData.append("product-images", file)
+            })
 
-            const isMainIndex = productImages.findIndex(image => image.name === selectedImage?.name);
+            const isMainIndex = productImages.findIndex(image => image.name === selectedImage?.name)
             if (isMainIndex === -1) {
-                toast.error("Please select a main image");
-                setIsLoading(false);
-                return;
+                toast.error("Please select a main image")
+                setIsLoading(false)
+                return
             }
 
-            productImageFormData.append("isMain", isMainIndex.toString());
-            productImageFormData.append("product_id", productId);
+            productImageFormData.append("isMain", isMainIndex.toString())
+            productImageFormData.append("product_id", productId)
 
-            const resImage = await handleCreateProductImageAction(productImageFormData, session?.accessToken || "");
+            const resImage = await handleCreateProductImageAction(productImageFormData, session?.accessToken || "")
             if (!resImage.success) {
-                toast.error(resImage.message || "Product image creation failed!");
-                setIsLoading(false);
-                return;
+                toast.error(resImage.message || "Product image creation failed!")
+                setIsLoading(false)
+                return
             }
         }
 
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        toast.success(resProduct.message);
-        setOpen(false);
-        setIsLoading(false);
-    };
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        toast.success(resProduct.message)
+        setOpen(false)
+        setIsLoading(false)
+    }
 
 
     const handleOpenChange = (state: boolean) => {
-        setOpen(state);
-        if (!state) return;
-        setProductData({ product_name: "", price: 0, stock: 0, description: "", category_id: null });
-        setSelectedImage(null);
-        setProductImages([]);
-        setBlobImages([]);
-    };
+        setOpen(state)
+        if (!state) return
+        setProductData({ product_name: "", price: 0, stock: 0, description: "", category_id: null })
+        setSelectedImage(null)
+        setProductImages([])
+        setBlobImages([])
+    }
 
     return (
         <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -228,7 +228,7 @@ const AddProductModal = ({ categories }: { categories: ICategory[] }) => {
                             </SelectTrigger>
                             {categories.length > 0 && (
                                 <SelectContent>
-                                    {categories.map((category) => (
+                                    {categories?.map((category) => (
                                         <SelectItem key={category.id} value={category.id.toString()}>
                                             {category.category_name}
                                         </SelectItem>
@@ -263,7 +263,7 @@ const AddProductModal = ({ categories }: { categories: ICategory[] }) => {
                 </DialogFooter>
             </CustomModalBox>
         </Dialog>
-    );
-};
+    )
+}
 
-export default AddProductModal;
+export default AddProductModal

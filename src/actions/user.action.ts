@@ -1,6 +1,6 @@
 'use server'
 
-import { revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache"
 
 export const handleUpdateProfileAction = async (userId: string, formData: FormData, accessToken: string) => {
     try {
@@ -10,21 +10,21 @@ export const handleUpdateProfileAction = async (userId: string, formData: FormDa
             headers: {
                 Authorization: `Bearer ${accessToken}`,
             },
-        });
+        })
 
         if (!res.ok) {
-            const errorData = await res.json();
-            return { success: false, message: errorData.message || "Update failed" };
+            const errorData = await res.json()
+            return { success: false, message: errorData.message || "Update failed" }
         }
 
-        revalidateTag("profile");
-        const data = await res.json();
-        return { success: true, message: "Profile updated", data };
+        revalidateTag("profile")
+        const data = await res.json()
+        return { success: true, message: "Profile updated", data }
     } catch (error: any) {
-        console.error("handleUpdateProfileAction Error:", error);
-        return { success: false, message: error.message || "Network error" };
+        console.error("handleUpdateProfileAction Error:", error)
+        return { success: false, message: error.message || "Network error" }
     }
-};
+}
 
 
 export async function addReview(productId: number, rating: number, comment: string, accessToken: string) {
@@ -36,21 +36,21 @@ export async function addReview(productId: number, rating: number, comment: stri
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
             }
-        });
+        })
 
         // console.log(res)
 
         if (!res.ok) {
-            const errorData = await res.json();
-            return { success: false, message: errorData.message || 'Server error' };
+            const errorData = await res.json()
+            return { success: false, message: errorData.message || 'Server error' }
         }
 
-        revalidateTag("list-reviews");
-        const data = await res.json();
-        return { success: true, message: "Review added", data };
+        revalidateTag("list-reviews")
+        const data = await res.json()
+        return { success: true, message: "Review added", data }
     } catch (error: any) {
-        console.error("addReview Error:", error);
-        return { success: false, message: error.message || "Network error" };
+        console.error("addReview Error:", error)
+        return { success: false, message: error.message || "Network error" }
     }
 }
 export async function deleteReview(productId: number, accessToken: string) {
@@ -62,21 +62,21 @@ export async function deleteReview(productId: number, accessToken: string) {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
             }
-        });
+        })
 
         // console.log(res)
 
         if (!res.ok) {
-            const errorData = await res.json();
-            return { success: false, message: errorData.message || 'Server error' };
+            const errorData = await res.json()
+            return { success: false, message: errorData.message || 'Server error' }
         }
 
-        revalidateTag("list-reviews");
-        const data = await res.json();
-        return { success: true, message: "Review added", data };
+        revalidateTag("list-reviews")
+        const data = await res.json()
+        return { success: true, message: "Review added", data }
     } catch (error: any) {
-        console.error("addReview Error:", error);
-        return { success: false, message: error.message || "Network error" };
+        console.error("addReview Error:", error)
+        return { success: false, message: error.message || "Network error" }
     }
 }
 
@@ -89,18 +89,18 @@ export async function addToCart(productId: number, quantity: number, accessToken
                 'Authorization': `Bearer ${accessToken}`
             },
             body: JSON.stringify({ product_id: productId, quantity }),
-        });
+        })
 
         if (!res.ok) {
-            const errorData = await res.json();
-            return { success: false, message: errorData.message || 'Server error' };
+            const errorData = await res.json()
+            return { success: false, message: errorData.message || 'Server error' }
         }
 
-        const data = await res.json();
-        return { success: true, message: "Added to cart", data };
+        const data = await res.json()
+        return { success: true, message: "Added to cart", data }
     } catch (error: any) {
-        console.error("addToCart Error:", error);
-        return { success: false, message: error.message || "Network error" };
+        console.error("addToCart Error:", error)
+        return { success: false, message: error.message || "Network error" }
     }
 }
 
@@ -113,19 +113,19 @@ export async function checkout(address: string, accessToken: string) {
                 'Authorization': `Bearer ${accessToken}`
             },
             body: JSON.stringify({ address }),
-        });
+        })
 
         if (!res.ok) {
-            const errorData = await res.json();
-            return { success: false, message: errorData.message || 'Checkout failed' };
+            const errorData = await res.json()
+            return { success: false, message: errorData.message || 'Checkout failed' }
         }
 
-        revalidateTag("list-cartitems");
-        const data = await res.json();
-        return { success: true, message: "Checkout successful", data };
+        revalidateTag("list-cartitems")
+        const data = await res.json()
+        return { success: true, message: "Checkout successful", data }
     } catch (error: any) {
-        console.error("checkout Error:", error);
-        return { success: false, message: error.message || "Network error" };
+        console.error("checkout Error:", error)
+        return { success: false, message: error.message || "Network error" }
     }
 }
 
@@ -138,19 +138,19 @@ export async function removeProductFromCart(productId: number, accessToken: stri
                 'Authorization': `Bearer ${accessToken}`
             },
             body: JSON.stringify({ product_id: productId }),
-        });
+        })
 
         if (!res.ok) {
-            const errorData = await res.json();
-            return { success: false, message: errorData.message || 'Remove failed' };
+            const errorData = await res.json()
+            return { success: false, message: errorData.message || 'Remove failed' }
         }
 
-        revalidateTag("list-cartitems");
-        const data = await res.json();
-        return { success: true, message: "Removed from cart", data };
+        revalidateTag("list-cartitems")
+        const data = await res.json()
+        return { success: true, message: "Removed from cart", data }
     } catch (error: any) {
-        console.error("removeProductFromCart Error:", error);
-        return { success: false, message: error.message || "Network error" };
+        console.error("removeProductFromCart Error:", error)
+        return { success: false, message: error.message || "Network error" }
     }
 }
 
@@ -163,18 +163,18 @@ export async function updateCartQuantity(productId: number, quantity: number, ac
                 'Authorization': `Bearer ${accessToken}`
             },
             body: JSON.stringify({ product_id: productId, quantity }),
-        });
+        })
 
         if (!res.ok) {
-            const errorData = await res.json();
-            return { success: false, message: errorData.message || 'Update failed' };
+            const errorData = await res.json()
+            return { success: false, message: errorData.message || 'Update failed' }
         }
 
-        revalidateTag("list-cartitems");
-        const data = await res.json();
-        return { success: true, message: "Quantity updated", data };
+        revalidateTag("list-cartitems")
+        const data = await res.json()
+        return { success: true, message: "Quantity updated", data }
     } catch (error: any) {
-        console.error("updateCartQuantity Error:", error);
-        return { success: false, message: error.message || "Network error" };
+        console.error("updateCartQuantity Error:", error)
+        return { success: false, message: error.message || "Network error" }
     }
 }
