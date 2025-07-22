@@ -11,7 +11,7 @@ const Hero = ({ products }: { products: IProduct[] }) => {
             <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
                 <div className="mt-10 grid gap-4 sm:mt-16 lg:grid-cols-3 lg:grid-rows-2 h-2/3">
                     {/* Slider */}
-                    <div className="relative lg:col-span-2 lg:row-span-2">
+                    <div className="relative lg:col-span-2 lg:row-span-2 overflow-hidden">
                         <div className="absolute inset-px rounded-lg bg-white"></div>
                         {/* top 3 in carousel */}
                         <CustomCarousel products={products} />
@@ -22,8 +22,8 @@ const Hero = ({ products }: { products: IProduct[] }) => {
                     <div className="relative lg:col-span-1 lg:row-span-1 ">
                         <div className="absolute inset-px rounded-lg bg-white "></div>
                         <div className=" relative flex h-full overflow-hidden rounded-lg ">
-                            <div className="flex flex-col w-1/2 justify-between lg:pl-8 lg:py-10 sm:pl-10 sm:pt-10 ">
-                                <Link href="/" className="hover:text-primary-dark font-bold mt-2 text-lg tracking-tight text-gray-950 max-lg:text-center">Macbook Pro - 512/16GB</Link>
+                            <div className="flex flex-col w-1/2 justify-between lg:pl-8 lg:py-10 pl-10 md:pt-10 ">
+                                <Link href="/" className="hover:text-primary-dark font-bold mt-2 text-lg tracking-tight text-gray-950 ">Macbook Pro - 512/16GB</Link>
                                 <div>
                                     <p className="  max-w-lg text-sm/6 text-gray-600 ">
                                         limited time offer
@@ -34,7 +34,7 @@ const Hero = ({ products }: { products: IProduct[] }) => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex flex-col max-w-1/2 justify-center px-8 py-8 sm:px-10 sm:pt-10 ">
+                            <div className="flex flex-col max-w-1/2 justify-center px-8 py-8 sm:px-10 md:pt-10 ">
                                 <img src="https://cdn-icons-png.freepik.com/512/1/1694.png" alt="" />
                             </div>
                         </div>
@@ -45,8 +45,8 @@ const Hero = ({ products }: { products: IProduct[] }) => {
                     <div className="relative lg:col-span-1 lg:row-span-1 ">
                         <div className="absolute inset-px rounded-lg bg-white "></div>
                         <div className=" relative flex h-full overflow-hidden rounded-lg ">
-                            <div className="flex flex-col w-1/2 justify-between lg:pl-8 lg:py-10 sm:pl-10 sm:pt-10 ">
-                                <Link href="/" className="hover:text-primary-dark font-bold mt-2 text-lg tracking-tight text-gray-950 max-lg:text-center">Macbook Pro - 512/16GB</Link>
+                            <div className="flex flex-col w-1/2 justify-between lg:pl-8 lg:py-10 pl-10 md:pt-10 ">
+                                <Link href="/" className="hover:text-primary-dark font-bold mt-2 text-lg tracking-tight text-gray-950 ">Macbook Pro - 512/16GB</Link>
                                 <div>
                                     <p className="  max-w-lg text-sm/6 text-gray-600 ">
                                         limited time offer
@@ -57,36 +57,36 @@ const Hero = ({ products }: { products: IProduct[] }) => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex flex-col max-w-1/2 justify-center px-8 py-8 sm:px-10 sm:pt-10 ">
+                            <div className="flex flex-col max-w-1/2 justify-center px-8 py-8 sm:px-10 md:pt-10 ">
                                 <img src="https://cdn-icons-png.freepik.com/512/1/1694.png" alt="" />
                             </div>
                         </div>
                         <div className="pointer-events-none absolute inset-px rounded-lg   "></div>
                     </div>
                 </div>
-                <div className="flex justify-around mt-10">
-                    <div className="flex items-center">
+                <div className="flex justify-around flex-wrap">
+                    <div className="flex items-center mt-10 flex-1">
                         <Rocket size={45} />
                         <div className="ml-3.5">
                             <p className="mx-auto max-w-lg text-md font-semibold tracking-tight text-balance text-gray-950">Fast Shipping</p>
                             <p className="text-gray-500">For all orders</p>
                         </div>
                     </div>
-                    <div className="flex items-center">
+                    <div className="flex items-center mt-10 flex-1">
                         <Undo2 size={45} />
                         <div className="ml-3.5">
                             <p className="mx-auto max-w-lg text-md font-semibold tracking-tight text-balance text-gray-950">1 & 1 Returns</p>
                             <p className="text-gray-500">Cancellation after 1 day</p>
                         </div>
                     </div>
-                    <div className="flex items-center">
+                    <div className="flex items-center mt-10 flex-1">
                         <ShieldCheck size={45} />
                         <div className="ml-3.5">
                             <p className="mx-auto max-w-lg text-md font-semibold tracking-tight text-balance text-gray-950">100% Safety</p>
                             <p className="text-gray-500">Gurantee no shipping damage </p>
                         </div>
                     </div>
-                    <div className="flex items-center">
+                    <div className="flex items-center mt-10 flex-1">
                         <MessageCircleMore size={45} />
                         <div className="ml-3.5">
                             <p className="mx-auto max-w-lg text-md font-semibold tracking-tight text-balance text-gray-950">24/7 Dedicated Support</p>

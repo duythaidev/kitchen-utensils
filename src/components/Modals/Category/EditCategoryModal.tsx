@@ -82,7 +82,10 @@ const EditCategoryModal = ({ category }: { category: ICategory }) => {
             <Label className="text-center justify-center">Image</Label>
 
             {imageFile ? (
-              <Image
+              <img
+                fetchPriority="low"
+                loading="lazy"
+                decoding="async"
                 src={URL.createObjectURL(imageFile)}
                 alt="New Category Preview"
                 width={120}
@@ -90,7 +93,10 @@ const EditCategoryModal = ({ category }: { category: ICategory }) => {
                 className="rounded-md"
               />
             ) : categoryData.image_url ? (
-              <Image
+              <img
+                fetchPriority="low"
+                loading="lazy"
+                decoding="async"
                 src={categoryData.image_url}
                 alt="Current Category"
                 width={120}

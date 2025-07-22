@@ -152,7 +152,10 @@ const AddProductModal = ({ categories }: { categories: ICategory[] }) => {
                                         <CardHeader className="hover:scale-105 transition-all cursor-pointer"
                                             onClick={() => setSelectedImage(productImages[index])}
                                         >
-                                            <Image
+                                            <img
+                                                fetchPriority="low"
+                                                loading="lazy"
+                                                decoding="async"
                                                 src={blob}
                                                 alt="Preview"
                                                 width={300}

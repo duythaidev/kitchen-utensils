@@ -39,7 +39,10 @@ const ViewCategoryModal = ({ category }: { category: ICategory }) => {
             <Label className="text-center justify-center">Image</Label>
 
             {category.image_url ? (
-              <Image
+              <img
+                fetchPriority="low"
+                loading="lazy"
+                decoding="async"
                 src={category.image_url}
                 alt="Category Image"
                 width={120}

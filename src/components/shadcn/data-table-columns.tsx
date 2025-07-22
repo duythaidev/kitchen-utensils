@@ -297,7 +297,10 @@ export const categoriesColumns: ColumnDef<z.infer<typeof categorySchema>>[] = [
       row.original.image_url ?
         <img className="w-10 h-10 object-cover rounded-md" src={row.original.image_url} />
         :
-        <Image className="w-10 h-10" />
+        <img
+          fetchPriority="low"
+          loading="lazy"
+          decoding="async" className="w-10 h-10" />
   },
   {
     accessorKey: "category_name",

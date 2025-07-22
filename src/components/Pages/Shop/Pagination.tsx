@@ -36,7 +36,7 @@ const Pagination = ({ page, totalPages, goToPage }: IProps) => {
                     </Button>
                     <Button
                         variant="outline"
-                        className="hidden size-8 lg:flex"
+                        className=" size-8 lg:flex"
                         size="icon"
                         onClick={() => goToPage(page + 1)}
                         disabled={page >= totalPages}
@@ -46,7 +46,7 @@ const Pagination = ({ page, totalPages, goToPage }: IProps) => {
                     </Button>
                     <Button
                         variant="outline"
-                        className="hidden size-8 lg:flex"
+                        className=" size-8 lg:flex"
                         size="icon"
                         onClick={() => goToPage(totalPages)}
                         disabled={page >= totalPages}

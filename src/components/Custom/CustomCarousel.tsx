@@ -49,17 +49,17 @@ export default function CustomCarousel({ products }: { products: IProduct[] }) {
                 {products?.slice(0, 3)?.map((product, index) =>
                     <SwiperSlide className='px-10! text-black!'>
                         <div className="relative  flex h-[450px] overflow-hidden ">
-                            <div className="flex flex-col w-[55%] justify-around ">
+                            <div className="flex flex-col md:w-[55%] justify-around ">
                                 {product.discounted_price && (
                                     <div className="flex items-end">
-                                        <span className=" text-primary-dark font-bold text-5xl tracking-tight max-lg:text-center">
+                                        <span className=" text-primary-dark font-bold text-5xl tracking-tight ">
                                             {((product.discounted_price / product.price) * 100).toFixed(0)}%
                                         </span>
                                         <span className="ml-5 text-xl inline-block w-2.5 uppercase leading-none">sale off</span>
                                     </div>
                                 )}
                                 <div>
-                                    <HoverLink link="/shop" className=" font-bold block text-3xl tracking-tight  max-lg:text-center">
+                                    <HoverLink link="/shop" className=" font-bold block text-3xl tracking-tight  ">
                                         {/* Macbook Pro - 512/16GB */}
                                         {product.product_name}
                                     </HoverLink>
@@ -72,7 +72,7 @@ export default function CustomCarousel({ products }: { products: IProduct[] }) {
                                     Get started
                                 </button>
                             </div>
-                            <div className="flex flex-col max-w-[45%] items-center justify-center px-8 py-8 sm:px-10 sm:pt-10 ">
+                            <div className="flex flex-col md:max-w-[45%] items-center justify-center px-8 py-8 sm:px-10 sm:pt-10 ">
                                 {/* <img src="https://cdn-icons-png.freepik.com/512/1/1694.png" alt="" /> */}
                                 <img alt="as" src={'https://m.media-amazon.com/images/I/71-U1rX30iL._AC_SL1500_.jpg'}></img>
 
@@ -82,16 +82,16 @@ export default function CustomCarousel({ products }: { products: IProduct[] }) {
                 )}
 
                 <SwiperSlide className='px-10! text-black!'>
-                    <div className="relative  flex h-[450px] overflow-hidden ">
-                        <div className="flex flex-col w-[55%] justify-around ">
+                    <div className="relative  flex lg:h-[450px] overflow-hidden flex-wrap">
+                        <div className="flex flex-col md:w-[55%] justify-around ">
                             <div className="flex items-end">
-                                <span className=" text-primary-dark font-bold text-5xl tracking-tight max-lg:text-center">
+                                <span className=" text-primary-dark font-bold text-5xl tracking-tight">
                                     30%
                                 </span>
                                 <span className="ml-5 text-xl inline-block w-2.5 uppercase leading-none">sale off</span>
                             </div>
                             <div>
-                                <HoverLink link="/shop" className=" font-bold block text-3xl tracking-tight  max-lg:text-center">
+                                <HoverLink link="/shop" className=" font-bold block text-3xl tracking-tight ">
                                     Macbook Pro - 512/16GB
                                 </HoverLink>
                                 <p className="  max-w-lg mt-5 text-gray-600 ">
@@ -101,11 +101,11 @@ export default function CustomCarousel({ products }: { products: IProduct[] }) {
 
                                 </p>
                             </div>
-                            <button onClick={() => router.push('/shop')} className="capitalize cursor-pointer rounded-md w-2/5 text-center !bg-[#1c274c] px-5 py-3.5 text-sm font-semibold !text-white shadow-xs !transition duration-200 hover:!bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                            <button onClick={() => router.push('/shop')} className="capitalize mt-5 md:mt-0 cursor-pointer rounded-md md:w-2/5 w-full text-center !bg-[#1c274c] px-5 py-3.5 text-sm font-semibold !text-white shadow-xs !transition duration-200 hover:!bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                                 Get started
                             </button>
                         </div>
-                        <div className="flex flex-col max-w-[45%] items-center justify-center px-8 py-8 sm:px-10 sm:pt-10 ">
+                        <div className="flex flex-col md:max-w-[45%] items-center justify-center px-8 py-8 sm:px-10 sm:pt-10 ">
                             {/* <img src="https://cdn-icons-png.freepik.com/512/1/1694.png" alt="" /> */}
                             <img alt="as" src={'https://m.media-amazon.com/images/I/71-U1rX30iL._AC_SL1500_.jpg'}></img>
 

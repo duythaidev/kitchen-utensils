@@ -34,17 +34,17 @@ const AddUserModal = () => {
     const [isLoading, setIsLoading] = useState(false)
     const handleAddUser = async () => {
         setIsLoading(true)
-      
+
         if (
             userData.user_name === "" ||
             userData.email === "" ||
             userData.password === "" ||
             userData.role === ""
-          ) {
+        ) {
             toast.error("Please fill in all required fields")
             setIsLoading(false)
             return
-          }
+        }
 
         const formData = new FormData()
         formData.append("user_name", userData.user_name)
@@ -54,20 +54,20 @@ const AddUserModal = () => {
         formData.append("role", userData.role)
         formData.append("password", userData.password)
         if (avatar) formData.append("avatar", avatar)
-      
+
         const result = await handleCreateUserAction(formData, session?.accessToken || "")
-      
+
         if (result.success) {
-          await new Promise(resolve => setTimeout(resolve, 1000))
-          toast.success(result.message || "Create succeed!")
-          setOpen(false)
+            await new Promise(resolve => setTimeout(resolve, 1000))
+            toast.success(result.message || "Create succeed!")
+            setOpen(false)
         } else {
-          toast.error(result.message || "Create failed!")
+            toast.error(result.message || "Create failed!")
         }
-      
+
         setIsLoading(false)
-      }
-      
+    }
+
     const handleOpenChange = (open: boolean) => {
         setOpen(open)
         setUserData({
@@ -103,7 +103,10 @@ const AddUserModal = () => {
                         <Label className="text-center">Avatar</Label>
 
                         <div className="w-[120px] h-[120px] bg-gray-200 rounded-md overflow-hidden">
-                            <Image
+                            <img
+                                fetchPriority="low"
+                                loading="lazy"
+                                decoding="async"
                                 src={avatar ? URL.createObjectURL(avatar) : "https://placehold.jp/150x150.png"}
                                 alt="Avatar image"
                                 width={120}

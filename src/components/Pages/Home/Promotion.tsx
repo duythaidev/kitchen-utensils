@@ -23,16 +23,19 @@ const Promotion = () => {
 
             <Link
               href="/shop"
-              className="inline-flex font-medium text-custom-sm text-white bg-blue-600 py-[11px] px-9.5 rounded-md ease-out duration-200 hover:bg-blue-800 mt-7.5"
+              className="flex md:inline-flex justify-center items-center   font-medium text-custom-sm text-white bg-blue-600 py-[11px] md:px-9.5 rounded-md ease-out duration-200 hover:bg-blue-800 mt-7.5"
             >
               Buy Now
             </Link>
           </div>
 
-          <Image
+          <img
+            fetchPriority="low"
+            loading="lazy"
+            decoding="async"
             src="https://www.tefal.com.au/cdn/shop/files/01-TP-EY55JD-Jamie-Oliver-by-Tefal-Easy-Fry-Silence-Deluxe-Air-Fryer.webp?v=1747632504&width=800"
             alt="promo img"
-            className="absolute bottom-0 right-4 lg:right-26 -z-1"
+            className="md:md:absolute bottom-0 right-4 lg:right-26 -z-1"
             width={350}
             height={500}
           />
@@ -41,10 +44,13 @@ const Promotion = () => {
         <div className="grid gap-7.5 grid-cols-1 lg:grid-cols-2">
           {/* <!-- promo banner small --> */}
           <div className="relative z-1 overflow-hidden rounded-lg bg-[#DBF4F3] py-10 xl:py-16 px-4 sm:px-7.5 xl:px-10">
-            <Image
+            <img
+              fetchPriority="low"
+              loading="lazy"
+              decoding="async"
               src="https://www.tefal.com.au/cdn/shop/files/BL477BlenderforcePianoWhite.png?v=1746168855&width=800"
               alt="promo img"
-              className="absolute top-1/2 -translate-y-1/2 left-3 sm:left-10 -z-1"
+              className="md:absolute md:top-1/2 md:-translate-y-1/2 left-3 sm:left-10 -z-1"
               width={241}
               height={241}
             />
@@ -64,7 +70,7 @@ const Promotion = () => {
 
               <Link
                 href="/shop"
-                className="inline-flex font-medium text-custom-sm text-white bg-teal-600 py-2.5 px-8.5 rounded-md ease-out duration-200 hover:bg-teal-700 mt-9"
+                className="flex justify-center items-center md:inline-flex font-medium text-custom-sm text-white bg-teal-600 py-2.5 px-8.5 rounded-md ease-out duration-200 hover:bg-teal-700 mt-9"
               >
                 Grab Now
               </Link>
@@ -73,10 +79,13 @@ const Promotion = () => {
 
           {/* <!-- promo banner small --> */}
           <div className="relative z-1 overflow-hidden rounded-lg bg-[#FFECE1] py-10 xl:py-16 px-4 sm:px-7.5 xl:px-10">
-            <Image
+            <img
+              fetchPriority="low"
+              loading="lazy"
+              decoding="async"
               src="https://www.tefal.com.au/cdn/shop/products/1.B5670222TefalSimplyCleanNon-StickFrypan20cmPackshot1.png?v=1746169370&width=600"
               alt="promo img"
-              className="absolute top-1/2 -translate-y-1/2 right-3 sm:right-8.5 -z-1"
+              className="md:absolute mx-auto md:mx-0 md:top-1/2 md:-translate-y-1/2 right-3 sm:right-8.5 -z-1"
               width={200}
               height={200}
             />
@@ -94,12 +103,12 @@ const Promotion = () => {
                 The non-stick surface is easy to clean and easy to use.
               </p>
 
-              <a
+              <Link
                 href="/shop"
-                className="inline-flex font-medium text-custom-sm text-white bg-orange-400 py-2.5 px-8.5 rounded-md ease-out duration-200 hover:bg-orange-500 mt-7.5"
+                className="flex md:inline-flex  justify-center items-center md:w-[141px] font-medium text-custom-sm text-white bg-orange-400 py-2.5 px-8.5 rounded-md ease-out duration-200 hover:bg-orange-500 mt-7.5"
               >
                 Buy Now
-              </a>
+              </Link>
             </div>
           </div>
         </div>

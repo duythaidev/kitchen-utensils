@@ -90,7 +90,10 @@ const EditUserModal = ({ user }: { user: IUser }) => {
                         <Label className="text-center justify-center">Avatar</Label>
 
                         {avatar ? (
-                            <Image
+                            <img
+                                fetchPriority="low"
+                                loading="lazy"
+                                decoding="async"
                                 src={URL.createObjectURL(avatar)}
                                 alt="New Avatar Preview"
                                 width={100}
@@ -98,7 +101,10 @@ const EditUserModal = ({ user }: { user: IUser }) => {
                                 className="rounded-full mx-auto"
                             />
                         ) : userData.avatar_url ? (
-                            <Image
+                            <img
+                                fetchPriority="low"
+                                loading="lazy"
+                                decoding="async"
                                 src={userData.avatar_url}
                                 alt="Current Avatar"
                                 width={100}

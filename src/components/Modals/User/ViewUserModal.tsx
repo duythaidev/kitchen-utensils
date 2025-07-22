@@ -47,7 +47,10 @@ const ViewUserModal = ({ user }: { user: IUser }) => {
           {/* Avatar */}
           <div className="grid gap-3 mx-auto">
             {user.avatar_url ? (
-              <Image
+              <img
+                fetchPriority="low"
+                loading="lazy"
+                decoding="async"
                 src={user.avatar_url}
                 alt="Current Avatar"
                 width={100}
