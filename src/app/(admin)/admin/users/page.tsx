@@ -14,23 +14,23 @@ const Page = async ({
 }: {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) => {
-     const session = await getServerSession(authOptions);
-  const accessToken = session?.accessToken;
-  const { keyword, page, limit } = await searchParams;
+    const session = await getServerSession(authOptions);
+    const accessToken = session?.accessToken;
+    const { keyword, page, limit } = await searchParams;
 
-  const query = new URLSearchParams({
-    keyword: keyword?.toString() || '',
-    page: page?.toString() || '1',
-    limit: limit?.toString() || '10',
-  });
+    const query = new URLSearchParams({
+        keyword: keyword?.toString() || '',
+        page: page?.toString() || '1',
+        limit: limit?.toString() || '10',
+    });
 
-  const { data } = await fetchWithAuth({
-    url: `/users?${query.toString()}`,
-    method: 'GET',
-    accessToken: accessToken as string,
-    tag: 'list-users',
-    cache: 'no-store',
-  });
+    const { data } = await fetchWithAuth({
+        url: `/users?${query.toString()}`,
+        method: 'GET',
+        accessToken: accessToken as string,
+        tag: 'list-users',
+        cache: 'no-store',
+    });
 
     return (
         <div>

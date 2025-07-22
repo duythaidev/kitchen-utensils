@@ -38,6 +38,7 @@ const Login = () => {
             const res = await signIn("credentials", {
                 email,
                 password,
+                redirect: false,
             })
 
             if (res?.error) {
@@ -48,7 +49,7 @@ const Login = () => {
             router.push('/'); // Redirect to home page after successful login
             // Optionally redirect here (e.g., router.push('/'))
         } catch (error: any) {
-            console.error("Login Failed:", error)
+            console.log("Login Failed:", error)
             toast.error(`Login Failed: ${error.message}`)
         } finally {
             setLoading(false)
@@ -70,9 +71,9 @@ const Login = () => {
 
                         <div className="flex flex-col gap-3">
                             <button onClick={() => {
-                                    setEmail('admin@gmail.com');
-                                    setPassword('123123');
-                                }}
+                                setEmail('admin@gmail.com');
+                                setPassword('123123');
+                            }}
                                 className="flex cursor-pointer items-center justify-between bg-purple-100 hover:bg-purple-200 transition text-purple-800 rounded-md px-4 py-3 border border-purple-300"
                             >
                                 <div className="flex items-center gap-5">
@@ -88,9 +89,9 @@ const Login = () => {
                             </button>
 
                             <button onClick={() => {
-                                    setEmail('customer@gmail.com');
-                                    setPassword('123123');
-                                }}
+                                setEmail('customer@gmail.com');
+                                setPassword('123123');
+                            }}
                                 className="flex cursor-pointer items-center justify-between bg-blue-100 hover:bg-blue-200 transition text-blue-800 rounded-md px-4 py-3 border border-blue-300"
                             >
                                 <div className="flex items-center gap-5">

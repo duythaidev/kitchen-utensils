@@ -179,8 +179,8 @@ const EditUserModal = ({ user }: { user: IUser }) => {
                                 <SelectValue placeholder="Select a role" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="Admin">Admin</SelectItem>
-                                <SelectItem value="User">User</SelectItem>
+                                <SelectItem value="admin">Admin</SelectItem>
+                                <SelectItem value="user">User</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>

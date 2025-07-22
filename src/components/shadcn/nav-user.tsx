@@ -28,7 +28,7 @@ export function NavUser({
   user = {
     user_name: "shadcn",
     email: "m@example.com",
-    avatar_url: "/avatars/shadcn.jpg",
+    avatar_url: "https://placehold.jp/50x50.png",
   },
 }: {
   user?: {
@@ -48,7 +48,7 @@ export function NavUser({
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-lg grayscale">
+              <Avatar className="h-8 w-8 rounded-lg ">
                 {user.avatar_url ?
                   <AvatarImage src={user.avatar_url} alt={user.user_name || "avatar"} />
                   :

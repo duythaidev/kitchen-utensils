@@ -1,12 +1,10 @@
 'use client';
-import React, { useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
 
 import { Autoplay, Pagination } from 'swiper/modules';
-import Link from 'next/link';
 import HoverLink from '../Custom/HoverLink';
 import { useRouter } from 'nextjs-toploader/app';
 import { IProduct } from '@/types';
@@ -81,8 +79,7 @@ export default function CustomCarousel({ products }: { products: IProduct[] }) {
                             </div>
                         </div>
                     </SwiperSlide>
-                )
-                }
+                )}
 
                 <SwiperSlide className='px-10! text-black!'>
                     <div className="relative  flex h-[450px] overflow-hidden ">

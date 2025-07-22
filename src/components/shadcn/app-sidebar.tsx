@@ -29,7 +29,7 @@ const data = {
   user: {
     user_name: "shadcn",
     email: "m@example.com",
-    avatar_url: "/avatars/shadcn.jpg",
+    avatar_url: "https://placehold.jp/50x50.png",
   },
   navMain: [
     {
@@ -152,7 +152,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <Link href="/admin/dashboard">
                 <div className="max-w-[30px] max-h-[30px] overflow-hidden">
-                  <Image width={30} height={30} src="/favicon.ico" alt="" />
+                  <img  src="/favicon.ico" alt="" />
                 </div>
 
                 <p className=" font-bold font-mono">DuyThaiDev</p>

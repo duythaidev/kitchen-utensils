@@ -29,43 +29,7 @@ import {
   SelectItem,
 } from "@/components/shadcn/select"
 import { useState, useEffect } from "react"
-
-const chartData = [
-  { date: "2024-04-01", revenue: 0 },
-  { date: "2024-05-02", revenue: 1200 },
-  { date: "2024-05-03", revenue: 1200 },
-  { date: "2024-05-04", revenue: 1200 },
-  { date: "2024-06-01", revenue: 1200 },
-  { date: "2024-06-02", revenue: 1350 },
-  { date: "2024-06-03", revenue: 980 },
-  { date: "2024-06-04", revenue: 1600 },
-  { date: "2024-06-05", revenue: 1420 },
-  { date: "2024-06-06", revenue: 1700 },
-  { date: "2024-06-07", revenue: 1100 },
-  { date: "2024-06-08", revenue: 1750 },
-  { date: "2024-06-09", revenue: 1600 },
-  { date: "2024-06-10", revenue: 1900 },
-  { date: "2024-06-11", revenue: 1650 },
-  { date: "2024-06-12", revenue: 1400 },
-  { date: "2024-06-13", revenue: 1850 },
-  { date: "2024-06-14", revenue: 2100 },
-  { date: "2024-06-15", revenue: 1800 },
-  { date: "2024-06-16", revenue: 2000 },
-  { date: "2024-06-17", revenue: 1700 },
-  { date: "2024-06-18", revenue: 1500 },
-  { date: "2024-06-19", revenue: 1600 },
-  { date: "2024-06-20", revenue: 1950 },
-  { date: "2024-06-21", revenue: 1450 },
-  { date: "2024-06-22", revenue: 2200 },
-  { date: "2024-06-23", revenue: 2000 },
-  { date: "2024-06-24", revenue: 1900 },
-  { date: "2024-06-25", revenue: 1650 },
-  { date: "2024-06-26", revenue: 2100 },
-  { date: "2024-06-27", revenue: 1750 },
-  { date: "2024-06-28", revenue: 1800 },
-  { date: "2024-06-29", revenue: 2300 },
-  { date: "2024-06-30", revenue: 2500 },
-]
+import { useRouter, useSearchParams } from "next/navigation"
 
 const chartConfig = {
   revenue: {
@@ -73,28 +37,27 @@ const chartConfig = {
     color: "var(--primary)",
   },
 } satisfies ChartConfig
-
-export const ChartAreaInteractive = () => {
+interface IRevenue {
+  date: string,
+  revenue: number,
+}
+export const ChartAreaInteractive = ({ revenues }: { revenues: IRevenue[] }) => {
   const isMobile = useIsMobile()
-  const [timeRange, setTimeRange] = useState("30d")
-
+  const [timeRange, setTimeRange] = useState("7d")
+  const searchParams = useSearchParams()
   useEffect(() => {
     if (isMobile) setTimeRange("7d")
   }, [isMobile])
 
-  const filteredData = chartData.filter((item) => {
-    const date = new Date(item.date) // date of the item
+  const router = useRouter()
 
-    const reference = new Date("2024-06-30") // last date of the chart
-
-    const start = new Date(reference) // start date of the chart
-
-    if (timeRange === "90d") start.setDate(reference.getDate() - 90)
-    else if (timeRange === "30d") start.setDate(reference.getDate() - 30)
-    else start.setDate(reference.getDate() - 7)
-    return date >= start // check if the date is greater than the start date
-  })
-
+  const handleSetTimeRange = (value: string) => {
+    setTimeRange(value)
+    const params = new URLSearchParams()
+    params.set("range", value)
+    router.push(`?${params.toString()}`)
+  }
+ 
   return (
     <Card className="@container/card">
       <CardHeader>
@@ -107,7 +70,7 @@ export const ChartAreaInteractive = () => {
           <ToggleGroup
             type="single"
             value={timeRange}
-            onValueChange={setTimeRange}
+            onValueChange={handleSetTimeRange}
             variant="outline"
             className="hidden @[767px]/card:flex"
           >
@@ -115,7 +78,7 @@ export const ChartAreaInteractive = () => {
             <ToggleGroupItem value="30d">Last 30 days</ToggleGroupItem>
             <ToggleGroupItem value="7d">Last 7 days</ToggleGroupItem>
           </ToggleGroup>
-          <Select value={timeRange} onValueChange={setTimeRange}>
+          <Select value={timeRange} onValueChange={handleSetTimeRange}>
             <SelectTrigger className="w-36 @[767px]/card:hidden">
               <SelectValue placeholder="Last 30 days" />
             </SelectTrigger>
@@ -129,7 +92,7 @@ export const ChartAreaInteractive = () => {
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <ChartContainer config={chartConfig} className="h-[250px] w-full">
-          <AreaChart data={filteredData}>
+          <AreaChart data={revenues}>
             <defs>
               <linearGradient id="fillRevenue" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="var(--color-revenue)" stopOpacity={0.8} />

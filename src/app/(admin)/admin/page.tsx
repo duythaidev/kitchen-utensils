@@ -4,39 +4,49 @@ import { SectionCards } from "@/components/shadcn/section-cards"
 import { getServerSession } from "next-auth"
 import { Metadata } from "next";
 import { ChartAreaInteractive } from "@/components/shadcn/chart-area-interactive";
+import { fetchWithAuth } from "@/lib/fetchWithAuth";
 
 export const metadata: Metadata = {
   title: 'Admin Dashboard - Kitchen Utensils',
   description: 'View admin dashboard',
 };
 
-export default async function Page() {
+const Page = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) => {
   // const data = await getDashboardData();
   const session = await getServerSession(authOptions);
   const accessToken = session?.accessToken;
+  const { range } = await searchParams;
 
-  const res = await fetch(`${process.env.BACKEND_API}/statistics`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`, // 
-    },
-    cache: 'no-store', //  test
-
-    next: { tags: ['list-users'] }
+  const query = new URLSearchParams({
+    range: range?.toString() || '7d',
   });
-  const data = await res.json()
 
+  const { data } = await fetchWithAuth({
+    url: `/statistics`,
+    method: 'GET',
+    accessToken: accessToken as string,
+  });
+  const { data: revenues } = await fetchWithAuth({
+    url: `/statistics/period?${query.toString()}`,
+    method: 'GET',
+    accessToken: accessToken as string,
+  });
   return (
     <div className="flex flex-1 flex-col">
       <div className="@container/main flex flex-1 flex-col gap-2">
         <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
           <SectionCards data={data} />
           <div className="px-4 lg:px-6">
-            <ChartAreaInteractive />
+            <ChartAreaInteractive revenues={revenues} />
           </div>
         </div>
       </div>
     </div>
   )
 }
+
+export default Page;

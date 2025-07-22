@@ -26,7 +26,7 @@ async function imageUrlToFile(imageUrl: string, filename: string, mimeType: stri
         const file = new File([blob], filename, { type: mimeType || blob.type })
         return file
     } catch (error) {
-        console.error("Error converting image URL to File object:", error)
+        console.log("Error converting image URL to File object:", error)
         return null
     }
 }

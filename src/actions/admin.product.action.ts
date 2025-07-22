@@ -15,7 +15,7 @@ export const handleCreateProductAction = async (data: any, accessToken: string) 
     revalidateTag('list-products')
     return { success: true, message: 'Product created', data: result }
   } catch (error: any) {
-    console.error('handleCreateProductAction Error:', error)
+    console.log('handleCreateProductAction Error:', error)
     return { success: false, message: error.message || 'Network error' }
   }
 }
@@ -34,7 +34,7 @@ export const handleCreateProductImageAction = async (formData: FormData, accessT
     revalidateTag('list-products')
     return { success: true, message: 'Image added', data: result }
   } catch (error: any) {
-    console.error('handleCreateProductImageAction Error:', error)
+    console.log('handleCreateProductImageAction Error:', error)
     return { success: false, message: error.message || 'Network error' }
   }
 }
@@ -52,7 +52,7 @@ export const handleUpdateProductAction = async (productId: number, data: any, ac
     revalidateTag('list-products')
     return { success: true, message: 'Product updated', data: result }
   } catch (error: any) {
-    console.error('handleUpdateProductAction Error:', error)
+    console.log('handleUpdateProductAction Error:', error)
     return { success: false, message: error.message || 'Network error' }
   }
 }
@@ -71,7 +71,7 @@ export const handleUpdateProductImageAction = async (productId: number, formData
     revalidateTag('list-products')
     return { success: true, message: 'Image updated', data: result }
   } catch (error: any) {
-    console.error('handleUpdateProductImageAction Error:', error)
+    console.log('handleUpdateProductImageAction Error:', error)
     return { success: false, message: error.message || 'Network error' }
   }
 }
@@ -88,7 +88,7 @@ export const handleDeleteProductAction = async (productId: number, accessToken: 
     revalidateTag('list-products')
     return { success: true, message: 'Product deleted', data: result }
   } catch (error: any) {
-    console.error('handleDeleteProductAction Error:', error)
+    console.log('handleDeleteProductAction Error:', error)
     return { success: false, message: error.message || 'Network error' }
   }
 }

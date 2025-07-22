@@ -46,7 +46,7 @@ export const authOptions: NextAuthOptions = {
                         accessToken: data.access_token,
                     }
                 } catch (error) {
-                    console.error("Login error:", error)
+                    console.log("Login error:", error)
                     return null
                 }
             },
@@ -86,15 +86,13 @@ export const authOptions: NextAuthOptions = {
                 })
 
                 const data = await res.json()
-                // console.log("data", data)
-
                 token.accessToken = data.access_token // Gán JWT từ backend trả về
 
                 token.user = {
-                    email: data.email,
-                    user_name: data.user_name,
-                    avatar_url: data.avatar_url,
-                    role: data.role || "user", // Default role if not provided
+                    email: data.user.email,
+                    user_name: data.user.user_name,
+                    avatar_url: data.user.avatar_url,
+                    role: data.user.role || "user", // Default role if not provided
                 }
             }
 
@@ -106,7 +104,6 @@ export const authOptions: NextAuthOptions = {
                     avatar_url: session.user.avatar_url,
                 }
             }
-
             return token
         },
         // add accessToken to session
@@ -120,6 +117,9 @@ export const authOptions: NextAuthOptions = {
                     accessToken: token.accessToken,
                 },
             }
-        }
+        },
+        async redirect({ url, baseUrl }: any) {
+            return baseUrl;
+        },
     }
 }

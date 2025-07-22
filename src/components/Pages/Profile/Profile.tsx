@@ -51,7 +51,7 @@ const Profile = ({ profile }: { profile: any }) => {
             user: {
                 ...session?.user,
                 user_name: res.data.user_name,
-                // avatar_url: res.data.avatar_url,
+                avatar_url: res.data.avatar_url,
             },
         })
 
@@ -133,159 +133,159 @@ const Profile = ({ profile }: { profile: any }) => {
                     </div>
 
                     <div className={`xl:max-w-[770px] w-full `} >
-                        <form>
-                            <div className="bg-white shadow-1 rounded-xl p-4 sm:p-8.5">
-                                <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
-                                    <div className="w-full">
-                                        <div className="max-w-[100px] mb-2 mx-auto h-[100px] bg-gray-200 rounded-md overflow-hidden">
-                                            <img
-                                                src={avatar ? URL.createObjectURL(avatar) : myProfile?.avatar_url || "https://placehold.jp/150x150.png"}
-                                                alt="Avatar image"
-                                                width={100}
-                                                height={100}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        </div>
-                                        {/* <div className="w-[100px] h-[100px] mb-2 bg-gray-200 rounded-md" /> */}
-
-                                        <div className="flex justify-center">
-                                            <Button type="button"
-                                                variant="outline"
-                                                onClick={() =>
-                                                    document.getElementById("picture-input")?.click()
-                                                }
-                                                className="mb-5 mx-auto text-sm w-[100px] cursor-pointer"
-                                            >
-                                                {avatar ? "Change Avatar" : "Select Avatar"}
-                                            </Button>
-                                        </div>
-                                        <input
-                                            id="picture-input"
-                                            type="file"
-                                            accept="image/*"
-                                            className="hidden"
-                                            onChange={(e) => {
-                                                if (e.target.files && e.target.files[0]) {
-                                                    setAvatar(e.target.files[0])
-                                                }
-                                            }}
-                                        />
-                                        <label htmlFor="username" className="block mb-2.5">
-                                            Username
-                                        </label>
-
-                                        <input
-                                            type="text"
-                                            name="username"
-                                            placeholder="User Name"
-                                            value={myProfile?.user_name}
-                                            onChange={(e) => {
-                                                setMyProfile({ ...myProfile, user_name: e.target.value })
-                                            }}
-                                            className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                        <div className="bg-white shadow-1 rounded-xl p-4 sm:p-8.5">
+                            <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
+                                <div className="w-full">
+                                    <div className="max-w-[100px] mb-2 mx-auto h-[100px] bg-gray-200 rounded-md overflow-hidden">
+                                        <img
+                                            src={avatar ? URL.createObjectURL(avatar) : myProfile?.avatar_url || "https://placehold.jp/150x150.png"}
+                                            alt="Avatar image"
+                                            width={100}
+                                            height={100}
+                                            className="w-full h-full object-cover"
                                         />
                                     </div>
+                                    {/* <div className="w-[100px] h-[100px] mb-2 bg-gray-200 rounded-md" /> */}
 
-
-                                </div>
-
-                                <div className="mb-5">
-                                    <label htmlFor="address" className="block mb-2.5">
-                                        Address
+                                    <div className="flex justify-center">
+                                        <Button type="button"
+                                            variant="outline"
+                                            onClick={() =>
+                                                document.getElementById("picture-input")?.click()
+                                            }
+                                            className="mb-5 mx-auto text-sm w-[100px] cursor-pointer"
+                                        >
+                                            {avatar ? "Change Avatar" : "Select Avatar"}
+                                        </Button>
+                                    </div>
+                                    <input
+                                        id="picture-input"
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={(e) => {
+                                            if (e.target.files && e.target.files[0]) {
+                                                setAvatar(e.target.files[0])
+                                            }
+                                        }}
+                                    />
+                                    <label htmlFor="username" className="block mb-2.5">
+                                        Username
                                     </label>
+
                                     <input
                                         type="text"
-                                        name="address"
-                                        id="address"
-                                        placeholder="Address"
-                                        value={myProfile?.address}
+                                        name="username"
+                                        placeholder="User Name"
+                                        value={myProfile?.user_name}
                                         onChange={(e) => {
-                                            setMyProfile({ ...myProfile, address: e.target.value })
+                                            setMyProfile({ ...myProfile, user_name: e.target.value })
                                         }}
                                         className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                                     />
-
                                 </div>
 
-                                <div className="mb-5">
-                                    <label htmlFor="phone" className="block mb-2.5">
-                                        Phone
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="phone"
-                                        id="phone"
-                                        placeholder="Phone"
-                                        value={myProfile?.phone}
-                                        onChange={(e) => {
-                                            setMyProfile({ ...myProfile, phone: e.target.value })
-                                        }}
-                                        className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                                    />
 
-                                </div>
-
-                                <CustomButton isLoading={isLoading} color="blue" onClick={(e) => handleUpdateProfile(e)}>
-                                    Save Changes
-                                </CustomButton>
                             </div>
 
-                            <p className="text-custom-sm mt-5 mb-9">
-                                This will be how your name will be displayed in the account
-                                section and in reviews
-                            </p>
+                            <div className="mb-5">
+                                <label htmlFor="address" className="block mb-2.5">
+                                    Address
+                                </label>
+                                <input
+                                    type="text"
+                                    name="address"
+                                    id="address"
+                                    placeholder="Address"
+                                    value={myProfile?.address}
+                                    onChange={(e) => {
+                                        setMyProfile({ ...myProfile, address: e.target.value })
+                                    }}
+                                    className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                                />
 
-                            <p className="font-medium text-xl sm:text-2xl text-dark mb-7">
-                                Password Change
-                            </p>
+                            </div>
 
-                            <div className="bg-white shadow-1 rounded-xl p-4 sm:p-8.5">
-                                <div className="mb-5">
-                                    <label htmlFor="oldPassword" className="block mb-2.5">
-                                        Old Password
-                                    </label>
+                            <div className="mb-5">
+                                <label htmlFor="phone" className="block mb-2.5">
+                                    Phone
+                                </label>
+                                <input
+                                    type="text"
+                                    name="phone"
+                                    id="phone"
+                                    placeholder="Phone"
+                                    value={myProfile?.phone}
+                                    onChange={(e) => {
+                                        setMyProfile({ ...myProfile, phone: e.target.value })
+                                    }}
+                                    className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                                />
 
-                                    <input value={oldPassword}
-                                        onChange={(e) => setOldPassword(e.target.value)}
-                                        type="password"
-                                        className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                                    />
-                                </div>
+                            </div>
 
-                                <div className="mb-5">
-                                    <label htmlFor="newPassword" className="block mb-2.5">
-                                        New Password
-                                    </label>
+                            <CustomButton isLoading={isLoading} color="blue" onClick={(e) => handleUpdateProfile(e)}>
+                                Save Changes
+                            </CustomButton>
+                        </div>
 
-                                    <input
-                                        value={newPassword}
-                                        onChange={(e) => setNewPassword(e.target.value)}
-                                        type="password"
-                                        className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                                    />
-                                </div>
+                        <p className="text-custom-sm mt-5 mb-9">
+                            This will be how your name will be displayed in the account
+                            section and in reviews
+                        </p>
 
-                                <div className="mb-5">
-                                    <label
-                                        htmlFor="confirmNewPassword"
-                                        className="block mb-2.5"
-                                    >
-                                        Confirm New Password
-                                    </label>
+                        <p className="font-medium text-xl sm:text-2xl text-dark mb-7">
+                            Password Change
+                        </p>
 
-                                    <input
-                                        value={confirmPassword}
-                                        onChange={(e) => setConfirmPassword(e.target.value)}
-                                        type="password"
-                                        className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
-                                    />
-                                </div>
+                        <div className="bg-white shadow-1 rounded-xl p-4 sm:p-8.5">
+                            <div className="mb-5">
+                                <label htmlFor="oldPassword" className="block mb-2.5">
+                                    Old Password
+                                </label>
 
+                                <input value={oldPassword}
+                                    onChange={(e) => setOldPassword(e.target.value)}
+                                    type="password"
+                                    className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                                />
+                            </div>
+
+                            <div className="mb-5">
+                                <label htmlFor="newPassword" className="block mb-2.5">
+                                    New Password
+                                </label>
+
+                                <input
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                    type="password"
+                                    className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                                />
+                            </div>
+
+                            <div className="mb-5">
+                                <label
+                                    htmlFor="confirmNewPassword"
+                                    className="block mb-2.5"
+                                >
+                                    Confirm New Password
+                                </label>
+
+                                <input
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    type="password"
+                                    className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                                />
+                            </div>
+
+                            <div className="flex justify-end">
                                 <CustomButton color="blue" onClick={handleChangePassword}>
                                     Change Password
                                 </CustomButton>
                             </div>
-                        </form>
+                        </div>
                     </div>
                     {/* <!-- details tab content end -->
           <!--== user dashboard content end ==--> */}

@@ -17,7 +17,7 @@ export const handleCreateUserAction = async (formData: FormData, accessToken: st
     revalidateTag("list-users")
     return { success: true, message: "User created", data }
   } catch (error: any) {
-    console.error("handleCreateUserAction Error:", error)
+    console.log("handleCreateUserAction Error:", error)
     return { success: false, message: error.message || "Network error" }
   }
 }
@@ -35,7 +35,7 @@ export const handleBanUserAction = async (userId: number, isActive: boolean, acc
     revalidateTag("list-users")
     return { success: true, message: isActive ? "User banned" : "User unbanned", data }
   } catch (error: any) {
-    console.error("handleBanUserAction Error:", error)
+    console.log("handleBanUserAction Error:", error)
     return { success: false, message: error.message || "Network error" }
   }
 }
@@ -55,7 +55,7 @@ export const handleUpdateUserAction = async (id: number, formData: FormData, acc
     revalidateTag("list-users")
     return { success: true, message: "User updated", data }
   } catch (error: any) {
-    console.error("handleUpdateUserAction Error:", error)
+    console.log("handleUpdateUserAction Error:", error)
     return { success: false, message: error.message || "Network error" }
   }
 }

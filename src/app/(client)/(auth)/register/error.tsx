@@ -11,7 +11,7 @@ export default function Error({
 }) {
 
     useEffect(() => {
-        console.error(error)
+        console.log(error)
     }, [error])
 
     return (

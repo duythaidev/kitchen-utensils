@@ -23,7 +23,7 @@ export const changeStatus = async (
     revalidateTag('list-orders')
     return { success: true, message: 'Order status updated', data }
   } catch (error: any) {
-    console.error('changeStatus Error:', error)
+    console.log('changeStatus Error:', error)
     return { success: false, message: error.message || 'Network error' }
   }
 }

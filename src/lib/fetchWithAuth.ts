@@ -8,6 +8,7 @@ export const fetchWithAuth = async ({
     tag,
     isFormData = false,
     cache = "no-cache",
+    revalidate
 }: {
     url: string;
     method?: string;
@@ -16,6 +17,7 @@ export const fetchWithAuth = async ({
     tag?: string;
     isFormData?: boolean;
     cache?: RequestCache;
+    revalidate?: number;
 }) => {
 
     const requestHeaders: HeadersInit = new Headers();
@@ -28,10 +30,10 @@ export const fetchWithAuth = async ({
 
     const response = await fetch(`${process.env.BACKEND_API}${url}`, {
         method,
-        headers : requestHeaders,
+        headers: requestHeaders,
         body: isFormData ? body : body ? JSON.stringify(body) : undefined,
         cache: cache,
-        next: tag ? { tags: [tag] } : undefined,
+        next: tag ? { tags: [tag] } : revalidate ? { revalidate: revalidate } : undefined,
     });
 
     if ([401].includes(response.status)) {

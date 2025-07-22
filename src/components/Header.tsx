@@ -42,7 +42,7 @@ const Header = ({ categories }: { categories: ICategory[] }) => {
       router.push(`/shop?keyword=${searchRef.current.value}`)
     }
   }
-
+  console.log(session)
 
   useEffect(() => {
     window.addEventListener("scroll", handleStickyMenu);
