@@ -34,7 +34,7 @@ export const authOptions: NextAuthOptions = {
                     const data = await res.json()
                     // console.log("data", data)
                     if (!res.ok || !data.access_token) {
-                        return { error: data.message || "Login failed" }; 
+                        return { error: data.message || "Login failed" } as any;
                     }
 
                     // add token to callback 

@@ -1,7 +1,7 @@
 'use client';
 import { ICartItem, IProduct } from "@/types";
 import { Check, CircleAlert, CircleX, Minus, Plus } from "lucide-react";
-import Image from "next/image";
+
 import { useState } from "react";
 import { Input } from "@/components/shadcn/input";
 import Link from "next/link";

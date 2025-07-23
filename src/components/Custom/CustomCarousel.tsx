@@ -38,7 +38,7 @@ export default function CustomCarousel({ products }: { products: IProduct[] }) {
 
                 autoplay={{
                     delay: 5000,
-                    disableOnInteraction: false,
+                    disableOnInteraction: true,
                 }}
                 slidesPerView={1}
                 navigation={true}
@@ -48,70 +48,47 @@ export default function CustomCarousel({ products }: { products: IProduct[] }) {
             >
                 {products?.slice(0, 3)?.map((product, index) =>
                     <SwiperSlide className='px-10! text-black!'>
-                        <div className="relative  flex h-[450px] overflow-hidden ">
-                            <div className="flex flex-col md:w-[55%] justify-around ">
-                                {product.discounted_price && (
-                                    <div className="flex items-end">
-                                        <span className=" text-primary-dark font-bold text-5xl tracking-tight ">
-                                            {((product.discounted_price / product.price) * 100).toFixed(0)}%
-                                        </span>
-                                        <span className="ml-5 text-xl inline-block w-2.5 uppercase leading-none">sale off</span>
-                                    </div>
-                                )}
-                                <div>
-                                    <HoverLink link="/shop" className=" font-bold block text-3xl tracking-tight  ">
+                        <div className="relative  flex lg:h-[450px] overflow-hidden flex-wrap">
+                            <div className="flex w-full flex-col md:w-[55%] justify-around ">
+                                {
+                                    product.discounted_price && (
+                                        <div className="flex items-center md:items-end">
+                                            <span className=" text-primary-dark font-bold text-2xl md:text-5xl tracking-tight">
+                                                {((product.price - product.discounted_price) / product.price * 100).toFixed(0)}%
+                                            </span>
+                                            <span className="ml-5  text-md md:text-2xl inline-block md:w-2.5 uppercase leading-none">sale off</span>
+                                        </div>
+                                    )
+                                }
+
+                                <div className='break-words text-wrap overflow-hidden'>
+                                    <HoverLink link="/shop"
+                                        className=" font-bold block text-2xl md:text-3xl tracking-tight break-words text-wrap "
+                                    >
                                         {/* Macbook Pro - 512/16GB */}
                                         {product.product_name}
                                     </HoverLink>
                                     <p className="  max-w-lg mt-5 text-gray-600 text-sm md:text-base ">
+                                        {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, minima minus? Laborum ullam, in ipsam ducimus saepe ea illum. Deleniti ad corrupti omnis nam inventore quas aliquam quae iure illo. */}
                                         {/* Love to cook? Or do you just love to eat? We have everything that you need for cooking, baking, serving and eating all in one place. These kitchen and dining essentials help make everyday meals quicker, easier and more enjoyable. */}
-                                        {content[index]}
+                                        {content[0]}
+
                                     </p>
                                 </div>
-                                <button onClick={() => router.push('/shop')} className="capitalize cursor-pointer rounded-md w-2/5 text-center !bg-[#1c274c] px-5 py-3.5 text-sm font-semibold !text-white shadow-xs !transition duration-200 hover:!bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                                <button onClick={() => router.push('/shop')} className="capitalize mt-5 md:mt-0 cursor-pointer rounded-md md:w-2/5 w-full text-center !bg-[#1c274c] px-5 py-3.5 text-sm font-semibold !text-white shadow-xs !transition duration-200 hover:!bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                                     Get started
                                 </button>
                             </div>
                             <div className="flex flex-col md:max-w-[45%] items-center justify-center px-8 py-8 sm:px-10 sm:pt-10 ">
                                 {/* <img src="https://cdn-icons-png.freepik.com/512/1/1694.png" alt="" /> */}
-                                <img alt="as" src={'https://m.media-amazon.com/images/I/71-U1rX30iL._AC_SL1500_.jpg'}></img>
+                                <img alt="as" src={product.images?.find(i => i.is_main)?.image_url}></img>
 
                             </div>
                         </div>
                     </SwiperSlide>
                 )}
 
-                <SwiperSlide className='px-10! text-black!'>
-                    <div className="relative  flex lg:h-[450px] overflow-hidden flex-wrap">
-                        <div className="flex flex-col md:w-[55%] justify-around ">
-                            <div className="flex items-center md:items-end">
-                                <span className=" text-primary-dark font-bold text-xl md:text-5xl tracking-tight">
-                                    30%
-                                </span>
-                                <span className="ml-5  text-md md:text-xl inline-block md:w-2.5 uppercase leading-none">sale off</span>
-                            </div>
-                            <div>
-                                <HoverLink link="/shop" className=" font-bold block text-xl md:text-3xl tracking-tight ">
-                                    Macbook Pro - 512/16GB
-                                </HoverLink>
-                                <p className="  max-w-lg mt-5 text-gray-600 text-sm md:text-base ">
-                                    {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, minima minus? Laborum ullam, in ipsam ducimus saepe ea illum. Deleniti ad corrupti omnis nam inventore quas aliquam quae iure illo. */}
-                                    {/* Love to cook? Or do you just love to eat? We have everything that you need for cooking, baking, serving and eating all in one place. These kitchen and dining essentials help make everyday meals quicker, easier and more enjoyable. */}
-                                    {content[0]}
 
-                                </p>
-                            </div>
-                            <button onClick={() => router.push('/shop')} className="capitalize mt-5 md:mt-0 cursor-pointer rounded-md md:w-2/5 w-full text-center !bg-[#1c274c] px-5 py-3.5 text-sm font-semibold !text-white shadow-xs !transition duration-200 hover:!bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                                Get started
-                            </button>
-                        </div>
-                        <div className="flex flex-col md:max-w-[45%] items-center justify-center px-8 py-8 sm:px-10 sm:pt-10 ">
-                            {/* <img src="https://cdn-icons-png.freepik.com/512/1/1694.png" alt="" /> */}
-                            <img alt="as" src={'https://m.media-amazon.com/images/I/71-U1rX30iL._AC_SL1500_.jpg'}></img>
-
-                        </div>
-                    </div>
-                </SwiperSlide>
 
             </Swiper>
         </div>

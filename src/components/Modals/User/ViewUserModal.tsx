@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/shadcn/input"
 import { Label } from "@/components/shadcn/label"
 import { Button } from "@/components/shadcn/button";
-import Image from "next/image";
+
 import {
   Select,
   SelectItem,
