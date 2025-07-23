@@ -22,8 +22,8 @@ const Hero = ({ products }: { products: IProduct[] }) => {
                     <div className="relative lg:col-span-1 lg:row-span-1 ">
                         <div className="absolute inset-px rounded-lg bg-white "></div>
                         <div className=" relative flex h-full overflow-hidden rounded-lg ">
-                            <div className="flex flex-col w-1/2 justify-between lg:pl-8 lg:py-10 pl-10 md:pt-10 ">
-                                <Link href="/" className="hover:text-primary-dark font-bold mt-2 text-lg tracking-tight text-gray-950 ">Macbook Pro - 512/16GB</Link>
+                            <div className="flex flex-col w-1/2 justify-between lg:pl-8 pl-5 py-10 ">
+                                <Link href="/" className="hover:text-primary-dark font-bold text-md md:text-lg tracking-tight text-gray-950 ">Macbook Pro - 512/16GB</Link>
                                 <div>
                                     <p className="  max-w-lg text-sm/6 text-gray-600 ">
                                         limited time offer
@@ -45,8 +45,8 @@ const Hero = ({ products }: { products: IProduct[] }) => {
                     <div className="relative lg:col-span-1 lg:row-span-1 ">
                         <div className="absolute inset-px rounded-lg bg-white "></div>
                         <div className=" relative flex h-full overflow-hidden rounded-lg ">
-                            <div className="flex flex-col w-1/2 justify-between lg:pl-8 lg:py-10 pl-10 md:pt-10 ">
-                                <Link href="/" className="hover:text-primary-dark font-bold mt-2 text-lg tracking-tight text-gray-950 ">Macbook Pro - 512/16GB</Link>
+                            <div className="flex flex-col w-1/2 justify-between lg:pl-8 pl-5 py-10 ">
+                                <Link href="/" className="hover:text-primary-dark font-bold text-md md:text-lg tracking-tight text-gray-950 ">Macbook Pro - 512/16GB</Link>
                                 <div>
                                     <p className="  max-w-lg text-sm/6 text-gray-600 ">
                                         limited time offer

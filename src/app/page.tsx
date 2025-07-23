@@ -33,7 +33,7 @@ export default async function Home() {
   return (
     <>
       <Header categories={data.data}></Header>
-      <div className='pt-[135px] '>
+      <div className='md:pt-[135px] '>
         <Hero products={[]}></Hero>
         <CategoryList categories={data.data}></CategoryList>
         <Promotion></Promotion>

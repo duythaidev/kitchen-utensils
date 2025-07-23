@@ -42,7 +42,6 @@ const Header = ({ categories }: { categories: ICategory[] }) => {
       router.push(`/shop?keyword=${searchRef.current.value}`)
     }
   }
-  console.log(session)
 
   useEffect(() => {
     window.addEventListener("scroll", handleStickyMenu);
@@ -132,7 +131,7 @@ const Header = ({ categories }: { categories: ICategory[] }) => {
 
           </div>
         </nav>
-        <MobileHeader showNav={showNav} setShowNav={setShowNav}></MobileHeader>
+        <MobileHeader categories={categories} showNav={showNav} setShowNav={setShowNav}></MobileHeader>
       </div>
       <div className="w-full bg-white px-20 hidden md:block">
         <nav className={` mx-auto flex max-w-7xl items-center justify-between  transition-all px-8 ${stickyMenu ? 'py-2 ' : 'py-3'}`} aria-label="Global">

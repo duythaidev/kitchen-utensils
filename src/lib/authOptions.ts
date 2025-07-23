@@ -32,9 +32,9 @@ export const authOptions: NextAuthOptions = {
                     })
 
                     const data = await res.json()
-
+                    // console.log("data", data)
                     if (!res.ok || !data.access_token) {
-                        throw new Error("Login failed")
+                        return { error: data.message || "Login failed" }; 
                     }
 
                     // add token to callback 
@@ -58,6 +58,12 @@ export const authOptions: NextAuthOptions = {
     ],
     callbacks: {
         // add accessToken to token
+        signIn({ user, account, profile, email, credentials }: any) {
+            if (user?.error) {
+                throw new Error(user.error); 
+            }
+            return true;
+        },        
         async jwt({ token, user, account, trigger, session }: any) {
             // Credentials login
             if (account?.provider === "credentials" && user) {

@@ -40,6 +40,7 @@ const Login = () => {
                 password,
                 redirect: false,
             })
+            console.log("res", res)
 
             if (res?.error) {
                 throw new Error(res?.error || "Invalid credentials")

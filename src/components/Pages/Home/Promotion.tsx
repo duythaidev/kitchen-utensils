@@ -55,7 +55,7 @@ const Promotion = () => {
               height={241}
             />
 
-            <div className="text-right">
+            <div className="md:text-right">
               <span className="block text-lg text-dark mb-1.5">
                 Tefal Blender
               </span>

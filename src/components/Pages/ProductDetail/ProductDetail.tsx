@@ -1,7 +1,7 @@
 'use client'
 
 import { IProduct, IReview } from "@/types"
-import { LoaderCircle, Minus, Plus, ShoppingCart } from "lucide-react"
+import { ChevronLeft, Link, LoaderCircle, Minus, Plus, ShoppingCart } from "lucide-react"
 import { useRef, useState } from "react"
 import { useSession } from "next-auth/react"
 import { toast } from "sonner"
@@ -10,6 +10,10 @@ import { Input } from "@/components/shadcn/input"
 import StarRating from "@/components/Custom/StarRating"
 import ReviewForm from "../Review/ReviewForm"
 import ReviewList from "@/components/Custom/ReviewList"
+import { useRouter } from "nextjs-toploader/app"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/shadcn/tooltip"
+import { TooltipProvider } from "@/components/shadcn/tooltip"
+import { Button } from "@/components/shadcn/button"
 const tabs = [
     {
         id: "tabOne",
@@ -82,10 +86,31 @@ const ProductDetailPage = ({ product, reviews }: { product: IProduct, reviews?: 
 
         setIsLoading(false)
     }
+    const navigate = useRouter()
 
     return (
         <>
             <div className="w-full px-4 py-10 md:px-8 lg:px-20 bg-white">
+                <div className="flex items-center gap-2">
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <button
+                                    onClick={() => navigate.back()}
+                                    className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded cursor-pointer hover:bg-gray-200"
+                                    aria-label="Go Back"
+                                >
+                                    <ChevronLeft className="w-4 h-4" />
+                                </button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                Back to home
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+
+                </div>
+
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-7xl mx-auto">
                     {/* Image */}
                     <div className="w-3/4 mx-auto">
@@ -119,7 +144,7 @@ const ProductDetailPage = ({ product, reviews }: { product: IProduct, reviews?: 
                             </span>
                         )}
 
-                        <h1 className="text-3xl font-bold text-gray-900">{product.product_name}</h1>
+                        <h1 className="text-3xl font-bold text-gray-900 text-wrap break-words w-full">{product.product_name}</h1>
 
                         <div className="mt-4">
                             <p className="text-2xl font-semibold text-gray-900">${product.discounted_price || product.price}</p>

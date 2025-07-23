@@ -63,7 +63,7 @@ export default function CustomCarousel({ products }: { products: IProduct[] }) {
                                         {/* Macbook Pro - 512/16GB */}
                                         {product.product_name}
                                     </HoverLink>
-                                    <p className="  max-w-lg mt-5 text-gray-600 ">
+                                    <p className="  max-w-lg mt-5 text-gray-600 text-sm md:text-base ">
                                         {/* Love to cook? Or do you just love to eat? We have everything that you need for cooking, baking, serving and eating all in one place. These kitchen and dining essentials help make everyday meals quicker, easier and more enjoyable. */}
                                         {content[index]}
                                     </p>
@@ -84,17 +84,17 @@ export default function CustomCarousel({ products }: { products: IProduct[] }) {
                 <SwiperSlide className='px-10! text-black!'>
                     <div className="relative  flex lg:h-[450px] overflow-hidden flex-wrap">
                         <div className="flex flex-col md:w-[55%] justify-around ">
-                            <div className="flex items-end">
-                                <span className=" text-primary-dark font-bold text-5xl tracking-tight">
+                            <div className="flex items-center md:items-end">
+                                <span className=" text-primary-dark font-bold text-xl md:text-5xl tracking-tight">
                                     30%
                                 </span>
-                                <span className="ml-5 text-xl inline-block w-2.5 uppercase leading-none">sale off</span>
+                                <span className="ml-5  text-md md:text-xl inline-block md:w-2.5 uppercase leading-none">sale off</span>
                             </div>
                             <div>
-                                <HoverLink link="/shop" className=" font-bold block text-3xl tracking-tight ">
+                                <HoverLink link="/shop" className=" font-bold block text-xl md:text-3xl tracking-tight ">
                                     Macbook Pro - 512/16GB
                                 </HoverLink>
-                                <p className="  max-w-lg mt-5 text-gray-600 ">
+                                <p className="  max-w-lg mt-5 text-gray-600 text-sm md:text-base ">
                                     {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, minima minus? Laborum ullam, in ipsam ducimus saepe ea illum. Deleniti ad corrupti omnis nam inventore quas aliquam quae iure illo. */}
                                     {/* Love to cook? Or do you just love to eat? We have everything that you need for cooking, baking, serving and eating all in one place. These kitchen and dining essentials help make everyday meals quicker, easier and more enjoyable. */}
                                     {content[0]}

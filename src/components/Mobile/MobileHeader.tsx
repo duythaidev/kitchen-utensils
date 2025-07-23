@@ -1,58 +1,78 @@
+'use client'
+
+import Link from "next/link"
+import { X, ShoppingCart, ShoppingBag } from "lucide-react"
+import { useSession } from "next-auth/react"
+import { ICategory } from "@/types"
+
 interface IProps {
-    showNav: boolean;
-    setShowNav: (show: boolean) => void;
+  showNav: boolean
+  setShowNav: (show: boolean) => void
+  categories?: ICategory[]
 }
-const MobileHeader = ({ showNav, setShowNav }: IProps) => {
-    return (
-        <div className={`lg:hidden ${showNav ? 'block' : 'hidden'}`} role="dialog" aria-modal="true">
-          {/* <!-- Background backdrop, show/hide based on slide-over state. --> */}
-          <div className="fixed inset-0 z-10"></div>
-          <div className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-            <div className="flex items-center justify-between">
-              <a href="#" className="-m-1.5 p-1.5">
-                <span className="sr-only">Your Company</span>
-                <img className="h-8 w-auto" src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="" />
-              </a>
-              <button type="button" className="-m-2.5 rounded-md p-2.5 text-gray-700 hover:bg-gray hover:rounded-full cursor-pointer" onClick={() => setShowNav(false)}>
-                <span className="sr-only">Close menu</span>
-                <svg className="size-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <div className="mt-6 flow-root">
-              <div className="-my-6 divide-y divide-gray-500/10">
-                <div className="space-y-2 py-6">
-                  <div className="-mx-3">
-                    <button type="button" className="flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50" aria-controls="disclosure-1" aria-expanded="false">
-                      Product
 
-                      <svg className="size-5 flex-none" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                        <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
-                      </svg>
-                    </button>
-                    <div className="mt-2 space-y-2" id="disclosure-1">
-                      <a href="#" className="block rounded-lg py-2 pr-3 pl-6 text-sm/7 font-semibold text-gray-900 hover:bg-gray-50">Analytics</a>
-                      <a href="#" className="block rounded-lg py-2 pr-3 pl-6 text-sm/7 font-semibold text-gray-900 hover:bg-gray-50">Engagement</a>
-                      <a href="#" className="block rounded-lg py-2 pr-3 pl-6 text-sm/7 font-semibold text-gray-900 hover:bg-gray-50">Security</a>
-                      <a href="#" className="block rounded-lg py-2 pr-3 pl-6 text-sm/7 font-semibold text-gray-900 hover:bg-gray-50">Integrations</a>
-                      <a href="#" className="block rounded-lg py-2 pr-3 pl-6 text-sm/7 font-semibold text-gray-900 hover:bg-gray-50">Automations</a>
-                      <a href="#" className="block rounded-lg py-2 pr-3 pl-6 text-sm/7 font-semibold text-gray-900 hover:bg-gray-50">Watch demo</a>
-                      <a href="#" className="block rounded-lg py-2 pr-3 pl-6 text-sm/7 font-semibold text-gray-900 hover:bg-gray-50">Contact sales</a>
-                    </div>
-                  </div>
-                  <a href="#" className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Features</a>
-                  <a href="#" className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Marketplace</a>
-                  <a href="#" className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Company</a>
-                </div>
-                <div className="py-6">
-                  <a href="#" className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Log in</a>
-                </div>
-              </div>
-            </div>
-          </div>
+const MobileHeader = ({ showNav, setShowNav, categories = [] }: IProps) => {
+  const { data: session } = useSession()
+
+  return (
+    <div className={`lg:hidden fixed inset-0 z-50 bg-white transition-transform duration-300 ${showNav ? "translate-x-0" : "translate-x-full"} transform`}>
+      <div className="flex items-center justify-between p-4 border-b">
+        <Link href="/" className="flex items-center gap-2">
+          <img src="/favicon.ico" alt="Logo" className="w-8 h-8" />
+          <span className="font-bold font-mono">ThaiDevShop</span>
+        </Link>
+        <button onClick={() => setShowNav(false)} className="p-2 rounded-full hover:bg-gray-100">
+          <X className="w-6 h-6 text-gray-700" />
+        </button>
+      </div>
+
+      <div className="px-6 py-4 space-y-4">
+        <Link href="/" className="block text-base font-medium text-gray-800 hover:text-primary">Home</Link>
+        <Link href="/shop" className="block text-base font-medium text-gray-800 hover:text-primary">Shop</Link>
+        <Link href="/contact" className="block text-base font-medium text-gray-800 hover:text-primary">Contact</Link>
+
+        <div>
+          <p className="block text-base font-medium text-gray-800 hover:text-primary">Categories</p>
+          <Link href="/shop" className="block text-sm text-gray-700 hover:text-primary">All Categories</Link>
+          {categories.map(cat => (
+            <Link
+              key={cat.id}
+              href={`/shop?category=${cat.id}`}
+              className="block text-sm text-gray-700 hover:text-primary"
+            >
+              {cat.category_name}
+            </Link>
+          ))}
         </div>
-    );
+
+        {session?.user?.role === "admin" && (
+          <div className="pt-2">
+            <p className="block text-base font-medium text-gray-800 hover:text-primary">Admin</p>
+            <Link href="/admin" className="block text-sm text-gray-700 hover:text-primary">Dashboard</Link>
+            <Link href="/admin/users" className="block text-sm text-gray-700 hover:text-primary">Users</Link>
+            <Link href="/admin/products" className="block text-sm text-gray-700 hover:text-primary">Products</Link>
+            <Link href="/admin/orders" className="block text-sm text-gray-700 hover:text-primary">Orders</Link>
+          </div>
+        )}
+
+        {session?.user && (
+          <>
+            <Link href="/cart" className="flex items-center gap-2 text-gray-700 hover:text-primary">
+              <ShoppingCart size={18} /> Cart
+            </Link>
+            <Link href="/order" className="flex items-center gap-2 text-gray-700 hover:text-primary">
+              <ShoppingBag size={18} /> Orders
+            </Link>
+            <Link href="/profile" className="block mt-4 text-base font-medium text-primary">{session.user.user_name || "Profile"}</Link>
+          </>
+        )}
+
+        {!session?.user && (
+          <Link href="/login" className="block mt-4 text-base font-medium text-primary">Log in</Link>
+        )}
+      </div>
+    </div>
+  )
 }
 
-export default MobileHeader;
+export default MobileHeader

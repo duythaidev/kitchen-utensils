@@ -339,7 +339,7 @@ const FilterInput = ({ placeholder, columnIndex, table }: { placeholder: string,
     router.push(`?keyword=${search}`)
   }
   return (
-    <div className="p-2 border-b last:border-b-0 flex items-center gap-2 w-3xs">
+    <div className="p-0 md:p-2 border-b last:border-b-0 flex items-center gap-2 w-3xs">
       <Input
         placeholder={placeholder}
         className="w-full"

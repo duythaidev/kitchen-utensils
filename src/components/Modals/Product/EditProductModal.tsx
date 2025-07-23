@@ -370,7 +370,7 @@ const EditProductModal = ({ product, categories }: { product: IProduct, categori
                         </DialogClose>
                         <CustomButton
                             color="blue"
-                            className={`px-4! py-2! text-sm w-[150px]! ${isLoading ? "cursor-wait" : ""}`}
+                            className={`px-4! py-2! text-sm w-full md:w-[150px]! ${isLoading ? "cursor-wait" : ""}`}
                             isLoading={isLoading}
                             onClick={handleUpdateProduct}
                         >
