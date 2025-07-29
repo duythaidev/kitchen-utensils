@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
+  <br />
+    <a href="https://github.com/duythaidev/kitchen-utensils" target="_blank">
+           <img src="./public/kitchen.png" alt="Project Banner">
+    </a>
+  <br />
 
-## Getting Started
+  <div>
+  <img alt="TypeScript" src="https://img.shields.io/badge/-TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white" />
+  <img alt="NextJs" src="https://img.shields.io/badge/NextJs-000000?style=flat&logo=next.js&logoColor=white" />
+  <img alt="shadcn/ui" src="https://img.shields.io/badge/shadcn/ui-000000?style=flat&logo=shadcnui&logoColor=white" />
+  <img alt="NestJs" src="https://img.shields.io/badge/-NestJs-ea2845?style=flat-square&logo=nestjs&logoColor=white" />
+  <img alt="Tailwind" src="https://img.shields.io/badge/tailwindcss-0F172A?&logo=tailwindcss" />
+  </div>
 
-First, run the development server:
+  <h3 align="center">Full Stack E-Commerce Kitchen Utensils Website</h3>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+   <div align="center">
+     Welcome to the Full Stack E-Commerce Website! This website is designed to offer a comprehensive E-Commerce solution with a focus on responsiveness and smooth animations.
+    </div>
+</div>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## <a name="">⚙️ Repositories</a>
+- [Kitchen Utensils Frontend](https://github.com/duythaidev/kitchen-utensils)
+- [Kitchen Utensils Backend](https://github.com/duythaidev/kitchen-utensils-be)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## <a name="tech-stack">⚙️ Tech Stack</a>
+- **Next.js**
+- **Tailwind CSS**
+- **Shadcn UI**
+- **Next Auth**
+- **TypeScript**
+- **MySQL**
+- **Nest.js**
+- **TypeORM**
+- **JWT**
+- **Passport**
 
-## Learn More
+ 
+## <a name="features"> 🔋 Features</a>
+👉 **Home page**
 
-To learn more about Next.js, take a look at the following resources:
+👉 **Shop page**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+👉 **Product page**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+👉 **Cart page**
 
-## Deploy on Vercel
+👉 **Checkout page**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+👉 **Product detail page**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+👉 **Admin dashboard**
+
+👉 **Admin CRUD product**
+
+👉 **Admin CRUD category**

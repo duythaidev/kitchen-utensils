@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { Metadata } from "next";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
-
+import { redirect } from "next/navigation";
 export const metadata: Metadata = {
     title: 'User Dashboard - Kitchen Utensils',
     description: 'View user dashboard',
@@ -15,6 +15,9 @@ const Page = async ({
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) => {
     const session = await getServerSession(authOptions);
+    if (!session) {
+        redirect('/login?unauthorized=true')
+    }
     const accessToken = session?.accessToken;
     const { keyword, page, limit } = await searchParams;
 
@@ -31,6 +34,9 @@ const Page = async ({
         tag: 'list-users',
         cache: 'no-store',
     });
+
+    console.log(data)
+
 
     return (
         <div>

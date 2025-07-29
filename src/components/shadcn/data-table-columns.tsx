@@ -142,8 +142,8 @@ export const usersColumns: ColumnDef<z.infer<typeof userSchema>>[] = [
     header: "Role",
     size: 50,
     cell: ({ row }) => (
-      <Badge variant="outline" className={`${row.original.role === "Admin" ? "text-primary-dark" : "text-orange-500"} px-1.5`}>
-        {row.original.role === "Admin" ? "Admin" : "User"}
+      <Badge variant="outline" className={`${row.original.role === "admin" ? "text-primary-dark" : "text-orange-500"} px-1.5`}>
+        {row.original.role === "admin" ? "Admin" : "User"}
       </Badge>
     ),
   },

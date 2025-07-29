@@ -1,3 +1,4 @@
+'use server'
 import { redirect } from "next/navigation";
 
 export const fetchWithAuth = async ({
@@ -35,6 +36,11 @@ export const fetchWithAuth = async ({
         cache: cache,
         next: tag ? { tags: [tag] } : revalidate ? { revalidate: revalidate } : undefined,
     });
+    console.log(response)
+
+    if ([403].includes(response.status)) {
+        redirect("/");
+    }
 
     if ([401].includes(response.status)) {
         redirect("/logout");

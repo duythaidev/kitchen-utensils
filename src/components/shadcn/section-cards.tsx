@@ -66,16 +66,16 @@ export function SectionCards({ data = fakeData }: { data?: IProps }) {
         <CardHeader>
           <CardDescription>Total Revenue</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            {revenue.totalRevenue}
+            {revenue?.totalRevenue}
           </CardTitle>
           <CardAction>
-            <TrendBadge percent={revenue.percent} />
+            <TrendBadge percent={revenue?.percent} />
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="flex gap-2 font-medium">
             {getTrendText(
-              revenue.percent,
+              revenue?.percent,
               "Trending up this month",
               "Decreased this month",
               "No change"
@@ -90,16 +90,16 @@ export function SectionCards({ data = fakeData }: { data?: IProps }) {
         <CardHeader>
           <CardDescription>Total Orders</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            {orders.totalOrders}
+            {orders?.totalOrders}
           </CardTitle>
           <CardAction>
-            <TrendBadge percent={orders.percent} />
+            <TrendBadge percent={orders?.percent} />
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="flex gap-2 font-medium">
             {getTrendText(
-              orders.percent,
+              orders?.percent,
               "More orders this month",
               "Dropped slightly",
               "No change"
@@ -114,16 +114,16 @@ export function SectionCards({ data = fakeData }: { data?: IProps }) {
         <CardHeader>
           <CardDescription>Total Customers</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            {users.totalUsers}
+            {users?.totalUsers}
           </CardTitle>
           <CardAction>
-            <TrendBadge percent={users.percent} />
+            <TrendBadge percent={users?.percent} />
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="flex gap-2 font-medium">
             {getTrendText(
-              users.percent,
+              users?.percent,
               "Strong acquisition",
               "Lost some users",
               "No change"
@@ -138,16 +138,16 @@ export function SectionCards({ data = fakeData }: { data?: IProps }) {
         <CardHeader>
           <CardDescription>Canceled Orders</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            {cancledOrders.totalCancledOrders}
+            {cancledOrders?.totalCancledOrders}
           </CardTitle>
           <CardAction>
-            <TrendBadge percent={cancledOrders.percent} />
+            <TrendBadge percent={cancledOrders?.percent} />
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="flex gap-2 font-medium">
             {getTrendText(
-              cancledOrders.percent,
+              cancledOrders?.percent,
               "Increased cancellations",
               "Fewer cancellations",
               "No change"

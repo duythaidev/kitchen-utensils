@@ -77,7 +77,7 @@ const AddProductModal = ({ categories }: { categories: ICategory[] }) => {
 
         const resProduct = await handleCreateProductAction(productData, session?.accessToken || "")
         if (!resProduct.success) {
-            toast.error(resProduct.message)
+            toast.error("Error: " + resProduct.message)
             setIsLoading(false)
             return
         }
@@ -101,15 +101,15 @@ const AddProductModal = ({ categories }: { categories: ICategory[] }) => {
             productImageFormData.append("product_id", productId)
 
             const resImage = await handleCreateProductImageAction(productImageFormData, session?.accessToken || "")
-            if (!resImage.success) {
-                toast.error(resImage.message || "Product image creation failed!")
+            if (!resImage?.success) {
+                toast.error("Error: " + resImage?.message || "Product image creation failed!")
                 setIsLoading(false)
                 return
             }
         }
 
         await new Promise(resolve => setTimeout(resolve, 1000))
-        toast.success(resProduct.message)
+        toast.success("Success: " + resProduct.message)
         setOpen(false)
         setIsLoading(false)
     }
